@@ -17,10 +17,12 @@ function Stars({ rating, size = 13 }: { rating: number; size?: number }) {
         <Star
           key={s}
           size={size}
-          fill={s <= filled ? '#f97316' : 'none'}
-          stroke={s <= filled ? '#f97316' : 'currentColor'}
           strokeWidth={1.5}
-          className={s <= filled ? '' : 'text-[var(--g2-border)]'}
+          style={
+            s <= filled
+              ? { fill: 'var(--g2-star)', color: 'var(--g2-star)' }
+              : { fill: 'none', color: 'var(--g2-border)' }
+          }
         />
       ))}
     </span>

@@ -38,10 +38,12 @@ function Stars({ rating, size = 11 }: { rating: number; size?: number }) {
         <Star
           key={s}
           size={size}
-          fill={s <= filled ? '#f97316' : 'none'}
-          stroke={s <= filled ? '#f97316' : 'currentColor'}
           strokeWidth={1.5}
-          className={s <= filled ? '' : 'text-[var(--g2-border)]'}
+          style={
+            s <= filled
+              ? { fill: 'var(--g2-star)', color: 'var(--g2-star)' }
+              : { fill: 'none', color: 'var(--g2-border)' }
+          }
         />
       ))}
     </span>
@@ -80,7 +82,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
     ? relatedProducts.filter((p) => p.category === activeCategory)
     : relatedProducts
 
-  const displayPlaybooks: PlaybookData[] = matchedPlaybooks.slice(0, 5)
+  const displayPlaybooks: PlaybookData[] = matchedPlaybooks.slice(0, 3)
 
   function handlePlaybook(id: string) {
     onClose()
@@ -96,7 +98,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
 
   return (
     <div
-      className="absolute top-full mt-3 left-0 right-0 z-50 rounded-2xl border overflow-hidden shadow-2xl"
+      className="absolute top-full mt-3 left-0 right-0 z-50 rounded-2xl border overflow-hidden shadow-2xl text-left"
       style={{
         background: dark ? '#16132b' : 'var(--g2-surface)',
         borderColor: dark ? '#2a2740' : 'var(--g2-border)',
