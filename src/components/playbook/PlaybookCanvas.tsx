@@ -71,7 +71,7 @@ export default function PlaybookCanvas({
     const newNodes: ToolNode[] = initialTools.map(({ tool }, i) => ({
       id: uid(),
       type: 'toolNode' as const,
-      position: { x: i * 290, y: 150 + (i % 2) * 120 },
+      position: { x: i * 380, y: 120 + (i % 2) * 200 },
       data: { ...tool, rating: 0, onDelete: deleteNode, onRate },
     }))
     setNodes(newNodes)
