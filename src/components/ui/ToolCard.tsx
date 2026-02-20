@@ -8,6 +8,7 @@ export interface Tool {
   previewBg: string
   previewContent?: string
   logoEmoji: string
+  rating: number
   likes: number
   comments: number
 }
@@ -18,15 +19,18 @@ interface ToolCardProps {
 
 export default function ToolCard({ tool }: ToolCardProps) {
   return (
-    <article className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-bg)] overflow-hidden hover:shadow-lg transition-shadow">
+    <article className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] overflow-hidden hover:shadow-lg transition-shadow">
 
       {/* Card header */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
         <div className="w-10 h-10 rounded-full bg-[var(--g2-border)] flex items-center justify-center shrink-0 text-xl">
           {tool.logoEmoji}
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 flex items-center gap-2">
           <p className="text-[14px] font-bold text-[var(--g2-dark)] truncate">{tool.name}</p>
+          <span className="shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--g2-purple-light)] text-[var(--g2-purple)]">
+            {tool.rating.toFixed(1)}
+          </span>
         </div>
         <span className={`text-[11px] font-semibold px-3 py-1.5 rounded-full shrink-0 ${tool.categoryColor}`}>
           {tool.category}

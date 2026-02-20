@@ -44,7 +44,7 @@ export default function FeaturePanels() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
         {/* Panel 1: AI Playbook */}
-        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-bg)] p-7 gap-6">
+        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-7 gap-6">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-1">
               Share your
@@ -80,7 +80,7 @@ export default function FeaturePanels() {
         </div>
 
         {/* Panel 2: AI Tool Rankings */}
-        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-bg)] p-7 gap-6">
+        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-7 gap-6">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-1">
               AI Tool
@@ -146,7 +146,7 @@ export default function FeaturePanels() {
         </div>
 
         {/* Panel 3: Popular AI Categories */}
-        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-bg)] p-7 gap-6">
+        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-7 gap-6">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-1">
               Popular AI

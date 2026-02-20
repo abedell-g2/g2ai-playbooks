@@ -12,16 +12,28 @@
   --g2-border:        #dfdfe2;
   --g2-bg:            #fafafa;
 
+  /* Surface sits one step above bg (cards, panels) */
+  --g2-surface:       #ffffff;
+
+  /* "AI." display color — orange in light, near-white in dark */
+  --g2-ai-text:       #ff492c;
+
+  /* Hero radial glow */
+  --hero-glow: radial-gradient(ellipse at 50% -20%, rgba(87, 70, 178, 0.07) 0%, transparent 65%);
+
   color-scheme: light dark;
 }
 
 /* Dark mode overrides */
 .dark {
-  --g2-bg:     #0e0c1a;
-  --g2-dark:   #f5f4fb;
-  --g2-text:   #c4c2cc;
-  --g2-muted:  #807d8e;
-  --g2-border: #2a2740;
+  --g2-bg:       #0e0c1a;
+  --g2-surface:  #16132b;
+  --g2-dark:     #f5f4fb;
+  --g2-text:     #c4c2cc;
+  --g2-muted:    #807d8e;
+  --g2-border:   #2a2740;
+  --g2-ai-text:  #f5f4fb;
+  --hero-glow:   radial-gradient(ellipse at 50% -10%, rgba(87, 70, 178, 0.45) 0%, transparent 65%);
 }
 
 /*
