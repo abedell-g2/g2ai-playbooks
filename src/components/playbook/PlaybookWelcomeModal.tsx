@@ -104,6 +104,22 @@ export default function PlaybookWelcomeModal({ onSubmit }: PlaybookWelcomeModalP
             />
           </div>
 
+          {/* Author */}
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)]">
+            <img
+              src="https://media.licdn.com/dms/image/v2/C5603AQF2xPA_A5YPIg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1653323249034?e=2147483647&v=beta&t=cQ2tQFG2kS-Z38clCSkC6fuw3ANhg6p9FpM9HJtb19Y"
+              alt="Godard Abel"
+              className="w-9 h-9 rounded-full object-cover ring-2 ring-[var(--g2-border)] shrink-0"
+            />
+            <div className="min-w-0">
+              <p className="text-[13px] font-semibold text-[var(--g2-dark)]">Godard Abel</p>
+              <p className="text-[12px] text-[var(--g2-muted)]">CEO @ G2</p>
+            </div>
+            <span className="ml-auto text-[11px] font-semibold text-[var(--g2-purple)] bg-[var(--g2-purple-light)] px-2.5 py-1 rounded-full shrink-0">
+              Author
+            </span>
+          </div>
+
           <button
             type="submit"
             disabled={!canSubmit}
