@@ -26,12 +26,15 @@ export default function ConnectionModal({ onSubmit, onSkip }: ConnectionModalPro
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.5)' }}
+      style={{ background: 'rgba(0,0,0,0.5)', animation: 'modal-backdrop 0.2s ease forwards' }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="conn-heading"
     >
-      <div className="w-full max-w-[420px] rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] shadow-2xl p-7 flex flex-col gap-5">
+      <div
+        className="w-full max-w-[420px] rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] shadow-2xl p-7 flex flex-col gap-5"
+        style={{ animation: 'modal-panel 0.25s ease forwards' }}
+      >
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">

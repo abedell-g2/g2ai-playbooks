@@ -24,10 +24,10 @@ export default function StarRating({ value, onChange }: StarRatingProps) {
         >
           <Star
             size={13}
-            className={
+            style={
               star <= active
-                ? 'fill-amber-400 text-amber-400'
-                : 'fill-none text-[var(--g2-border)]'
+                ? { fill: 'var(--g2-star)', color: 'var(--g2-star)' }
+                : { fill: 'none', color: 'var(--g2-border)' }
             }
           />
         </button>
