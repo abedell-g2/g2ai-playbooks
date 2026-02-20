@@ -24,47 +24,52 @@
   --g2-border: #2a2740;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/*
+  All custom base styles go inside @layer base so they don't override
+  Tailwind utility classes (which live in @layer utilities).
+  Unlayered CSS always beats layered CSS in the cascade, so any unlayered
+  rule like "* { padding: 0 }" would silently zero out every p-* / py-* class.
+*/
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
 
-body {
-  font-family: 'Figtree', system-ui, sans-serif;
-  background-color: var(--g2-bg);
-  color: var(--g2-dark);
-  -webkit-font-smoothing: antialiased;
+  html.dark { color-scheme: dark; }
+
+  body {
+    font-family: 'Figtree', system-ui, sans-serif;
+    background-color: var(--g2-bg);
+    color: var(--g2-dark);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--g2-purple);
+    color: #fff;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 9999;
+    transition: top 0.15s;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* ReactFlow base overrides */
+  .react-flow__renderer { border-radius: 12px; }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid var(--g2-purple);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--g2-border); border-radius: 999px; }
 }
-
-/* Skip link */
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 1rem;
-  padding: 0.5rem 1rem;
-  background: var(--g2-purple);
-  color: #fff;
-  border-radius: 0 0 8px 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  z-index: 9999;
-  transition: top 0.15s;
-}
-.skip-link:focus { top: 0; }
-
-/* Dark mode class applied to <html> */
-html.dark {
-  color-scheme: dark;
-}
-
-/* ReactFlow base overrides */
-.react-flow__renderer { border-radius: 12px; }
-
-/* Focus ring */
-:focus-visible {
-  outline: 2px solid var(--g2-purple);
-  outline-offset: 2px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--g2-border); border-radius: 999px; }
