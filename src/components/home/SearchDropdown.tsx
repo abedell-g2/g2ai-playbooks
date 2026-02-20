@@ -10,24 +10,10 @@ import {
   type PlaybookData,
 } from '../../data/searchData'
 
-const BASE = import.meta.env.BASE_URL
-
-// Map each product id to a deterministic set of 3 screenshot images
-const ALL_IMGS = Array.from({ length: 8 }, (_, i) =>
-  i < 7
-    ? `${BASE}images/product-images/rounded-${i + 1}.png`
-    : `${BASE}images/product-images/rounded.png`,
-)
-
-const PRODUCT_ORDER = [
-  'claude', 'chatgpt', 'cursor', 'copilot',
-  'perplexity', 'midjourney', 'notion-ai', 'jasper', 'replit', 'grammarly',
-]
-
-function getScreenshots(productId: string): [string, string, string] {
-  const idx = PRODUCT_ORDER.indexOf(productId)
-  const o = idx >= 0 ? idx : 0
-  return [ALL_IMGS[o % 8], ALL_IMGS[(o + 2) % 8], ALL_IMGS[(o + 4) % 8]]
+// Microlink free API — returns a redirect to the site's OG/social preview image.
+// No API key needed; works as a plain <img src>.
+function ogImage(domain: string) {
+  return `https://api.microlink.io/?url=https://${domain}&embed=image.url`
 }
 
 function Stars({ rating, size = 11 }: { rating: number; size?: number }) {
@@ -64,7 +50,15 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
   const matchedPlaybooks = searchPlaybooks(query)
 
   const featured: ProductData | null = matchedProducts[0] ?? null
-  const screenshots = featured ? getScreenshots(featured.id) : []
+
+  // 3 thumbnails: featured product + first two related products (or repeat featured)
+  const thumbnailDomains: [string, string, string] = featured
+    ? [
+        featured.domain,
+        getProductById(featured.relatedIds[0])?.domain ?? featured.domain,
+        getProductById(featured.relatedIds[1])?.domain ?? featured.domain,
+      ]
+    : ['openai.com', 'claude.ai', 'cursor.com']
 
   // Related products for the featured product
   const relatedProducts: ProductData[] = featured
@@ -111,11 +105,19 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
         {featured && (
           <div className="flex-[3] p-5 flex flex-col gap-4 min-w-0">
 
-            {/* Screenshots */}
+            {/* Screenshots — real OG images via Microlink */}
             <div className="grid grid-cols-3 gap-2">
-              {screenshots.map((src, i) => (
+              {thumbnailDomains.map((domain, i) => (
                 <div key={i} className="rounded-xl overflow-hidden aspect-[4/3] bg-[var(--g2-bg)]">
-                  <img src={src} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={ogImage(domain)}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to a subtle gradient if OG image fails
+                      ;(e.target as HTMLImageElement).style.display = 'none'
+                    }}
+                  />
                 </div>
               ))}
             </div>

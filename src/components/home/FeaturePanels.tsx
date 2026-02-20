@@ -29,16 +29,22 @@ const RANKINGS = [
 ]
 
 const CATEGORIES = [
-  { label: 'Generative',    color: 'bg-violet-50 text-violet-500' },
-  { label: 'Coding',        color: 'bg-sky-50 text-sky-600' },
-  { label: 'Marketing',     color: 'bg-orange-50 text-orange-500' },
-  { label: 'Writing',       color: 'bg-emerald-50 text-emerald-600' },
-  { label: 'Data Analytics',color: 'bg-amber-50 text-amber-600' },
-  { label: 'Image Creation', color: 'bg-rose-50 text-rose-500' },
-  { label: 'Legal',         color: 'bg-slate-50 text-slate-500' },
-  { label: 'Education',     color: 'bg-teal-50 text-teal-500' },
-  { label: 'Sales',         color: 'bg-red-50 text-red-500' },
-  { label: 'Productivity',  color: 'bg-indigo-50 text-indigo-500' },
+  { label: 'Generative',       color: 'bg-violet-50 text-violet-500' },
+  { label: 'Coding',           color: 'bg-sky-50 text-sky-600' },
+  { label: 'Marketing',        color: 'bg-orange-50 text-orange-500' },
+  { label: 'Writing',          color: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Data Analytics',   color: 'bg-amber-50 text-amber-600' },
+  { label: 'Image Creation',   color: 'bg-rose-50 text-rose-500' },
+  { label: 'Video',            color: 'bg-pink-50 text-pink-500' },
+  { label: 'Audio',            color: 'bg-cyan-50 text-cyan-600' },
+  { label: 'Automation',       color: 'bg-purple-50 text-purple-500' },
+  { label: 'Design',           color: 'bg-fuchsia-50 text-fuchsia-500' },
+  { label: 'Research',         color: 'bg-teal-50 text-teal-500' },
+  { label: 'Customer Support', color: 'bg-lime-50 text-lime-600' },
+  { label: 'Legal',            color: 'bg-slate-50 text-slate-500' },
+  { label: 'Education',        color: 'bg-blue-50 text-blue-500' },
+  { label: 'Sales',            color: 'bg-red-50 text-red-500' },
+  { label: 'Productivity',     color: 'bg-indigo-50 text-indigo-500' },
 ]
 
 export default function FeaturePanels() {
