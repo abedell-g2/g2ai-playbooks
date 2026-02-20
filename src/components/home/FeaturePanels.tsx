@@ -59,7 +59,7 @@ export default function FeaturePanels() {
             <img
               src={`${BASE}images/Playbook-Image.png`}
               alt="AI Playbook"
-              className="w-[160px] h-[140px] object-contain rounded-2xl"
+              className="w-full h-[200px] object-contain rounded-2xl"
             />
           </div>
 
