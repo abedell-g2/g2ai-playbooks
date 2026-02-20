@@ -6,7 +6,7 @@ const BASE = import.meta.env.BASE_URL
 const AI_FRAMES = Array.from({ length: 18 }, (_, i) =>
   `${BASE}images/ai-images/Property${i + 1}.png`
 )
-const FRAME_MS = 70
+const FRAME_MS = 110
 
 function AnimatedAI() {
   const [ready, setReady] = useState(false)
@@ -52,7 +52,7 @@ function AnimatedAI() {
       alt="AI."
       aria-label="AI."
       className="inline-block"
-      style={{ height: '0.88em', width: 'auto', verticalAlign: '-0.05em' }}
+      style={{ height: '1.15em', width: 'auto', verticalAlign: '-0.1em' }}
     />
   )
 }
