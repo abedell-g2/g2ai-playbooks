@@ -26,7 +26,7 @@ const nodeTypes = { toolNode: ToolNode }
 let idCounter = 1
 const uid = () => `node_${idCounter++}`
 
-export default function PlaybookCanvas() {
+export default function PlaybookCanvas({ dark }: { dark: boolean }) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<ToolNode, AppEdge> | null>(null)
   const [nodes, setNodes, onNodesChange] = useNodesState<ToolNode>([])
@@ -109,9 +109,9 @@ export default function PlaybookCanvas() {
           className="!border-[var(--g2-border)] !bg-[var(--g2-bg)] !shadow-sm !rounded-xl overflow-hidden"
         />
         <MiniMap
-          className="!border-[var(--g2-border)] !bg-[var(--g2-bg)] !rounded-xl overflow-hidden"
+          className="!rounded-xl overflow-hidden"
           nodeColor="#5746b2"
-          maskColor="rgba(250,250,250,0.7)"
+          maskColor={dark ? 'rgba(14,12,26,0.75)' : 'rgba(250,250,250,0.75)'}
         />
 
         {nodes.length === 0 && (

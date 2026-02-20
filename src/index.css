@@ -29,15 +29,16 @@
 
 /* Dark mode overrides */
 .dark {
-  --g2-bg:       #0e0c1a;
-  --g2-surface:  #16132b;
-  --g2-dark:     #f5f4fb;
-  --g2-text:     #c4c2cc;
-  --g2-muted:    #807d8e;
-  --g2-border:   #2a2740;
-  --g2-ai-text:  #f5f4fb;
-  --g2-logo:     #ebe9f6;
-  --hero-glow:   radial-gradient(ellipse at 50% -10%, rgba(87, 70, 178, 0.45) 0%, transparent 65%);
+  --g2-bg:           #0e0c1a;
+  --g2-surface:      #16132b;
+  --g2-dark:         #f5f4fb;
+  --g2-text:         #c4c2cc;
+  --g2-muted:        #807d8e;
+  --g2-border:       #2a2740;
+  --g2-purple-light: #221f3d;
+  --g2-ai-text:      #f5f4fb;
+  --g2-logo:         #ebe9f6;
+  --hero-glow:       radial-gradient(ellipse at 50% -10%, rgba(87, 70, 178, 0.45) 0%, transparent 65%);
 }
 
 /*
@@ -77,6 +78,27 @@
 
   /* ReactFlow base overrides */
   .react-flow__renderer { border-radius: 12px; }
+
+  /* ReactFlow dark mode: controls */
+  .dark .react-flow__controls {
+    border-color: var(--g2-border);
+    background: var(--g2-surface);
+  }
+  .dark .react-flow__controls-button {
+    background: var(--g2-surface);
+    border-color: var(--g2-border);
+    fill: var(--g2-dark);
+  }
+  .dark .react-flow__controls-button:hover {
+    background: var(--g2-purple-light);
+    fill: var(--g2-dark);
+  }
+
+  /* ReactFlow dark mode: minimap */
+  .dark .react-flow__minimap {
+    border: 1px solid var(--g2-border) !important;
+    background: var(--g2-surface) !important;
+  }
 
   /* Focus ring */
   :focus-visible {

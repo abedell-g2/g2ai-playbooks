@@ -83,7 +83,7 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
       <div className="flex flex-1 overflow-hidden">
         <ToolSidebar />
         <ReactFlowProvider>
-          <PlaybookCanvas />
+          <PlaybookCanvas dark={dark} />
         </ReactFlowProvider>
       </div>
     </div>
