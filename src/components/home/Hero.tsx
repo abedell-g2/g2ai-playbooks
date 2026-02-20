@@ -1,4 +1,5 @@
-import { Search, Sparkles } from 'lucide-react'
+import { Search, Sparkles, PenLine } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import SearchDropdown from './SearchDropdown'
 
@@ -150,6 +151,19 @@ export default function Hero({ dark }: HeroProps) {
               </button>
             </form>
           </div>
+
+          {/* CTA below search */}
+          {!showDropdown && (
+            <div className="flex justify-center mt-4">
+              <Link
+                to="/playbook/new"
+                className="flex items-center gap-2 text-[13.5px] font-semibold text-[var(--g2-muted)] hover:text-[var(--g2-purple)] transition-colors"
+              >
+                <PenLine size={14} />
+                Create your AI Playbook
+              </Link>
+            </div>
+          )}
 
           {/* Dropdown */}
           {showDropdown && (

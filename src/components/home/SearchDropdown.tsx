@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Star, BookOpen, ArrowRight, ExternalLink, Shuffle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import ToolLogo from '../ui/ToolLogo'
@@ -70,7 +69,6 @@ interface Props {
 
 export default function SearchDropdown({ query, dark, onClose }: Props) {
   const navigate = useNavigate()
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
   const matchedProducts = searchProducts(query)
   const matchedPlaybooks = searchPlaybooks(query)
@@ -84,15 +82,6 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
         .map((id) => getProductById(id))
         .filter((p): p is ProductData => !!p)
     : []
-
-  // Category chips from related products
-  const categories: string[] = [
-    ...new Set(relatedProducts.map((p) => p.category)),
-  ]
-
-  const filteredRelated = activeCategory
-    ? relatedProducts.filter((p) => p.category === activeCategory)
-    : relatedProducts
 
   const displayPlaybooks: PlaybookData[] = matchedPlaybooks.slice(0, 3)
 
@@ -184,38 +173,9 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
                   </p>
                 </div>
 
-                {/* Category chips */}
-                {categories.length > 1 && (
-                  <div className="flex gap-2 flex-wrap">
-                    <button
-                      onClick={() => setActiveCategory(null)}
-                      className={`text-[11px] font-semibold px-3 py-1 rounded-full transition-colors ${
-                        activeCategory === null
-                          ? 'bg-[var(--g2-purple)] text-white'
-                          : 'bg-[var(--g2-purple-light)] text-[var(--g2-purple)] hover:bg-[var(--g2-purple)] hover:text-white'
-                      }`}
-                    >
-                      All
-                    </button>
-                    {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
-                        className={`text-[11px] font-semibold px-3 py-1 rounded-full transition-colors ${
-                          activeCategory === cat
-                            ? 'bg-[var(--g2-purple)] text-white'
-                            : 'bg-[var(--g2-purple-light)] text-[var(--g2-purple)] hover:bg-[var(--g2-purple)] hover:text-white'
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
                 {/* Related tools grid */}
                 <div className="grid grid-cols-2 gap-2">
-                  {filteredRelated.slice(0, 4).map((tool) => (
+                  {relatedProducts.slice(0, 4).map((tool) => (
                     <div
                       key={tool.id}
                       className="flex items-center gap-2.5 p-2.5 rounded-xl border border-[var(--g2-border)] hover:border-[var(--g2-purple)] transition-colors cursor-pointer"
@@ -276,7 +236,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
                 <div className="flex items-center gap-2 pl-11">
                   <button
                     onClick={() => handlePlaybook(pb.id)}
-                    className="text-[12.5px] font-semibold px-3 py-1.5 rounded-full bg-[var(--g2-purple)] text-white hover:bg-purple-700 transition-colors"
+                    className="text-[12.5px] font-semibold px-3 py-1.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
                   >
                     See Playbook
                   </button>
