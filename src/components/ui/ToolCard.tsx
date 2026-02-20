@@ -8,6 +8,7 @@ export interface Tool {
   categoryColor: string
   description: string
   previewBg: string
+  previewImage?: string
   previewContent?: string
   rating: number
   likes: number
@@ -37,15 +38,24 @@ export default function ToolCard({ tool }: ToolCardProps) {
       </div>
 
       {/* Preview image */}
-      <div
-        className="mx-5 rounded-xl overflow-hidden h-[168px] flex items-center justify-center"
-        style={{ background: tool.previewBg }}
-        aria-hidden="true"
-      >
-        {tool.previewContent && (
-          <span className="text-white/90 font-black text-2xl tracking-tight px-4 text-center">
-            {tool.previewContent}
-          </span>
+      <div className="mx-5 rounded-xl overflow-hidden h-[168px]" aria-hidden="true">
+        {tool.previewImage ? (
+          <img
+            src={tool.previewImage}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{ background: tool.previewBg }}
+          >
+            {tool.previewContent && (
+              <span className="text-white/90 font-black text-2xl tracking-tight px-4 text-center">
+                {tool.previewContent}
+              </span>
+            )}
+          </div>
         )}
       </div>
 

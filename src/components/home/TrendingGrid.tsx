@@ -1,5 +1,18 @@
 import ToolCard, { type Tool } from '../ui/ToolCard'
 
+const BASE = import.meta.env.BASE_URL
+
+const PRODUCT_IMAGES = [
+  `${BASE}images/product-images/rounded-1.png`,
+  `${BASE}images/product-images/rounded-2.png`,
+  `${BASE}images/product-images/rounded-3.png`,
+  `${BASE}images/product-images/rounded-4.png`,
+  `${BASE}images/product-images/rounded-5.png`,
+  `${BASE}images/product-images/rounded-6.png`,
+  `${BASE}images/product-images/rounded-7.png`,
+  `${BASE}images/product-images/rounded.png`,
+]
+
 const TRENDING_TOOLS: Tool[] = [
   {
     name: 'Automateed',
@@ -123,8 +136,8 @@ export default function TrendingGrid() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {TRENDING_TOOLS.map((tool) => (
-          <ToolCard key={tool.name} tool={tool} />
+        {TRENDING_TOOLS.map((tool, i) => (
+          <ToolCard key={tool.name} tool={{ ...tool, previewImage: PRODUCT_IMAGES[i % PRODUCT_IMAGES.length] }} />
         ))}
       </div>
 
