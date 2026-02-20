@@ -1,21 +1,48 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { ReactFlowProvider } from '@xyflow/react'
 import { ArrowLeft, Share2, Save } from 'lucide-react'
-import ToolSidebar from '../components/playbook/ToolSidebar'
-import PlaybookCanvas from '../components/playbook/PlaybookCanvas'
+import ToolSidebar, { type AITool } from '../components/playbook/ToolSidebar'
+import PlaybookCanvas, { type RemixTool } from '../components/playbook/PlaybookCanvas'
 import ThemeToggle from '../components/ui/ThemeToggle'
 import G2Logo from '../components/ui/G2Logo'
 import PlaybookWelcomeModal, { type PlaybookMeta } from '../components/playbook/PlaybookWelcomeModal'
+import { getPlaybookById, getProductById, type ProductData } from '../data/searchData'
 
 interface PlaybookBuilderProps {
   dark: boolean
   onToggle: () => void
 }
 
+function productToAITool(product: ProductData): AITool {
+  return {
+    id: product.id,
+    name: product.name,
+    domain: product.domain,
+    category: product.category,
+    description: product.shortDescription,
+  }
+}
+
 export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps) {
-  const [showModal, setShowModal] = useState(true)
-  const [title, setTitle] = useState('')
+  const [searchParams] = useSearchParams()
+  const remixId = searchParams.get('remix')
+
+  // Resolve remix data at render time (stable — remixId doesn't change)
+  const remixPlaybook = remixId ? getPlaybookById(remixId) : undefined
+  const remixTools: RemixTool[] | undefined = remixPlaybook
+    ? (remixPlaybook.steps
+        .map((step) => {
+          const product = getProductById(step.toolId)
+          return product ? { tool: productToAITool(product), action: step.action } : null
+        })
+        .filter(Boolean) as RemixTool[])
+    : undefined
+
+  const [showModal, setShowModal] = useState(!remixPlaybook)
+  const [title, setTitle] = useState(
+    remixPlaybook ? `Remix: ${remixPlaybook.title}` : ''
+  )
   const [editing, setEditing] = useState(false)
 
   function handleModalSubmit(meta: PlaybookMeta) {
@@ -26,6 +53,7 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
   return (
     <div className="h-screen flex flex-col bg-[var(--g2-bg)] overflow-hidden">
       {showModal && <PlaybookWelcomeModal onSubmit={handleModalSubmit} />}
+
       {/* Top bar */}
       <header className="h-14 shrink-0 flex items-center gap-4 px-4 border-b border-[var(--g2-border)] bg-[var(--g2-bg)]">
         {/* Back */}
@@ -83,7 +111,7 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
       <div className="flex flex-1 overflow-hidden">
         <ToolSidebar />
         <ReactFlowProvider>
-          <PlaybookCanvas dark={dark} />
+          <PlaybookCanvas dark={dark} initialTools={remixTools} />
         </ReactFlowProvider>
       </div>
     </div>

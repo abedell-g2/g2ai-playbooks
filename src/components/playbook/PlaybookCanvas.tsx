@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   ReactFlow,
   Background,
@@ -31,7 +31,18 @@ const nodeTypes = { toolNode: ToolNode }
 let idCounter = 1
 const uid = () => `node_${idCounter++}`
 
-export default function PlaybookCanvas({ dark }: { dark: boolean }) {
+export interface RemixTool {
+  tool: AITool
+  action?: string
+}
+
+export default function PlaybookCanvas({
+  dark,
+  initialTools,
+}: {
+  dark: boolean
+  initialTools?: RemixTool[]
+}) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<ToolNode, AppEdge> | null>(null)
   const [nodes, setNodes, onNodesChange] = useNodesState<ToolNode>([])
@@ -50,6 +61,46 @@ export default function PlaybookCanvas({ dark }: { dark: boolean }) {
       ),
     [setNodes]
   )
+
+  // Populate canvas when remixing a playbook — runs once rfInstance is ready
+  const remixInitialized = useRef(false)
+  useEffect(() => {
+    if (remixInitialized.current || !rfInstance || !initialTools?.length) return
+    remixInitialized.current = true
+
+    const newNodes: ToolNode[] = initialTools.map(({ tool }, i) => ({
+      id: uid(),
+      type: 'toolNode' as const,
+      position: { x: i * 290, y: 150 + (i % 2) * 120 },
+      data: { ...tool, rating: 0, onDelete: deleteNode, onRate },
+    }))
+    setNodes(newNodes)
+
+    const newEdges: AppEdge[] = newNodes.slice(0, -1).map((node, i) => ({
+      id: `remix-edge-${i}`,
+      source: node.id,
+      target: newNodes[i + 1].id,
+      animated: true,
+      style: { stroke: '#5746b2', strokeWidth: 2 },
+      ...(initialTools[i]?.action
+        ? {
+            label: initialTools[i].action,
+            labelStyle: {
+              fill: 'var(--g2-dark)',
+              fontSize: 11,
+              fontWeight: 700,
+              fontFamily: 'Figtree, system-ui, sans-serif',
+            },
+            labelBgStyle: { fill: 'var(--g2-surface)', stroke: 'var(--g2-border)', strokeWidth: 1 },
+            labelBgPadding: [6, 3] as [number, number],
+            labelBgBorderRadius: 6,
+          }
+        : {}),
+    }))
+    setEdges(newEdges)
+
+    requestAnimationFrame(() => rfInstance.fitView({ padding: 0.18 }))
+  }, [rfInstance, initialTools, deleteNode, onRate, setNodes, setEdges])
 
   const onConnect = useCallback((params: Connection) => {
     setPendingConnection(params)
