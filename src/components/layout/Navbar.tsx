@@ -24,9 +24,14 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
           <a href="#" className="text-[15px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Rankings</a>
         </nav>
 
-        {/* Theme toggle */}
-        <div className="shrink-0 justify-self-end">
+        {/* Right: theme toggle + avatar */}
+        <div className="shrink-0 justify-self-end flex items-center gap-3">
           <ThemeToggle dark={dark} onToggle={onToggle} />
+          <img
+            src="https://media.licdn.com/dms/image/v2/C5603AQF2xPA_A5YPIg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1653323249034?e=2147483647&v=beta&t=cQ2tQFG2kS-Z38clCSkC6fuw3ANhg6p9FpM9HJtb19Y"
+            alt="Profile"
+            className="w-8 h-8 rounded-full object-cover ring-2 ring-[var(--g2-border)] shrink-0"
+          />
         </div>
       </div>
     </header>
