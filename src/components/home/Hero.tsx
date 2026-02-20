@@ -53,7 +53,7 @@ function AnimatedAI() {
 
       {/* Text — sits on top, fades in when done */}
       <span
-        className="font-black italic absolute inset-0 flex items-end"
+        className="font-black absolute inset-0 flex items-end"
         style={{
           color: 'var(--g2-ai-text)',
           opacity: done ? 1 : 0,
