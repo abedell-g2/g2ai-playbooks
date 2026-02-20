@@ -34,7 +34,7 @@ const CATEGORIES = [
   { label: 'Marketing',     color: 'bg-orange-50 text-orange-500' },
   { label: 'Writing',       color: 'bg-emerald-50 text-emerald-600' },
   { label: 'Data Analytics',color: 'bg-amber-50 text-amber-600' },
-  { label: 'Vision',        color: 'bg-rose-50 text-rose-500' },
+  { label: 'Image Creation', color: 'bg-rose-50 text-rose-500' },
   { label: 'Legal',         color: 'bg-slate-50 text-slate-500' },
   { label: 'Education',     color: 'bg-teal-50 text-teal-500' },
   { label: 'Sales',         color: 'bg-red-50 text-red-500' },
@@ -59,7 +59,7 @@ export default function FeaturePanels() {
             <img
               src={`${BASE}images/Playbook-Image.png`}
               alt="AI Playbook"
-              className="w-[110px] h-[96px] object-contain rounded-2xl"
+              className="w-[160px] h-[140px] object-contain rounded-2xl"
             />
           </div>
 
