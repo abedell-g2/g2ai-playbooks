@@ -1,25 +1,26 @@
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import ToolLogo from '../ui/ToolLogo'
 
 const RANKINGS = [
   {
     rank: 1,
     name: 'ChatGPT',
-    logo: 'https://logo.clearbit.com/openai.com',
+    domain: 'openai.com',
     categories: ['Generativity', 'Writing'],
     score: 4.565,
   },
   {
     rank: 2,
     name: 'Gemini',
-    logo: 'https://logo.clearbit.com/google.com',
+    domain: 'gemini.google.com',
     categories: ['Generativity', 'Writing'],
     score: 4.505,
   },
   {
     rank: 3,
     name: 'Thea',
-    logo: null,
+    domain: 'thea.so',
     categories: ['Generativity', 'Coding'],
     score: 4.565,
   },
@@ -100,13 +101,7 @@ export default function FeaturePanels() {
                 </span>
 
                 {/* Logo */}
-                <div className="w-8 h-8 rounded-full bg-[var(--g2-border)] overflow-hidden shrink-0 flex items-center justify-center">
-                  {item.logo ? (
-                    <img src={item.logo} alt={item.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-[11px] font-bold text-[var(--g2-muted)]">{item.name[0]}</span>
-                  )}
-                </div>
+                <ToolLogo domain={item.domain} name={item.name} size={32} className="shrink-0" />
 
                 {/* Name + categories */}
                 <div className="flex-1 min-w-0">

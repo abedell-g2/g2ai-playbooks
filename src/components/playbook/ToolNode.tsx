@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Handle, Position, type NodeProps } from '@xyflow/react'
 import { X } from 'lucide-react'
 import type { AITool } from './ToolSidebar'
+import ToolLogo from '../ui/ToolLogo'
 
 const CATEGORY_COLORS: Record<string, string> = {
   Generativity: 'bg-purple-100 text-purple-700',
@@ -45,7 +46,7 @@ const ToolNode = memo(({ id, data, selected }: NodeProps) => {
       {/* Card content */}
       <div className="p-3">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-2xl">{tool.emoji}</span>
+          <ToolLogo domain={tool.domain} name={tool.name} size={32} className="shrink-0" />
           <div className="min-w-0">
             <p className="text-[13px] font-bold text-[#201f23] truncate">{tool.name}</p>
             <span

@@ -1,35 +1,36 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
+import ToolLogo from '../ui/ToolLogo'
 
 export interface AITool {
   id: string
   name: string
+  domain?: string
   category: string
-  emoji: string
   description: string
 }
 
 export const AI_TOOLS: AITool[] = [
-  { id: 'claude', name: 'Claude', category: 'Generativity', emoji: '🤖', description: 'Anthropic\'s AI assistant' },
-  { id: 'chatgpt', name: 'ChatGPT', category: 'Generativity', emoji: '💬', description: 'OpenAI conversational AI' },
-  { id: 'gemini', name: 'Gemini', category: 'Generativity', emoji: '✨', description: 'Google\'s multimodal AI' },
-  { id: 'n8n', name: 'N8N', category: 'Automation', emoji: '🔄', description: 'Workflow automation platform' },
-  { id: 'zapier', name: 'Zapier', category: 'Automation', emoji: '⚡', description: 'Connect apps & automate work' },
-  { id: 'github-copilot', name: 'GitHub Copilot', category: 'Coding', emoji: '🐙', description: 'AI pair programmer' },
-  { id: 'midjourney', name: 'Midjourney', category: 'Vision', emoji: '🎨', description: 'AI image generation' },
-  { id: 'dalle', name: 'DALL-E', category: 'Vision', emoji: '🖼️', description: 'OpenAI image generation' },
-  { id: 'notion-ai', name: 'Notion AI', category: 'Productivity', emoji: '📝', description: 'AI-powered workspace' },
-  { id: 'jasper', name: 'Jasper', category: 'Writing', emoji: '✍️', description: 'AI marketing copywriter' },
-  { id: 'copyai', name: 'Copy.ai', category: 'Writing', emoji: '📄', description: 'AI copywriting tool' },
-  { id: 'grammarly', name: 'Grammarly', category: 'Writing', emoji: '📖', description: 'AI writing assistant' },
-  { id: 'runway', name: 'Runway', category: 'Video', emoji: '🎬', description: 'AI video generation' },
-  { id: 'synthesia', name: 'Synthesia', category: 'Video', emoji: '🎥', description: 'AI avatar videos' },
-  { id: 'elevenlabs', name: 'ElevenLabs', category: 'Audio', emoji: '🔊', description: 'AI voice generation' },
-  { id: 'deepl', name: 'DeepL', category: 'Writing', emoji: '🌐', description: 'AI translation' },
-  { id: 'gong', name: 'Gong', category: 'Sales', emoji: '📞', description: 'Revenue intelligence AI' },
-  { id: 'zoominfo', name: 'ZoomInfo', category: 'Sales', emoji: '🎯', description: 'B2B data & intelligence' },
-  { id: 'huggingface', name: 'Hugging Face', category: 'Generativity', emoji: '🤗', description: 'Open-source AI models' },
-  { id: 'replicate', name: 'Replicate', category: 'Generativity', emoji: '🧪', description: 'Run AI models in the cloud' },
+  { id: 'claude',         name: 'Claude',         domain: 'anthropic.com',     category: 'Generativity', description: 'Anthropic\'s AI assistant' },
+  { id: 'chatgpt',        name: 'ChatGPT',        domain: 'openai.com',        category: 'Generativity', description: 'OpenAI conversational AI' },
+  { id: 'gemini',         name: 'Gemini',         domain: 'gemini.google.com', category: 'Generativity', description: 'Google\'s multimodal AI' },
+  { id: 'n8n',            name: 'N8N',            domain: 'n8n.io',            category: 'Automation',   description: 'Workflow automation platform' },
+  { id: 'zapier',         name: 'Zapier',         domain: 'zapier.com',        category: 'Automation',   description: 'Connect apps & automate work' },
+  { id: 'github-copilot', name: 'GitHub Copilot', domain: 'github.com',        category: 'Coding',       description: 'AI pair programmer' },
+  { id: 'midjourney',     name: 'Midjourney',     domain: 'midjourney.com',    category: 'Vision',       description: 'AI image generation' },
+  { id: 'dalle',          name: 'DALL-E',         domain: 'openai.com',        category: 'Vision',       description: 'OpenAI image generation' },
+  { id: 'notion-ai',      name: 'Notion AI',      domain: 'notion.so',         category: 'Productivity', description: 'AI-powered workspace' },
+  { id: 'jasper',         name: 'Jasper',         domain: 'jasper.ai',         category: 'Writing',      description: 'AI marketing copywriter' },
+  { id: 'copyai',         name: 'Copy.ai',        domain: 'copy.ai',           category: 'Writing',      description: 'AI copywriting tool' },
+  { id: 'grammarly',      name: 'Grammarly',      domain: 'grammarly.com',     category: 'Writing',      description: 'AI writing assistant' },
+  { id: 'runway',         name: 'Runway',         domain: 'runwayml.com',      category: 'Video',        description: 'AI video generation' },
+  { id: 'synthesia',      name: 'Synthesia',      domain: 'synthesia.io',      category: 'Video',        description: 'AI avatar videos' },
+  { id: 'elevenlabs',     name: 'ElevenLabs',     domain: 'elevenlabs.io',     category: 'Audio',        description: 'AI voice generation' },
+  { id: 'deepl',          name: 'DeepL',          domain: 'deepl.com',         category: 'Writing',      description: 'AI translation' },
+  { id: 'gong',           name: 'Gong',           domain: 'gong.io',           category: 'Sales',        description: 'Revenue intelligence AI' },
+  { id: 'zoominfo',       name: 'ZoomInfo',       domain: 'zoominfo.com',      category: 'Sales',        description: 'B2B data & intelligence' },
+  { id: 'huggingface',    name: 'Hugging Face',   domain: 'huggingface.co',    category: 'Generativity', description: 'Open-source AI models' },
+  { id: 'replicate',      name: 'Replicate',      domain: 'replicate.com',     category: 'Generativity', description: 'Run AI models in the cloud' },
 ]
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -96,7 +97,7 @@ export default function ToolSidebar() {
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-[var(--g2-border)] cursor-grab active:cursor-grabbing hover:border-[var(--g2-purple)] hover:bg-[var(--g2-purple-light)] transition-colors select-none"
             title={tool.description}
           >
-            <span className="text-xl shrink-0">{tool.emoji}</span>
+            <ToolLogo domain={tool.domain} name={tool.name} size={28} className="shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="text-[12.5px] font-semibold text-[var(--g2-dark)] truncate">{tool.name}</p>
               <span

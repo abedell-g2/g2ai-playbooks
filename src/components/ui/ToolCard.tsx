@@ -1,13 +1,14 @@
 import { Heart, MessageCircle, Repeat2, Send } from 'lucide-react'
+import ToolLogo from './ToolLogo'
 
 export interface Tool {
   name: string
+  domain?: string
   category: string
   categoryColor: string
   description: string
   previewBg: string
   previewContent?: string
-  logoEmoji: string
   rating: number
   likes: number
   comments: number
@@ -23,9 +24,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
       {/* Card header */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
-        <div className="w-10 h-10 rounded-full bg-[var(--g2-border)] flex items-center justify-center shrink-0 text-xl">
-          {tool.logoEmoji}
-        </div>
+        <ToolLogo domain={tool.domain} name={tool.name} size={40} className="shrink-0" />
         <div className="flex-1 min-w-0 flex items-center gap-2">
           <p className="text-[14px] font-bold text-[var(--g2-dark)] truncate">{tool.name}</p>
           <span className="shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--g2-purple-light)] text-[var(--g2-purple)]">
