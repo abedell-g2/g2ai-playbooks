@@ -10,10 +10,36 @@ import {
   type PlaybookData,
 } from '../../data/searchData'
 
-// Microlink free API — returns a redirect to the site's OG/social preview image.
-// No API key needed; works as a plain <img src>.
-function ogImage(domain: string) {
-  return `https://api.microlink.io/?url=https://${domain}&embed=image.url`
+const BASE = import.meta.env.BASE_URL
+
+const IMGS = [
+  `${BASE}images/product-images/rounded-1.png`,
+  `${BASE}images/product-images/rounded-2.png`,
+  `${BASE}images/product-images/rounded-3.png`,
+  `${BASE}images/product-images/rounded-4.png`,
+  `${BASE}images/product-images/rounded-5.png`,
+  `${BASE}images/product-images/rounded-6.png`,
+  `${BASE}images/product-images/rounded-7.png`,
+  `${BASE}images/product-images/rounded.png`,
+]
+
+// Each product gets 3 distinct screenshots — no repeats within a row
+const SCREENSHOTS: Record<string, [number, number, number]> = {
+  'claude':     [0, 3, 6],
+  'chatgpt':    [1, 4, 7],
+  'cursor':     [2, 5, 0],
+  'copilot':    [3, 6, 1],
+  'perplexity': [4, 7, 2],
+  'midjourney': [5, 0, 3],
+  'notion-ai':  [6, 1, 4],
+  'jasper':     [7, 2, 5],
+  'replit':     [0, 5, 3],
+  'grammarly':  [1, 6, 4],
+}
+
+function getScreenshots(productId: string): [string, string, string] {
+  const [a, b, c] = SCREENSHOTS[productId] ?? [0, 1, 2]
+  return [IMGS[a], IMGS[b], IMGS[c]]
 }
 
 function Stars({ rating, size = 11 }: { rating: number; size?: number }) {
@@ -50,15 +76,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
   const matchedPlaybooks = searchPlaybooks(query)
 
   const featured: ProductData | null = matchedProducts[0] ?? null
-
-  // 3 thumbnails: featured product + first two related products (or repeat featured)
-  const thumbnailDomains: [string, string, string] = featured
-    ? [
-        featured.domain,
-        getProductById(featured.relatedIds[0])?.domain ?? featured.domain,
-        getProductById(featured.relatedIds[1])?.domain ?? featured.domain,
-      ]
-    : ['openai.com', 'claude.ai', 'cursor.com']
+  const screenshots = featured ? getScreenshots(featured.id) : getScreenshots('chatgpt')
 
   // Related products for the featured product
   const relatedProducts: ProductData[] = featured
@@ -105,19 +123,11 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
         {featured && (
           <div className="flex-[3] p-5 flex flex-col gap-4 min-w-0">
 
-            {/* Screenshots — real OG images via Microlink */}
+            {/* Screenshots */}
             <div className="grid grid-cols-3 gap-2">
-              {thumbnailDomains.map((domain, i) => (
+              {screenshots.map((src, i) => (
                 <div key={i} className="rounded-xl overflow-hidden aspect-[4/3] bg-[var(--g2-bg)]">
-                  <img
-                    src={ogImage(domain)}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback to a subtle gradient if OG image fails
-                      ;(e.target as HTMLImageElement).style.display = 'none'
-                    }}
-                  />
+                  <img src={src} alt="" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
