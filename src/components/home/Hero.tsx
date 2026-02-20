@@ -88,7 +88,7 @@ export default function Hero({ dark }: HeroProps) {
         {/* Heading */}
         <h1
           id="hero-heading"
-          className="text-[clamp(3rem,7.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-10"
+          className="text-[clamp(2rem,5.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-10 whitespace-nowrap"
         >
           <span className="font-light">Where you go for </span>
           <AnimatedAI />
