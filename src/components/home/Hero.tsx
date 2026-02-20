@@ -1,15 +1,29 @@
 import { Search, Sparkles } from 'lucide-react'
 
-export default function Hero() {
+const BASE = import.meta.env.BASE_URL
+
+interface HeroProps {
+  dark: boolean
+}
+
+export default function Hero({ dark }: HeroProps) {
+  const bgImage = dark
+    ? `${BASE}images/Background_DarkMode.svg`
+    : `${BASE}images/Background_LightMode.svg`
+
   return (
     <section
       className="relative overflow-hidden py-28 md:py-36 text-center"
       style={{ background: 'var(--hero-glow), var(--g2-bg)' }}
       aria-labelledby="hero-heading"
     >
-      {/* Decorative + grid */}
+      {/* Decorative background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <DotGrid />
+        <img
+          src={bgImage}
+          alt=""
+          className="w-full h-full object-cover"
+        />
       </div>
 
       <div className="relative max-w-[860px] mx-auto px-8">
@@ -54,22 +68,4 @@ export default function Hero() {
       </div>
     </section>
   )
-}
-
-function DotGrid() {
-  const marks = []
-  for (let row = 0; row < 6; row++) {
-    for (let col = 0; col < 10; col++) {
-      marks.push(
-        <span
-          key={`${row}-${col}`}
-          className="absolute text-[var(--g2-border)] text-base select-none"
-          style={{ top: `${row * 18 + 4}%`, left: `${col * 11 + 1}%`, opacity: 0.6 }}
-        >
-          +
-        </span>
-      )
-    }
-  }
-  return <>{marks}</>
 }

@@ -2,6 +2,8 @@ import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ToolLogo from '../ui/ToolLogo'
 
+const BASE = import.meta.env.BASE_URL
+
 const RANKINGS = [
   {
     rank: 1,
@@ -54,9 +56,11 @@ export default function FeaturePanels() {
           </div>
 
           <div className="flex justify-center py-2">
-            <div className="w-[110px] h-[96px] rounded-2xl bg-gradient-to-br from-[var(--g2-purple-light)] to-purple-200 flex items-center justify-center">
-              <span className="text-5xl" role="img" aria-label="Playbook">📋</span>
-            </div>
+            <img
+              src={`${BASE}images/Playbook-Image.png`}
+              alt="AI Playbook"
+              className="w-[110px] h-[96px] object-contain rounded-2xl"
+            />
           </div>
 
           <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed">

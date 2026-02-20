@@ -25,7 +25,7 @@ function Homepage({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
       <a href="#main-content" className="skip-link">Skip to content</a>
       <Navbar dark={dark} onToggle={onToggle} />
       <main id="main-content">
-        <Hero />
+        <Hero dark={dark} />
         <FeaturePanels />
         <TrendingGrid />
       </main>
