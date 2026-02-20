@@ -47,6 +47,21 @@
   Unlayered CSS always beats layered CSS in the cascade, so any unlayered
   rule like "* { padding: 0 }" would silently zero out every p-* / py-* class.
 */
+/* ReactFlow dark mode: controls — must be unlayered to beat ReactFlow's own CSS */
+.dark .react-flow__controls {
+  background: var(--g2-surface) !important;
+  border-color: var(--g2-border) !important;
+  box-shadow: none !important;
+}
+.dark .react-flow__controls-button {
+  background: var(--g2-surface) !important;
+  border-bottom-color: var(--g2-border) !important;
+  fill: var(--g2-dark) !important;
+}
+.dark .react-flow__controls-button:hover {
+  background: var(--g2-purple-light) !important;
+}
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -78,21 +93,6 @@
 
   /* ReactFlow base overrides */
   .react-flow__renderer { border-radius: 12px; }
-
-  /* ReactFlow dark mode: controls */
-  .dark .react-flow__controls {
-    border-color: var(--g2-border);
-    background: var(--g2-surface);
-  }
-  .dark .react-flow__controls-button {
-    background: var(--g2-surface);
-    border-color: var(--g2-border);
-    fill: var(--g2-dark);
-  }
-  .dark .react-flow__controls-button:hover {
-    background: var(--g2-purple-light);
-    fill: var(--g2-dark);
-  }
 
   /* ReactFlow dark mode: minimap */
   .dark .react-flow__minimap {
