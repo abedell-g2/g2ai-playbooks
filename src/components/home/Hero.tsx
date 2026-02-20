@@ -18,13 +18,8 @@ function AnimatedAI() {
     let loaded = 0
     AI_FRAMES.forEach((src) => {
       const img = new Image()
-      img.onload = () => {
-        loaded++
-        if (loaded === AI_FRAMES.length) setReady(true)
-      }
-      img.onerror = () => {
-        loaded++
-        if (loaded === AI_FRAMES.length) setReady(true)
+      img.onload = img.onerror = () => {
+        if (++loaded === AI_FRAMES.length) setReady(true)
       }
       img.src = src
     })
@@ -37,23 +32,40 @@ function AnimatedAI() {
     return () => clearTimeout(t)
   }, [ready, frame, done])
 
-  // Resolved — show original styled text
-  if (!ready || done) {
-    return (
-      <span className="font-black italic" style={{ color: 'var(--g2-ai-text)' }}>
+  // Both image and text stay in the DOM; opacity crossfades so layout never shifts
+  return (
+    <span
+      className="relative inline-block"
+      style={{ height: '1.15em', verticalAlign: '-0.1em' }}
+    >
+      {/* Image — cycles through frames, fades out when done */}
+      <img
+        src={ready ? AI_FRAMES[Math.min(frame, AI_FRAMES.length - 1)] : AI_FRAMES[0]}
+        alt=""
+        style={{
+          display: 'block',
+          height: '100%',
+          width: 'auto',
+          opacity: ready && !done ? 1 : 0,
+          transition: done ? 'opacity 0.4s ease' : 'none',
+        }}
+      />
+
+      {/* Text — sits on top, fades in when done */}
+      <span
+        className="font-black italic absolute inset-0 flex items-end"
+        style={{
+          color: 'var(--g2-ai-text)',
+          opacity: done ? 1 : 0,
+          transition: 'opacity 0.4s ease',
+          whiteSpace: 'nowrap',
+          lineHeight: 1.05,
+        }}
+        aria-label="AI."
+      >
         AI.
       </span>
-    )
-  }
-
-  return (
-    <img
-      src={AI_FRAMES[frame]}
-      alt="AI."
-      aria-label="AI."
-      className="inline-block"
-      style={{ height: '1.15em', width: 'auto', verticalAlign: '-0.1em' }}
-    />
+    </span>
   )
 }
 
