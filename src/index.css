@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&family=Barlow:wght@400;600&display=swap');
+
+/* ── Elevate / G2.AI design tokens ────────────────────────── */
+:root {
+  --g2-purple:        #5746b2;
+  --g2-purple-light:  #ebe9f6;
+  --g2-orange:        #ff492c;
+  --g2-dark:          #201f23;
+  --g2-text:          #4c4b53;
+  --g2-muted:         #6f6d78;
+  --g2-border:        #dfdfe2;
+  --g2-bg:            #fafafa;
+
+  color-scheme: light dark;
+}
+
+/* Dark mode overrides */
+.dark {
+  --g2-bg:     #0e0c1a;
+  --g2-dark:   #f5f4fb;
+  --g2-text:   #c4c2cc;
+  --g2-muted:  #807d8e;
+  --g2-border: #2a2740;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Figtree', system-ui, sans-serif;
+  background-color: var(--g2-bg);
+  color: var(--g2-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ReactFlow base overrides */
+.react-flow__renderer { border-radius: 12px; }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--g2-purple);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--g2-border); border-radius: 999px; }
