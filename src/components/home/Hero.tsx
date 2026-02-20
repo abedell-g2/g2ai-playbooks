@@ -36,7 +36,7 @@ function AnimatedAI() {
   return (
     <span
       className="relative inline-block"
-      style={{ height: '1.15em', verticalAlign: '-0.1em' }}
+      style={{ height: '1.4em', verticalAlign: '-0.22em' }}
     >
       {/* Image — cycles through frames, fades out when done */}
       <img
