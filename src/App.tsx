@@ -6,6 +6,7 @@ import Hero from './components/home/Hero'
 import FeaturePanels from './components/home/FeaturePanels'
 import TrendingGrid from './components/home/TrendingGrid'
 import PlaybookBuilder from './pages/PlaybookBuilder'
+import PlaybookView from './pages/PlaybookView'
 
 function useTheme() {
   const [dark, setDark] = useState(() =>
@@ -41,6 +42,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Homepage dark={dark} onToggle={toggle} />} />
         <Route path="/playbook/new" element={<PlaybookBuilder dark={dark} onToggle={toggle} />} />
+        <Route path="/playbook/view/:id" element={<PlaybookView dark={dark} onToggle={toggle} />} />
       </Routes>
     </BrowserRouter>
   )
