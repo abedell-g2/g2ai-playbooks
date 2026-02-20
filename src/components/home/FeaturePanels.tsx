@@ -1,4 +1,5 @@
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const RANKINGS = [
   {
@@ -66,12 +67,12 @@ export default function FeaturePanels() {
           </p>
 
           <div className="flex items-center gap-2 mt-auto">
-            <a
-              href="#"
+            <Link
+              to="/playbook/new"
               className="px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-purple-700 transition-colors"
             >
               Start Your Playbook
-            </a>
+            </Link>
             <a
               href="#"
               className="px-4 py-2 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"

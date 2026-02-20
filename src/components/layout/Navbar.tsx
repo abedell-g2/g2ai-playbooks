@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import ThemeToggle from '../ui/ThemeToggle'
 
 interface NavbarProps {
@@ -23,15 +24,10 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
 
         {/* Nav links */}
         <nav aria-label="Primary navigation" className="hidden md:flex items-center gap-5 mx-auto">
-          {['Explore Software', 'AI Playbooks', 'Categories', 'Rankings'].map((link) => (
-            <a
-              key={link}
-              href="#"
-              className="text-[13.5px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
-            >
-              {link}
-            </a>
-          ))}
+          <a href="#" className="text-[13.5px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Explore Software</a>
+          <Link to="/playbook/new" className="text-[13.5px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">AI Playbooks</Link>
+          <a href="#" className="text-[13.5px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Categories</a>
+          <a href="#" className="text-[13.5px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Rankings</a>
         </nav>
 
         {/* Theme toggle */}
