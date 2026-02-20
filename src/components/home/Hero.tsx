@@ -71,7 +71,7 @@ export default function Hero({ dark }: HeroProps) {
 
   return (
     <section
-      className="relative overflow-hidden py-28 md:py-36 text-center"
+      className="relative overflow-hidden py-16 md:py-24 text-center"
       style={{ background: 'var(--hero-glow), var(--g2-bg)' }}
       aria-labelledby="hero-heading"
     >
@@ -88,33 +88,37 @@ export default function Hero({ dark }: HeroProps) {
         {/* Heading */}
         <h1
           id="hero-heading"
-          className="text-[clamp(2rem,5.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-10 whitespace-nowrap"
+          className="text-[clamp(2rem,5.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-7 whitespace-nowrap"
         >
           <span className="font-light">Where you go for </span>
           <AnimatedAI />
         </h1>
 
         {/* Search bar */}
-        <div className="max-w-[560px] mx-auto">
+        <div className="max-w-[620px] mx-auto">
           <form
             role="search"
             aria-label="Find AI software"
             onSubmit={(e) => e.preventDefault()}
-            className="flex items-center gap-3 rounded-full border border-[var(--g2-border)] bg-[var(--g2-surface)] px-5 py-4 shadow-sm transition-all focus-within:border-[var(--g2-purple)] focus-within:shadow-md"
+            className="flex items-center gap-3 rounded-full border px-6 py-5 shadow-sm transition-all focus-within:shadow-md"
+            style={{
+              background: dark ? '#1e1b36' : 'var(--g2-surface)',
+              borderColor: dark ? '#4a4570' : 'var(--g2-border)',
+            }}
           >
-            <Search size={17} className="shrink-0 text-[var(--g2-muted)]" aria-hidden="true" />
+            <Search size={18} className="shrink-0 text-[var(--g2-muted)]" aria-hidden="true" />
             <input
               type="search"
               placeholder="Find AI software..."
               aria-label="Find AI software"
-              className="flex-1 bg-transparent text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] text-[15px] outline-none"
+              className="flex-1 bg-transparent text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] text-[16px] outline-none"
             />
             <button
               type="submit"
               aria-label="Search with AI"
               className="shrink-0 text-[var(--g2-purple)] hover:text-[var(--g2-orange)] transition-colors"
             >
-              <Sparkles size={17} aria-hidden="true" />
+              <Sparkles size={18} aria-hidden="true" />
             </button>
           </form>
         </div>
