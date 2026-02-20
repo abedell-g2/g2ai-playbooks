@@ -21,10 +21,17 @@ const RANKINGS = [
   },
   {
     rank: 3,
-    name: 'Thea',
-    domain: 'thea.so',
+    name: 'Claude',
+    domain: 'claude.ai',
     categories: ['Generative', 'Coding'],
-    score: 4.565,
+    score: 4.480,
+  },
+  {
+    rank: 4,
+    name: 'Perplexity',
+    domain: 'perplexity.ai',
+    categories: ['Research', 'Generative'],
+    score: 4.440,
   },
 ]
 

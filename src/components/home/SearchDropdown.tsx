@@ -136,24 +136,24 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
             <div className="flex items-center gap-3">
               <ToolLogo domain={featured.domain} name={featured.name} size={36} />
               <div className="min-w-0">
-                <p className="text-[15px] font-bold text-[var(--g2-dark)] truncate">{featured.name}</p>
+                <p className="text-[16px] font-bold text-[var(--g2-dark)] truncate">{featured.name}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <Stars rating={featured.rating} />
-                  <span className="text-[12px] font-semibold text-[var(--g2-muted)]">
+                  <span className="text-[13px] font-semibold text-[var(--g2-muted)]">
                     {featured.rating.toFixed(1)}
                   </span>
-                  <span className="text-[11px] text-[var(--g2-muted)]">
+                  <span className="text-[12px] text-[var(--g2-muted)]">
                     ({featured.reviewCount.toLocaleString()} reviews)
                   </span>
                 </div>
               </div>
-              <span className={`ml-auto text-[11px] font-semibold px-2.5 py-1 rounded-full shrink-0 ${featured.categoryColor}`}>
+              <span className={`ml-auto text-[12px] font-semibold px-2.5 py-1 rounded-full shrink-0 ${featured.categoryColor}`}>
                 {featured.category}
               </span>
             </div>
 
             {/* Description */}
-            <p className="text-[13px] text-[var(--g2-muted)] leading-relaxed line-clamp-2">
+            <p className="text-[14px] text-[var(--g2-muted)] leading-relaxed line-clamp-2">
               {featured.description}
             </p>
 
@@ -161,7 +161,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
             <div className="flex gap-2.5">
               <button
                 onClick={onClose}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[12.5px] font-semibold hover:bg-purple-700 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-purple-700 transition-colors"
               >
                 <ExternalLink size={13} />
                 Explore {featured.name}
@@ -169,7 +169,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
               <a
                 href="#"
                 onClick={onClose}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[12.5px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
               >
                 Try {featured.name}
               </a>
@@ -222,10 +222,10 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
                     >
                       <ToolLogo domain={tool.domain} name={tool.name} size={28} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-[12px] font-semibold text-[var(--g2-dark)] truncate">{tool.name}</p>
+                        <p className="text-[13px] font-semibold text-[var(--g2-dark)] truncate">{tool.name}</p>
                         <div className="flex items-center gap-1 mt-0.5">
                           <Stars rating={tool.rating} size={9} />
-                          <span className="text-[10px] text-[var(--g2-muted)]">{tool.rating.toFixed(1)}</span>
+                          <span className="text-[11px] text-[var(--g2-muted)]">{tool.rating.toFixed(1)}</span>
                         </div>
                       </div>
                     </div>
@@ -242,7 +242,7 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-0.5">
               Popular
             </p>
-            <h3 className="text-[18px] font-black text-[var(--g2-dark)]">AI Playbooks</h3>
+            <h3 className="text-[20px] font-black text-[var(--g2-dark)]">AI Playbooks</h3>
           </div>
 
           <div className="flex flex-col divide-y divide-[var(--g2-border)] flex-1">
@@ -254,10 +254,10 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
                     <BookOpen size={15} className="text-[var(--g2-purple)]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold text-[var(--g2-dark)] leading-snug line-clamp-2">
+                    <p className="text-[14px] font-bold text-[var(--g2-dark)] leading-snug line-clamp-2">
                       {pb.title}
                     </p>
-                    <p className="text-[11.5px] text-[var(--g2-muted)] mt-0.5">
+                    <p className="text-[12.5px] text-[var(--g2-muted)] mt-0.5">
                       {pb.author} · {pb.authorRole} at {pb.company}
                     </p>
                   </div>
@@ -266,23 +266,23 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
                 {/* Rating */}
                 <div className="flex items-center gap-2 pl-11">
                   <Stars rating={pb.rating} size={10} />
-                  <span className="text-[11px] font-semibold text-[var(--g2-muted)]">
+                  <span className="text-[12px] font-semibold text-[var(--g2-muted)]">
                     {pb.rating.toFixed(1)}
                   </span>
-                  <span className="text-[10px] text-[var(--g2-muted)]">({pb.ratingCount})</span>
+                  <span className="text-[11px] text-[var(--g2-muted)]">({pb.ratingCount})</span>
                 </div>
 
                 {/* Action buttons */}
                 <div className="flex items-center gap-2 pl-11">
                   <button
                     onClick={() => handlePlaybook(pb.id)}
-                    className="text-[11.5px] font-semibold px-3 py-1.5 rounded-full bg-[var(--g2-purple)] text-white hover:bg-purple-700 transition-colors"
+                    className="text-[12.5px] font-semibold px-3 py-1.5 rounded-full bg-[var(--g2-purple)] text-white hover:bg-purple-700 transition-colors"
                   >
                     See Playbook
                   </button>
                   <button
                     onClick={() => handleRemix(pb.id)}
-                    className="flex items-center gap-1 text-[11.5px] font-semibold px-3 py-1.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
+                    className="flex items-center gap-1 text-[12.5px] font-semibold px-3 py-1.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
                   >
                     <Shuffle size={11} />
                     Remix

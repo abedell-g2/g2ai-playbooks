@@ -9,11 +9,7 @@ import PlaybookBuilder from './pages/PlaybookBuilder'
 import PlaybookView from './pages/PlaybookView'
 
 function useTheme() {
-  const [dark, setDark] = useState(() =>
-    typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-color-scheme: dark)').matches
-      : false
-  )
+  const [dark, setDark] = useState(false)
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
   }, [dark])
