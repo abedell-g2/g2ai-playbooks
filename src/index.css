@@ -47,6 +47,10 @@
   Unlayered CSS always beats layered CSS in the cascade, so any unlayered
   rule like "* { padding: 0 }" would silently zero out every p-* / py-* class.
 */
+/* ReactFlow dark mode: edge labels */
+.dark .react-flow__edge-textbg { fill: var(--g2-surface) !important; }
+.dark .react-flow__edge-text   { fill: var(--g2-dark) !important; }
+
 /* ReactFlow dark mode: controls — must be unlayered to beat ReactFlow's own CSS */
 .dark .react-flow__controls {
   background: var(--g2-surface) !important;
