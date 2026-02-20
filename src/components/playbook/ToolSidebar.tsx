@@ -11,9 +11,9 @@ export interface AITool {
 }
 
 export const AI_TOOLS: AITool[] = [
-  { id: 'claude',         name: 'Claude',         domain: 'anthropic.com',     category: 'Generativity', description: 'Anthropic\'s AI assistant' },
-  { id: 'chatgpt',        name: 'ChatGPT',        domain: 'openai.com',        category: 'Generativity', description: 'OpenAI conversational AI' },
-  { id: 'gemini',         name: 'Gemini',         domain: 'gemini.google.com', category: 'Generativity', description: 'Google\'s multimodal AI' },
+  { id: 'claude',         name: 'Claude',         domain: 'anthropic.com',     category: 'Generative', description: 'Anthropic\'s AI assistant' },
+  { id: 'chatgpt',        name: 'ChatGPT',        domain: 'openai.com',        category: 'Generative', description: 'OpenAI conversational AI' },
+  { id: 'gemini',         name: 'Gemini',         domain: 'gemini.google.com', category: 'Generative', description: 'Google\'s multimodal AI' },
   { id: 'n8n',            name: 'N8N',            domain: 'n8n.io',            category: 'Automation',   description: 'Workflow automation platform' },
   { id: 'zapier',         name: 'Zapier',         domain: 'zapier.com',        category: 'Automation',   description: 'Connect apps & automate work' },
   { id: 'github-copilot', name: 'GitHub Copilot', domain: 'github.com',        category: 'Coding',       description: 'AI pair programmer' },
@@ -29,20 +29,20 @@ export const AI_TOOLS: AITool[] = [
   { id: 'deepl',          name: 'DeepL',          domain: 'deepl.com',         category: 'Writing',      description: 'AI translation' },
   { id: 'gong',           name: 'Gong',           domain: 'gong.io',           category: 'Sales',        description: 'Revenue intelligence AI' },
   { id: 'zoominfo',       name: 'ZoomInfo',       domain: 'zoominfo.com',      category: 'Sales',        description: 'B2B data & intelligence' },
-  { id: 'huggingface',    name: 'Hugging Face',   domain: 'huggingface.co',    category: 'Generativity', description: 'Open-source AI models' },
-  { id: 'replicate',      name: 'Replicate',      domain: 'replicate.com',     category: 'Generativity', description: 'Run AI models in the cloud' },
+  { id: 'huggingface',    name: 'Hugging Face',   domain: 'huggingface.co',    category: 'Generative', description: 'Open-source AI models' },
+  { id: 'replicate',      name: 'Replicate',      domain: 'replicate.com',     category: 'Generative', description: 'Run AI models in the cloud' },
 ]
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Generativity: 'bg-purple-100 text-purple-700',
-  Automation: 'bg-blue-100 text-blue-700',
-  Coding: 'bg-green-100 text-green-700',
-  Vision: 'bg-pink-100 text-pink-700',
-  Productivity: 'bg-indigo-100 text-indigo-700',
-  Writing: 'bg-yellow-100 text-yellow-700',
-  Video: 'bg-orange-100 text-orange-700',
-  Audio: 'bg-teal-100 text-teal-700',
-  Sales: 'bg-red-100 text-red-700',
+  Generative:  'bg-violet-50 text-violet-500',
+  Automation:  'bg-indigo-50 text-indigo-500',
+  Coding:      'bg-sky-50 text-sky-600',
+  Vision:      'bg-rose-50 text-rose-500',
+  Productivity:'bg-blue-50 text-blue-500',
+  Writing:     'bg-emerald-50 text-emerald-600',
+  Video:       'bg-orange-50 text-orange-500',
+  Audio:       'bg-cyan-50 text-cyan-600',
+  Sales:       'bg-red-50 text-red-500',
 }
 
 export default function ToolSidebar() {

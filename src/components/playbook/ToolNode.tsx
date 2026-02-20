@@ -5,15 +5,15 @@ import type { AITool } from './ToolSidebar'
 import ToolLogo from '../ui/ToolLogo'
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Generativity: 'bg-purple-100 text-purple-700',
-  Automation: 'bg-blue-100 text-blue-700',
-  Coding: 'bg-green-100 text-green-700',
-  Vision: 'bg-pink-100 text-pink-700',
-  Productivity: 'bg-indigo-100 text-indigo-700',
-  Writing: 'bg-yellow-100 text-yellow-700',
-  Video: 'bg-orange-100 text-orange-700',
-  Audio: 'bg-teal-100 text-teal-700',
-  Sales: 'bg-red-100 text-red-700',
+  Generative:  'bg-violet-50 text-violet-500',
+  Automation:  'bg-indigo-50 text-indigo-500',
+  Coding:      'bg-sky-50 text-sky-600',
+  Vision:      'bg-rose-50 text-rose-500',
+  Productivity:'bg-blue-50 text-blue-500',
+  Writing:     'bg-emerald-50 text-emerald-600',
+  Video:       'bg-orange-50 text-orange-500',
+  Audio:       'bg-cyan-50 text-cyan-600',
+  Sales:       'bg-red-50 text-red-500',
 }
 
 type ToolNodeData = AITool & { onDelete?: (id: string) => void }

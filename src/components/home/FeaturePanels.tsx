@@ -7,36 +7,36 @@ const RANKINGS = [
     rank: 1,
     name: 'ChatGPT',
     domain: 'openai.com',
-    categories: ['Generativity', 'Writing'],
+    categories: ['Generative', 'Writing'],
     score: 4.565,
   },
   {
     rank: 2,
     name: 'Gemini',
     domain: 'gemini.google.com',
-    categories: ['Generativity', 'Writing'],
+    categories: ['Generative', 'Writing'],
     score: 4.505,
   },
   {
     rank: 3,
     name: 'Thea',
     domain: 'thea.so',
-    categories: ['Generativity', 'Coding'],
+    categories: ['Generative', 'Coding'],
     score: 4.565,
   },
 ]
 
 const CATEGORIES = [
-  { label: 'Generativity', color: 'bg-purple-100 text-purple-700' },
-  { label: 'Coding', color: 'bg-blue-100 text-blue-700' },
-  { label: 'Marketing', color: 'bg-orange-100 text-orange-700' },
-  { label: 'Writing', color: 'bg-green-100 text-green-700' },
-  { label: 'Data Analytics', color: 'bg-yellow-100 text-yellow-700' },
-  { label: 'Vision', color: 'bg-pink-100 text-pink-700' },
-  { label: 'Legal', color: 'bg-slate-100 text-slate-700' },
-  { label: 'Education', color: 'bg-teal-100 text-teal-700' },
-  { label: 'Sales', color: 'bg-red-100 text-red-700' },
-  { label: 'Productivity', color: 'bg-indigo-100 text-indigo-700' },
+  { label: 'Generative',    color: 'bg-violet-50 text-violet-500' },
+  { label: 'Coding',        color: 'bg-sky-50 text-sky-600' },
+  { label: 'Marketing',     color: 'bg-orange-50 text-orange-500' },
+  { label: 'Writing',       color: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Data Analytics',color: 'bg-amber-50 text-amber-600' },
+  { label: 'Vision',        color: 'bg-rose-50 text-rose-500' },
+  { label: 'Legal',         color: 'bg-slate-50 text-slate-500' },
+  { label: 'Education',     color: 'bg-teal-50 text-teal-500' },
+  { label: 'Sales',         color: 'bg-red-50 text-red-500' },
+  { label: 'Productivity',  color: 'bg-indigo-50 text-indigo-500' },
 ]
 
 export default function FeaturePanels() {
@@ -110,7 +110,7 @@ export default function FeaturePanels() {
                     {item.categories.map((cat) => (
                       <span
                         key={cat}
-                        className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--g2-purple-light)] text-[var(--g2-purple)] font-medium"
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-violet-50 text-violet-500 font-medium"
                       >
                         {cat}
                       </span>
