@@ -47,19 +47,19 @@ export default function FeaturePanels() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
         {/* Panel 1: AI Playbook */}
-        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-7 gap-6">
+        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-5 gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-1">
               Share your
             </p>
-            <h2 className="text-[22px] font-black text-[var(--g2-dark)]">AI Playbook</h2>
+            <h2 className="text-[26px] font-black text-[var(--g2-dark)]">AI Playbook</h2>
           </div>
 
-          <div className="flex justify-center py-2">
+          <div className="flex justify-center">
             <img
               src={`${BASE}images/Playbook-Image.png`}
               alt="AI Playbook"
-              className="w-full h-[200px] object-contain rounded-2xl"
+              className="w-full h-[240px] object-contain rounded-2xl"
             />
           </div>
 
@@ -85,12 +85,12 @@ export default function FeaturePanels() {
         </div>
 
         {/* Panel 2: AI Tool Rankings */}
-        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-7 gap-6">
+        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-5 gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-1">
               AI Tool
             </p>
-            <h2 className="text-[22px] font-black text-[var(--g2-dark)]">Rankings</h2>
+            <h2 className="text-[26px] font-black text-[var(--g2-dark)]">Rankings</h2>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -145,12 +145,12 @@ export default function FeaturePanels() {
         </div>
 
         {/* Panel 3: Popular AI Categories */}
-        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-7 gap-6">
+        <div className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-5 gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-1">
               Popular AI
             </p>
-            <h2 className="text-[22px] font-black text-[var(--g2-dark)]">Categories</h2>
+            <h2 className="text-[26px] font-black text-[var(--g2-dark)]">Categories</h2>
           </div>
 
           <div className="flex flex-wrap gap-2.5">
