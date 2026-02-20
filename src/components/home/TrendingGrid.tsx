@@ -104,31 +104,27 @@ const TRENDING_TOOLS: Tool[] = [
 
 export default function TrendingGrid() {
   return (
-    <section aria-labelledby="trending-heading" className="max-w-[1200px] mx-auto px-6 pb-16">
-      {/* Section heading */}
-      <div className="flex items-center gap-2 mb-6">
-        <h2
-          id="trending-heading"
-          className="text-[22px] font-black text-[var(--g2-dark)]"
-        >
+    <section aria-labelledby="trending-heading" className="max-w-[1160px] mx-auto px-8 pt-4 pb-20">
+
+      <div className="flex items-center gap-2.5 mb-10">
+        <h2 id="trending-heading" className="text-[24px] font-black text-[var(--g2-dark)]">
           Trending
         </h2>
-        <span aria-hidden="true" className="text-xl">📈</span>
+        <span aria-hidden="true" className="text-2xl">📈</span>
       </div>
 
-      {/* 3-column grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {TRENDING_TOOLS.map((tool) => (
           <ToolCard key={tool.name} tool={tool} />
         ))}
       </div>
 
-      {/* Load more */}
-      <div className="flex justify-center mt-8">
-        <button className="px-6 py-2.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors">
+      <div className="flex justify-center mt-10">
+        <button className="px-7 py-3 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors">
           See All
         </button>
       </div>
+
     </section>
   )
 }
