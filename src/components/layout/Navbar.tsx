@@ -9,7 +9,7 @@ interface NavbarProps {
 
 export default function Navbar({ dark, onToggle }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[var(--g2-border)] bg-[var(--g2-bg)]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full bg-[var(--g2-bg)]/50 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto px-6 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-6">
         {/* Logo */}
         <a href="/" aria-label="G2.AI home" className="shrink-0">

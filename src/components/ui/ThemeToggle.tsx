@@ -22,15 +22,15 @@ export default function ThemeToggle({ dark, onToggle }: ThemeToggleProps) {
       {/* Sun icon (right side) */}
       <span className="absolute right-[6px] flex items-center justify-center w-[14px] h-[14px]">
         <svg width="14" height="14" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="10.7947" cy="10.7946" r="4.79765" fill="#FF492C"/>
-          <rect y="9.59521" width="4.79765" height="2.39883" rx="1.19941" fill="#FF492C"/>
-          <rect x="16.7919" y="9.59521" width="4.79765" height="2.39883" rx="1.19941" fill="#FF492C"/>
-          <rect x="2.3136" y="17.5795" width="4.79765" height="2.39883" rx="1.19941" transform="rotate(-45 2.3136 17.5795)" fill="#FF492C"/>
-          <rect x="14.1873" y="5.70593" width="4.79765" height="2.39883" rx="1.19941" transform="rotate(-45 14.1873 5.70593)" fill="#FF492C"/>
-          <rect x="2.3136" y="4.00977" width="2.39883" height="4.79765" rx="1.19941" transform="rotate(-45 2.3136 4.00977)" fill="#FF492C"/>
-          <rect x="14.1873" y="15.8833" width="2.39883" height="4.79765" rx="1.19941" transform="rotate(-45 14.1873 15.8833)" fill="#FF492C"/>
-          <rect x="9.59534" width="2.39883" height="4.79765" rx="1.19941" fill="#FF492C"/>
-          <rect x="9.59534" y="16.7916" width="2.39883" height="4.79765" rx="1.19941" fill="#FF492C"/>
+          <circle cx="10.79" cy="10.79" r="4.8" fill="#fff"/>
+          <rect y="9.6" width="4.8" height="2.4" rx="1.2" fill="#fff"/>
+          <rect x="16.79" y="9.6" width="4.8" height="2.4" rx="1.2" fill="#fff"/>
+          <rect x="2.46" y="15.53" width="4.8" height="2.4" rx="1.2" transform="translate(-10.41 8.34) rotate(-45)" fill="#fff"/>
+          <rect x="14.33" y="3.66" width="4.8" height="2.4" rx="1.2" transform="translate(1.47 13.25) rotate(-45)" fill="#fff"/>
+          <rect x="3.66" y="2.46" width="2.4" height="4.8" rx="1.2" transform="translate(-2.01 4.86) rotate(-45)" fill="#fff"/>
+          <rect x="15.53" y="14.33" width="2.4" height="4.8" rx="1.2" transform="translate(-6.93 16.73) rotate(-45)" fill="#fff"/>
+          <rect x="9.6" width="2.4" height="4.8" rx="1.2" fill="#fff"/>
+          <rect x="9.6" y="16.79" width="2.4" height="4.8" rx="1.2" fill="#fff"/>
         </svg>
       </span>
       {/* Thumb */}
