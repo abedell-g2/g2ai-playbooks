@@ -1,6 +1,61 @@
 import { Search, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 const BASE = import.meta.env.BASE_URL
+
+const AI_FRAMES = Array.from({ length: 18 }, (_, i) =>
+  `${BASE}images/ai-images/Property${i + 1}.png`
+)
+const FRAME_MS = 70
+
+function AnimatedAI() {
+  const [ready, setReady] = useState(false)
+  const [frame, setFrame] = useState(0)
+  const done = frame >= AI_FRAMES.length
+
+  // Preload all frames, then start
+  useEffect(() => {
+    let loaded = 0
+    AI_FRAMES.forEach((src) => {
+      const img = new Image()
+      img.onload = () => {
+        loaded++
+        if (loaded === AI_FRAMES.length) setReady(true)
+      }
+      img.onerror = () => {
+        loaded++
+        if (loaded === AI_FRAMES.length) setReady(true)
+      }
+      img.src = src
+    })
+  }, [])
+
+  // Advance one frame at a time
+  useEffect(() => {
+    if (!ready || done) return
+    const t = setTimeout(() => setFrame((f) => f + 1), FRAME_MS)
+    return () => clearTimeout(t)
+  }, [ready, frame, done])
+
+  // Resolved — show original styled text
+  if (!ready || done) {
+    return (
+      <span className="font-black italic" style={{ color: 'var(--g2-ai-text)' }}>
+        AI.
+      </span>
+    )
+  }
+
+  return (
+    <img
+      src={AI_FRAMES[frame]}
+      alt="AI."
+      aria-label="AI."
+      className="inline-block"
+      style={{ height: '0.88em', width: 'auto', verticalAlign: '-0.05em' }}
+    />
+  )
+}
 
 interface HeroProps {
   dark: boolean
@@ -33,12 +88,7 @@ export default function Hero({ dark }: HeroProps) {
           className="text-[clamp(3rem,7.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-10"
         >
           <span className="font-light">Where you go for </span>
-          <span
-            className="font-black italic"
-            style={{ color: 'var(--g2-ai-text)' }}
-          >
-            AI.
-          </span>
+          <AnimatedAI />
         </h1>
 
         {/* Search bar */}
