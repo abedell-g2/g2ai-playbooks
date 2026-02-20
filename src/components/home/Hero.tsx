@@ -11,6 +11,8 @@ const FRAME_MS = 110
 function AnimatedAI() {
   const [ready, setReady] = useState(false)
   const [frame, setFrame] = useState(0)
+  // Pick the landing frame once at mount so it's consistent per page load
+  const [finalFrame] = useState(() => Math.floor(Math.random() * AI_FRAMES.length))
   const done = frame >= AI_FRAMES.length
 
   // Preload all frames, then start
@@ -32,39 +34,28 @@ function AnimatedAI() {
     return () => clearTimeout(t)
   }, [ready, frame, done])
 
-  // Both image and text stay in the DOM; opacity crossfades so layout never shifts
+  // While cycling use the current frame; once done, hold the random landing frame
+  const displaySrc = ready
+    ? AI_FRAMES[done ? finalFrame : Math.min(frame, AI_FRAMES.length - 1)]
+    : AI_FRAMES[0]
+
   return (
     <span
-      className="relative inline-block"
+      className="inline-block"
       style={{ height: '1.4em', verticalAlign: '-0.22em' }}
     >
-      {/* Image — cycles through frames, fades out when done */}
       <img
-        src={ready ? AI_FRAMES[Math.min(frame, AI_FRAMES.length - 1)] : AI_FRAMES[0]}
-        alt=""
+        src={displaySrc}
+        alt="AI."
+        aria-label="AI."
         style={{
           display: 'block',
           height: '100%',
           width: 'auto',
-          opacity: ready && !done ? 1 : 0,
-          transition: done ? 'opacity 0.4s ease' : 'none',
+          opacity: ready ? 1 : 0,
+          transition: 'opacity 0.3s ease',
         }}
       />
-
-      {/* Text — sits on top, fades in when done */}
-      <span
-        className="font-black absolute inset-0 flex items-end"
-        style={{
-          color: 'var(--g2-ai-text)',
-          opacity: done ? 1 : 0,
-          transition: 'opacity 0.4s ease',
-          whiteSpace: 'nowrap',
-          lineHeight: 1.05,
-        }}
-        aria-label="AI."
-      >
-        AI.
-      </span>
     </span>
   )
 }
