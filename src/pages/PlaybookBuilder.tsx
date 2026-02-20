@@ -6,6 +6,7 @@ import ToolSidebar from '../components/playbook/ToolSidebar'
 import PlaybookCanvas from '../components/playbook/PlaybookCanvas'
 import ThemeToggle from '../components/ui/ThemeToggle'
 import G2Logo from '../components/ui/G2Logo'
+import PlaybookWelcomeModal, { type PlaybookMeta } from '../components/playbook/PlaybookWelcomeModal'
 
 interface PlaybookBuilderProps {
   dark: boolean
@@ -13,11 +14,18 @@ interface PlaybookBuilderProps {
 }
 
 export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps) {
-  const [title, setTitle] = useState('My AI Playbook')
+  const [showModal, setShowModal] = useState(true)
+  const [title, setTitle] = useState('')
   const [editing, setEditing] = useState(false)
+
+  function handleModalSubmit(meta: PlaybookMeta) {
+    setTitle(meta.title)
+    setShowModal(false)
+  }
 
   return (
     <div className="h-screen flex flex-col bg-[var(--g2-bg)] overflow-hidden">
+      {showModal && <PlaybookWelcomeModal onSubmit={handleModalSubmit} />}
       {/* Top bar */}
       <header className="h-14 shrink-0 flex items-center gap-4 px-4 border-b border-[var(--g2-border)] bg-[var(--g2-bg)]">
         {/* Back */}
@@ -48,10 +56,11 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="text-[14px] font-semibold text-[var(--g2-dark)] hover:text-[var(--g2-purple)] transition-colors"
+              className="text-[14px] font-semibold hover:text-[var(--g2-purple)] transition-colors"
+              style={{ color: title ? 'var(--g2-dark)' : 'var(--g2-muted)' }}
               aria-label="Edit playbook title"
             >
-              {title}
+              {title || 'Untitled Playbook'}
             </button>
           )}
         </div>
