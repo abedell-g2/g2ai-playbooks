@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mic, Pause, ArrowRight, ArrowLeft, X } from 'lucide-react'
+import { Mic, Pause, ArrowRight, ArrowLeft, X, Plus, Search } from 'lucide-react'
 import G2Logo from '../components/ui/G2Logo'
 import ToolLogo from '../components/ui/ToolLogo'
 import { PRODUCTS, getProductById } from '../data/searchData'
@@ -21,6 +21,125 @@ function extractToolIds(text: string): string[] {
   return found
 }
 
+// ── Shared tool chip list with inline add dropdown ──────────────────────────
+
+interface ToolChipListProps {
+  toolIds: string[]
+  onRemove: (id: string) => void
+  onAdd: (id: string) => void
+  dark: boolean
+}
+
+function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
+  const [addOpen, setAddOpen] = useState(false)
+  const [addQuery, setAddQuery] = useState('')
+  const addRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!addOpen) return
+    function handleClick(e: MouseEvent) {
+      if (addRef.current && !addRef.current.contains(e.target as Node)) {
+        setAddOpen(false)
+        setAddQuery('')
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [addOpen])
+
+  const available = PRODUCTS.filter(
+    (p) =>
+      !toolIds.includes(p.id) &&
+      (addQuery === '' ||
+        p.name.toLowerCase().includes(addQuery.toLowerCase()) ||
+        p.tags.some((t) => t.includes(addQuery.toLowerCase())))
+  )
+
+  return (
+    <div className="w-full">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-3">
+        AI Tools Found
+      </p>
+      <div className="flex flex-wrap gap-2 items-center">
+        {toolIds.map((id) => {
+          const p = getProductById(id)
+          if (!p) return null
+          return (
+            <span
+              key={id}
+              className="flex items-center gap-1.5 pl-1.5 pr-2.5 py-1.5 rounded-full border border-[var(--g2-border)] bg-[var(--g2-surface)] text-[12.5px] font-medium text-[var(--g2-dark)]"
+            >
+              <ToolLogo domain={p.domain} name={p.name} size={18} />
+              {p.name}
+              <button
+                onClick={() => onRemove(id)}
+                className="ml-0.5 text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
+                aria-label={`Remove ${p.name}`}
+              >
+                <X size={11} />
+              </button>
+            </span>
+          )
+        })}
+
+        {/* Add tool button + dropdown */}
+        <div ref={addRef} className="relative">
+          <button
+            onClick={() => { setAddOpen((v) => !v); setAddQuery('') }}
+            aria-label="Add a tool"
+            className="w-[34px] h-[34px] rounded-full border-2 border-dashed border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] flex items-center justify-center transition-colors"
+          >
+            <Plus size={15} />
+          </button>
+
+          {addOpen && (
+            <div
+              className="absolute left-0 top-[calc(100%+8px)] z-50 w-60 rounded-xl border border-[var(--g2-border)] shadow-xl overflow-hidden"
+              style={{ background: dark ? '#16132b' : 'var(--g2-bg)' }}
+            >
+              {/* Search input */}
+              <div
+                className="flex items-center gap-2 px-3 py-2.5 border-b border-[var(--g2-border)]"
+              >
+                <Search size={13} className="shrink-0 text-[var(--g2-muted)]" />
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="Search tools…"
+                  value={addQuery}
+                  onChange={(e) => setAddQuery(e.target.value)}
+                  className="flex-1 bg-transparent text-[13px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none"
+                />
+              </div>
+              {/* Results */}
+              <div className="max-h-52 overflow-y-auto py-1">
+                {available.length > 0 ? (
+                  available.map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => { onAdd(p.id); setAddOpen(false); setAddQuery('') }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
+                    >
+                      <ToolLogo domain={p.domain} name={p.name} size={20} />
+                      <span className="font-medium">{p.name}</span>
+                    </button>
+                  ))
+                ) : (
+                  <p className="px-3 py-4 text-[12px] text-[var(--g2-muted)] text-center">
+                    No tools found
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Main page ────────────────────────────────────────────────────────────────
+
 interface Props {
   dark: boolean
 }
@@ -38,11 +157,11 @@ export default function PlaybookStart({ dark }: Props) {
   const recognitionRef = useRef<any>(null)
   const transcriptBaseRef = useRef('')
 
-  // Step 2 — author
-  const [author, setAuthor] = useState('')
-  const [authorRole, setAuthorRole] = useState('')
-  const [company, setCompany] = useState('')
-  const [linkedin, setLinkedin] = useState('')
+  // Step 2 — author (pre-populated for logged-in user)
+  const [author, setAuthor] = useState('Godard Abel')
+  const [authorRole, setAuthorRole] = useState('CEO')
+  const [company, setCompany] = useState('G2')
+  const [linkedin, setLinkedin] = useState('https://www.linkedin.com/in/godardabel/')
 
   useEffect(() => {
     setToolIds(extractToolIds(transcript))
@@ -72,18 +191,19 @@ export default function PlaybookStart({ dark }: Props) {
       setInterim(interimPart)
     }
 
-    recognition.onend = () => {
-      setRecording(false)
-      setInterim('')
-    }
-    recognition.onerror = () => {
-      setRecording(false)
-      setInterim('')
-    }
+    recognition.onend = () => { setRecording(false); setInterim('') }
+    recognition.onerror = () => { setRecording(false); setInterim('') }
 
     recognitionRef.current = recognition
     recognition.start()
     setRecording(true)
+  }
+
+  function addTool(id: string) {
+    setToolIds((ids) => (ids.includes(id) ? ids : [...ids, id]))
+  }
+  function removeTool(id: string) {
+    setToolIds((ids) => ids.filter((i) => i !== id))
   }
 
   function handleBuild() {
@@ -126,16 +246,8 @@ export default function PlaybookStart({ dark }: Props) {
 
         {/* Step pill indicators */}
         <div className="flex items-center gap-1.5">
-          <div
-            className={`h-2 rounded-full transition-all duration-300 ${
-              step >= 1 ? 'bg-[var(--g2-purple)] w-5' : 'bg-[var(--g2-border)] w-2'
-            }`}
-          />
-          <div
-            className={`h-2 rounded-full transition-all duration-300 ${
-              step >= 2 ? 'bg-[var(--g2-purple)] w-5' : 'bg-[var(--g2-border)] w-2'
-            }`}
-          />
+          <div className={`h-2 rounded-full transition-all duration-300 ${step >= 1 ? 'bg-[var(--g2-purple)] w-5' : 'bg-[var(--g2-border)] w-2'}`} />
+          <div className={`h-2 rounded-full transition-all duration-300 ${step >= 2 ? 'bg-[var(--g2-purple)] w-5' : 'bg-[var(--g2-border)] w-2'}`} />
         </div>
       </header>
 
@@ -189,16 +301,8 @@ export default function PlaybookStart({ dark }: Props) {
 
               {/* Mic status label */}
               {supported && (
-                <p
-                  className={`-mt-8 text-[14px] font-medium transition-colors ${
-                    recording ? 'text-[var(--g2-purple)]' : 'text-white/50'
-                  }`}
-                >
-                  {recording
-                    ? 'Listening…'
-                    : transcript
-                    ? 'Click to add more'
-                    : 'Click to start speaking'}
+                <p className={`-mt-8 text-[14px] font-medium transition-colors ${recording ? 'text-[var(--g2-purple)]' : 'text-white/50'}`}>
+                  {recording ? 'Listening…' : transcript ? 'Click to add more' : 'Click to start speaking'}
                 </p>
               )}
 
@@ -216,48 +320,22 @@ export default function PlaybookStart({ dark }: Props) {
                   className="w-full rounded-xl border px-4 py-3 text-[14px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none focus:border-[var(--g2-purple)] transition-colors resize-none leading-relaxed"
                   style={{
                     background: dark ? '#1e1b36' : 'var(--g2-surface)',
-                    borderColor: recording
-                      ? 'var(--g2-purple)'
-                      : dark
-                      ? '#4a4570'
-                      : 'var(--g2-border)',
+                    borderColor: recording ? 'var(--g2-purple)' : dark ? '#4a4570' : 'var(--g2-border)',
                   }}
                 />
-                {/* Interim preview */}
                 {interim && recording && (
                   <p className="text-[13px] text-[var(--g2-muted)] italic px-1">{interim}…</p>
                 )}
               </div>
 
-              {/* Detected tools */}
-              {toolIds.length > 0 && (
-                <div className="w-full">
-                  <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-3">
-                    {toolIds.length} tool{toolIds.length !== 1 ? 's' : ''} detected
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {toolIds.map((id) => {
-                      const p = getProductById(id)
-                      if (!p) return null
-                      return (
-                        <span
-                          key={id}
-                          className="flex items-center gap-1.5 pl-1.5 pr-2.5 py-1.5 rounded-full border border-[var(--g2-border)] bg-[var(--g2-surface)] text-[12.5px] font-medium text-[var(--g2-dark)]"
-                        >
-                          <ToolLogo domain={p.domain} name={p.name} size={18} />
-                          {p.name}
-                          <button
-                            onClick={() => setToolIds((ids) => ids.filter((i) => i !== id))}
-                            className="ml-0.5 text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
-                            aria-label={`Remove ${p.name}`}
-                          >
-                            <X size={11} />
-                          </button>
-                        </span>
-                      )
-                    })}
-                  </div>
-                </div>
+              {/* Tool chips — shown once user has started */}
+              {(transcript.trim().length > 0 || toolIds.length > 0) && (
+                <ToolChipList
+                  toolIds={toolIds}
+                  onRemove={removeTool}
+                  onAdd={addTool}
+                  dark={dark}
+                />
               )}
 
               {/* Continue */}
@@ -286,31 +364,26 @@ export default function PlaybookStart({ dark }: Props) {
             <div className="flex flex-col gap-7">
 
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-3">
+                <p className="text-[12px] font-semibold uppercase tracking-widest text-white/60 mb-3">
                   Step 2 of 2
                 </p>
-                <h1 className="text-[28px] font-black text-[var(--g2-dark)] mb-2">
+                <h1 className="text-[30px] font-black text-[var(--g2-dark)] mb-2">
                   A little about you
                 </h1>
-                <p className="text-[14px] text-[var(--g2-muted)] leading-relaxed">
+                <p className="text-[15px] text-white/70 leading-relaxed">
                   This helps others know whose playbook they're learning from.
                 </p>
               </div>
 
-              {/* Recap pill */}
-              {toolIds.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap py-3 px-4 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-surface)]">
-                  <span className="text-[12px] font-semibold text-[var(--g2-muted)] mr-1">
-                    Your tools:
-                  </span>
-                  {toolIds.map((id) => {
-                    const p = getProductById(id)
-                    if (!p) return null
-                    return <ToolLogo key={id} domain={p.domain} name={p.name} size={22} />
-                  })}
-                </div>
-              )}
+              {/* Same tool chip list — editable in step 2 too */}
+              <ToolChipList
+                toolIds={toolIds}
+                onRemove={removeTool}
+                onAdd={addTool}
+                dark={dark}
+              />
 
+              {/* Profile fields — pre-populated */}
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="s2-author" className="text-[12px] font-semibold text-[var(--g2-dark)]">
@@ -319,7 +392,6 @@ export default function PlaybookStart({ dark }: Props) {
                   <input
                     id="s2-author"
                     type="text"
-                    placeholder="Godard Abel"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
                     className={inputBase}
@@ -335,7 +407,6 @@ export default function PlaybookStart({ dark }: Props) {
                     <input
                       id="s2-role"
                       type="text"
-                      placeholder="CEO, Engineer…"
                       value={authorRole}
                       onChange={(e) => setAuthorRole(e.target.value)}
                       className={inputBase}
@@ -349,7 +420,6 @@ export default function PlaybookStart({ dark }: Props) {
                     <input
                       id="s2-company"
                       type="text"
-                      placeholder="Acme Inc."
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       className={inputBase}
@@ -365,7 +435,6 @@ export default function PlaybookStart({ dark }: Props) {
                   <input
                     id="s2-linkedin"
                     type="url"
-                    placeholder="https://linkedin.com/in/yourname"
                     value={linkedin}
                     onChange={(e) => setLinkedin(e.target.value)}
                     className={inputBase}
