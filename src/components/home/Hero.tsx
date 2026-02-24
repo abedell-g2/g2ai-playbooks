@@ -89,7 +89,7 @@ export default function Hero({ dark }: HeroProps) {
         <div className="max-w-[860px] mx-auto px-8">
           <h1
             id="hero-heading"
-            className="text-[clamp(2rem,5.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-7 whitespace-nowrap"
+            className="text-[clamp(2rem,5.5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--g2-dark)] mb-3 whitespace-nowrap"
           >
             <span className="font-light">Where you go for </span>
             <AnimatedAI />
@@ -97,8 +97,8 @@ export default function Hero({ dark }: HeroProps) {
         </div>
 
         {/* Subheadline + CTAs */}
-        <div className="flex flex-col items-center gap-6 mt-2 px-8">
-          <p className="text-[17px] text-[var(--g2-muted)] font-medium">
+        <div className="flex flex-col items-center gap-6 -mt-3 px-8">
+          <p className="text-[17px] text-white font-light">
             AI Playbooks — Discover expert-curated AI tool stacks
           </p>
           <div className="flex items-center gap-3">
