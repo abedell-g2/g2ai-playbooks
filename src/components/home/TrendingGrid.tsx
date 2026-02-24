@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Star, Search } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import ToolLogo from '../ui/ToolLogo'
@@ -113,6 +113,9 @@ function PlaybookCard({ playbook }: { playbook: PlaybookData }) {
 }
 
 const ALL_CATEGORIES = [...new Set(PLAYBOOKS.map((p) => p.category))].sort()
+const VISIBLE_COUNT = 7
+const INLINE_CATEGORIES = ALL_CATEGORIES.slice(0, VISIBLE_COUNT)
+const OVERFLOW_CATEGORIES = ALL_CATEGORIES.slice(VISIBLE_COUNT)
 
 interface Props {
   dark: boolean
@@ -122,6 +125,19 @@ export default function AllPlaybooks({ dark }: Props) {
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [visible, setVisible] = useState(PAGE_SIZE)
+  const [overflowOpen, setOverflowOpen] = useState(false)
+  const overflowRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!overflowOpen) return
+    function handleClick(e: MouseEvent) {
+      if (overflowRef.current && !overflowRef.current.contains(e.target as Node)) {
+        setOverflowOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [overflowOpen])
 
   const filtered = PLAYBOOKS.filter((p) => {
     const matchCat = !activeCategory || p.category === activeCategory
@@ -178,7 +194,8 @@ export default function AllPlaybooks({ dark }: Props) {
       </div>
 
       {/* Category filter chips */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div className="flex flex-wrap gap-2 mb-8 items-center">
+        {/* All */}
         <button
           onClick={() => handleCategoryClick(null)}
           className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
@@ -189,7 +206,9 @@ export default function AllPlaybooks({ dark }: Props) {
         >
           All
         </button>
-        {ALL_CATEGORIES.map((cat) => (
+
+        {/* Inline categories */}
+        {INLINE_CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => handleCategoryClick(cat)}
@@ -202,6 +221,47 @@ export default function AllPlaybooks({ dark }: Props) {
             {cat}
           </button>
         ))}
+
+        {/* Overflow "..." chip */}
+        {OVERFLOW_CATEGORIES.length > 0 && (
+          <div ref={overflowRef} className="relative">
+            <button
+              onClick={() => setOverflowOpen((v) => !v)}
+              className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
+                OVERFLOW_CATEGORIES.includes(activeCategory ?? '')
+                  ? 'bg-[var(--g2-purple)] text-white border-[var(--g2-purple)]'
+                  : overflowOpen
+                  ? 'border-[var(--g2-purple)] text-[var(--g2-purple)]'
+                  : 'border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)]'
+              }`}
+            >
+              •••
+            </button>
+
+            {overflowOpen && (
+              <div
+                className="absolute left-0 top-[calc(100%+8px)] z-50 min-w-[160px] rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)] shadow-lg shadow-black/10 py-1"
+              >
+                {OVERFLOW_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      handleCategoryClick(cat)
+                      setOverflowOpen(false)
+                    }}
+                    className={`w-full text-left px-4 py-2 text-[13px] font-medium transition-colors ${
+                      activeCategory === cat
+                        ? 'text-[var(--g2-purple)] font-semibold'
+                        : 'text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Grid */}
