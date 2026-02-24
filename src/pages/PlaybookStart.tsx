@@ -148,13 +148,13 @@ export default function PlaybookStart({ dark }: Props) {
             <div className="flex flex-col items-center gap-8">
 
               <div className="text-center">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-3">
+                <p className="text-[12px] font-semibold uppercase tracking-widest text-white/60 mb-3">
                   Step 1 of 2
                 </p>
-                <h1 className="text-[28px] font-black text-[var(--g2-dark)] mb-2">
+                <h1 className="text-[30px] font-black text-[var(--g2-dark)] mb-2">
                   Describe your AI workflow
                 </h1>
-                <p className="text-[14px] text-[var(--g2-muted)] leading-relaxed">
+                <p className="text-[15px] text-white/70 leading-relaxed">
                   {supported
                     ? "Hit the microphone icon, describe how you use AI in your normal workflow and we'll detect the tools automatically."
                     : "Type out how you use AI in your normal workflow and we'll detect the tools automatically."}
@@ -190,8 +190,8 @@ export default function PlaybookStart({ dark }: Props) {
               {/* Mic status label */}
               {supported && (
                 <p
-                  className={`-mt-4 text-[13px] font-medium transition-colors ${
-                    recording ? 'text-[var(--g2-purple)]' : 'text-[var(--g2-muted)]'
+                  className={`-mt-8 text-[14px] font-medium transition-colors ${
+                    recording ? 'text-[var(--g2-purple)]' : 'text-white/50'
                   }`}
                 >
                   {recording
@@ -272,9 +272,9 @@ export default function PlaybookStart({ dark }: Props) {
                 </button>
                 <button
                   onClick={() => navigate('/playbook/new')}
-                  className="text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-purple)] transition-colors"
+                  className="text-[14px] text-white/50 hover:text-white transition-colors cursor-pointer"
                 >
-                  I'll build it myself
+                  No thanks, I'll build it myself
                 </button>
               </div>
 
