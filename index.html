@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>G2.AI Playbooks</title>
     <script>
-      // Restore path encoded by 404.html redirect (GitHub Pages SPA fix)
+      // Restore path encoded by 404.html redirect (GitHub Pages SPA fix).
+      // Prepend l.pathname (e.g. /g2ai-playbooks/) so the base is preserved.
       (function(l) {
         if (l.search[1] === '/') {
           var decoded = l.search.slice(1).split('&').map(function(s) {
@@ -14,7 +15,7 @@
           });
           window.history.replaceState(
             null, null,
-            decoded[0] + (decoded[1] ? '&' + decoded[1] : '') + l.hash
+            l.pathname.replace(/\/$/, '') + decoded[0] + (decoded[1] ? '&' + decoded[1] : '') + l.hash
           );
         }
       }(window.location));
