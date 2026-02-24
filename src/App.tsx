@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import Navbar from './components/layout/Navbar'
 import Hero from './components/home/Hero'
-import FeaturePanels from './components/home/FeaturePanels'
-import TrendingGrid from './components/home/TrendingGrid'
+import AllPlaybooks from './components/home/TrendingGrid'
 import PlaybookBuilder from './pages/PlaybookBuilder'
 import PlaybookView from './pages/PlaybookView'
 
@@ -23,8 +22,7 @@ function Homepage({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
       <Navbar dark={dark} onToggle={onToggle} />
       <main id="main-content">
         <Hero dark={dark} />
-        <FeaturePanels />
-        <TrendingGrid />
+        <AllPlaybooks dark={dark} />
       </main>
     </div>
   )

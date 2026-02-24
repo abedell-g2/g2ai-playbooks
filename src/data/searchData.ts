@@ -26,6 +26,7 @@ export interface PlaybookData {
   toolIds: string[]
   rating: number
   ratingCount: number
+  category: string
   description: string
   steps: PlaybookStep[]
 }
@@ -183,6 +184,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['claude', 'cursor', 'copilot', 'perplexity'],
     rating: 4.8,
     ratingCount: 134,
+    category: 'Coding',
     description:
       "How Atlassian's engineering teams use AI to accelerate development — from code review with Claude to IDE assistance with Cursor and Copilot.",
     steps: [
@@ -201,6 +203,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['chatgpt', 'jasper', 'perplexity', 'notion-ai'],
     rating: 4.6,
     ratingCount: 89,
+    category: 'Sales',
     description:
       "The AI stack HubSpot's sales team uses to qualify leads, personalize outreach, and close deals faster.",
     steps: [
@@ -219,6 +222,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['midjourney', 'chatgpt', 'claude', 'notion-ai'],
     rating: 4.7,
     ratingCount: 211,
+    category: 'Design',
     description:
       "From ideation to handoff — how Figma's design team integrates AI to speed up research, generate concepts, and document design decisions.",
     steps: [
@@ -237,6 +241,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['jasper', 'chatgpt', 'midjourney', 'cursor'],
     rating: 4.5,
     ratingCount: 67,
+    category: 'Marketing',
     description:
       'How Shopify merchants use AI to create product listings, generate ad creative, and automate customer support at scale.',
     steps: [
@@ -255,6 +260,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['cursor', 'claude', 'copilot', 'chatgpt'],
     rating: 4.9,
     ratingCount: 302,
+    category: 'Coding',
     description:
       "The AI tools powering Vercel's frontend engineering team — from building Next.js apps to debugging performance issues.",
     steps: [
@@ -273,6 +279,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['perplexity', 'claude', 'jasper', 'grammarly', 'midjourney'],
     rating: 4.4,
     ratingCount: 156,
+    category: 'Writing',
     description:
       'A complete AI workflow for content teams — from research and ideation to writing, editing, and distributing at scale.',
     steps: [
@@ -292,6 +299,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['claude', 'cursor', 'replit', 'chatgpt', 'perplexity'],
     rating: 4.8,
     ratingCount: 445,
+    category: 'Productivity',
     description:
       'How to go from idea to shipped MVP in days using AI. A no-nonsense playbook for founders who want to build fast.',
     steps: [
@@ -311,6 +319,7 @@ export const PLAYBOOKS: PlaybookData[] = [
     toolIds: ['claude', 'perplexity', 'notion-ai', 'grammarly'],
     rating: 4.6,
     ratingCount: 78,
+    category: 'Legal',
     description:
       'How modern law firms use AI for case research, document drafting, and due diligence — while keeping privileged information secure.',
     steps: [
@@ -318,6 +327,120 @@ export const PLAYBOOKS: PlaybookData[] = [
       { toolId: 'claude', action: 'Summarize lengthy documents and identify key issues' },
       { toolId: 'grammarly', action: 'Review and polish legal memos and briefs' },
       { toolId: 'notion-ai', action: 'Organize research notes and timelines' },
+    ],
+  },
+  {
+    id: 'stripe-data',
+    title: 'Stripe Data & Analytics AI Stack',
+    author: 'Nadia Osei',
+    authorRole: 'Data Scientist',
+    company: 'Stripe',
+    toolIds: ['claude', 'perplexity', 'chatgpt', 'notion-ai'],
+    rating: 4.7,
+    ratingCount: 93,
+    category: 'Data Analytics',
+    description:
+      "How Stripe's data team uses AI to surface insights faster, write better queries, and turn raw numbers into executive-ready narratives.",
+    steps: [
+      { toolId: 'perplexity', action: 'Research industry benchmarks and competitive metrics' },
+      { toolId: 'claude', action: 'Write and debug SQL queries and data pipeline scripts' },
+      { toolId: 'chatgpt', action: 'Generate chart narratives and data summaries' },
+      { toolId: 'notion-ai', action: 'Compile findings into stakeholder-ready reports' },
+    ],
+  },
+  {
+    id: 'zendesk-support',
+    title: 'Zendesk Customer Support AI Playbook',
+    author: 'Lisa Park',
+    authorRole: 'Head of CX',
+    company: 'Zendesk',
+    toolIds: ['chatgpt', 'claude', 'grammarly', 'notion-ai'],
+    rating: 4.5,
+    ratingCount: 112,
+    category: 'Customer Support',
+    description:
+      'A practical playbook for support teams using AI to resolve tickets faster, improve CSAT scores, and scale without adding headcount.',
+    steps: [
+      { toolId: 'claude', action: 'Classify and triage incoming support tickets' },
+      { toolId: 'chatgpt', action: 'Draft empathetic, on-brand support responses' },
+      { toolId: 'grammarly', action: 'Polish replies for tone, clarity, and professionalism' },
+      { toolId: 'notion-ai', action: 'Build and maintain an AI-powered knowledge base' },
+    ],
+  },
+  {
+    id: 'adobe-creative',
+    title: 'Adobe Creative AI Workflow',
+    author: 'Sofia Reyes',
+    authorRole: 'Creative Director',
+    company: 'Adobe',
+    toolIds: ['midjourney', 'chatgpt', 'claude', 'grammarly'],
+    rating: 4.6,
+    ratingCount: 178,
+    category: 'Design',
+    description:
+      "From concept to final creative — how Adobe's creative team uses AI to ideate faster, explore more directions, and never hit a creative block.",
+    steps: [
+      { toolId: 'claude', action: 'Write creative briefs and develop conceptual directions' },
+      { toolId: 'midjourney', action: 'Generate visual concepts, textures, and mood boards' },
+      { toolId: 'chatgpt', action: 'Iterate on copy and develop brand voice guidelines' },
+      { toolId: 'grammarly', action: 'Proof all client-facing creative documents' },
+    ],
+  },
+  {
+    id: 'harvard-edu',
+    title: 'Harvard Online Education AI Toolkit',
+    author: 'James Okonkwo',
+    authorRole: 'Director of Learning',
+    company: 'Harvard Online',
+    toolIds: ['claude', 'perplexity', 'notion-ai', 'grammarly'],
+    rating: 4.5,
+    ratingCount: 63,
+    category: 'Education',
+    description:
+      'How educators at Harvard Online use AI to create course materials, personalize learning experiences, and give students better feedback at scale.',
+    steps: [
+      { toolId: 'perplexity', action: 'Research current academic sources and citations' },
+      { toolId: 'claude', action: 'Develop course outlines, lectures, and assessment rubrics' },
+      { toolId: 'grammarly', action: 'Proofread materials and provide style feedback' },
+      { toolId: 'notion-ai', action: 'Organize curriculum, syllabi, and student progress' },
+    ],
+  },
+  {
+    id: 'zapier-automation',
+    title: 'Zapier Automation-First AI Playbook',
+    author: 'Marco Ruiz',
+    authorRole: 'Automation Lead',
+    company: 'Zapier',
+    toolIds: ['claude', 'chatgpt', 'replit', 'notion-ai'],
+    rating: 4.8,
+    ratingCount: 201,
+    category: 'Automation',
+    description:
+      'Build AI-powered workflows that run themselves. A practical guide to connecting your apps, eliminating manual tasks, and scaling ops with AI.',
+    steps: [
+      { toolId: 'claude', action: 'Map workflows and identify automation opportunities' },
+      { toolId: 'chatgpt', action: 'Draft logic for conditional flows and edge cases' },
+      { toolId: 'replit', action: 'Write custom code blocks and API integrations' },
+      { toolId: 'notion-ai', action: 'Document automation blueprints for the team' },
+    ],
+  },
+  {
+    id: 'spotify-marketing',
+    title: 'Spotify Growth Marketing AI Stack',
+    author: 'Imani Davis',
+    authorRole: 'Growth Lead',
+    company: 'Spotify',
+    toolIds: ['jasper', 'midjourney', 'chatgpt', 'perplexity'],
+    rating: 4.4,
+    ratingCount: 87,
+    category: 'Marketing',
+    description:
+      "How Spotify's growth team uses AI to run more campaigns with fewer resources — from copy generation to campaign analysis to creative testing.",
+    steps: [
+      { toolId: 'perplexity', action: 'Research audience trends and competitor campaigns' },
+      { toolId: 'jasper', action: 'Generate high-volume ad copy and campaign messaging' },
+      { toolId: 'midjourney', action: 'Create visual assets and ad creative variations' },
+      { toolId: 'chatgpt', action: 'Analyze performance and write creative briefs' },
     ],
   },
 ]

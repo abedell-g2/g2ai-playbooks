@@ -1,153 +1,233 @@
-import ToolCard, { type Tool } from '../ui/ToolCard'
+import { useState } from 'react'
+import { Star, Search } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import ToolLogo from '../ui/ToolLogo'
+import { PLAYBOOKS, getProductById, type PlaybookData } from '../../data/searchData'
 
-const BASE = import.meta.env.BASE_URL
+const PAGE_SIZE = 6
 
-const PRODUCT_IMAGES = [
-  `${BASE}images/product-images/rounded-1.png`,
-  `${BASE}images/product-images/rounded-2.png`,
-  `${BASE}images/product-images/rounded-3.png`,
-  `${BASE}images/product-images/rounded-4.png`,
-  `${BASE}images/product-images/rounded-5.png`,
-  `${BASE}images/product-images/rounded-6.png`,
-  `${BASE}images/product-images/rounded-7.png`,
-  `${BASE}images/product-images/rounded.png`,
-]
+const CATEGORY_COLORS: Record<string, string> = {
+  'Coding':           'bg-sky-50 text-sky-600',
+  'Sales':            'bg-red-50 text-red-500',
+  'Design':           'bg-fuchsia-50 text-fuchsia-500',
+  'Marketing':        'bg-orange-50 text-orange-500',
+  'Writing':          'bg-emerald-50 text-emerald-600',
+  'Productivity':     'bg-indigo-50 text-indigo-500',
+  'Legal':            'bg-slate-50 text-slate-500',
+  'Data Analytics':   'bg-amber-50 text-amber-600',
+  'Customer Support': 'bg-lime-50 text-lime-600',
+  'Education':        'bg-blue-50 text-blue-500',
+  'Automation':       'bg-purple-50 text-purple-500',
+  'Research':         'bg-teal-50 text-teal-500',
+  'Generative':       'bg-violet-50 text-violet-500',
+}
 
-const TRENDING_TOOLS: Tool[] = [
-  {
-    name: 'Automateed',
-    domain: 'automateed.com',
-    category: 'Writing',
-    categoryColor: 'bg-emerald-50 text-emerald-600',
-    description: 'Create eBooks effortlessly with Automateed, the AI-powered writing tool.',
-    previewBg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-    previewContent: 'AUTOMATEED',
-    rating: 3.8,
-    likes: 38,
-    comments: 12,
-  },
-  {
-    name: 'BeatJar',
-    domain: 'beatjar.com',
-    category: 'Music',
-    categoryColor: 'bg-amber-50 text-amber-600',
-    description: 'Turn your story into a custom song with AI-powered music generation.',
-    previewBg: 'linear-gradient(135deg, #1a0a2e 0%, #2d1b69 50%, #11998e 100%)',
-    previewContent: 'BEATJAR',
-    rating: 2.5,
-    likes: 24,
-    comments: 8,
-  },
-  {
-    name: 'PromptWatch',
-    domain: 'promptwatch.io',
-    category: 'SEO',
-    categoryColor: 'bg-sky-50 text-sky-600',
-    description: 'Boost your company\'s visibility in AI search results and get discovered.',
-    previewBg: 'linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #42a5f5 100%)',
-    previewContent: 'PromptWatch',
-    rating: 4.1,
-    likes: 31,
-    comments: 15,
-  },
-  {
-    name: 'X-Pilot AI',
-    domain: 'xpilot.ai',
-    category: 'Education',
-    categoryColor: 'bg-rose-50 text-rose-500',
-    description: 'Turn live Zoom or Course videos into structured knowledge with AI visualization.',
-    previewBg: 'linear-gradient(135deg, #b71c1c 0%, #c62828 50%, #ef5350 100%)',
-    previewContent: 'X-Pilot',
-    rating: 2.5,
-    likes: 19,
-    comments: 6,
-  },
-  {
-    name: 'Guidde',
-    domain: 'guidde.com',
-    category: 'Video',
-    categoryColor: 'bg-violet-50 text-violet-500',
-    description: 'Create step-by-step video instructions automatically with AI assistance.',
-    previewBg: 'linear-gradient(135deg, #4a148c 0%, #6a1b9a 50%, #ab47bc 100%)',
-    previewContent: 'guidde',
-    rating: 2.6,
-    likes: 42,
-    comments: 20,
-  },
-  {
-    name: 'DeepReel',
-    domain: 'deepreel.com',
-    category: 'Video',
-    categoryColor: 'bg-orange-50 text-orange-500',
-    description: 'AI agent for Videos and Images — generate, edit, and enhance with ease.',
-    previewBg: 'linear-gradient(135deg, #e65100 0%, #f4511e 50%, #ff7043 100%)',
-    previewContent: 'DeepReel',
-    rating: 2.6,
-    likes: 33,
-    comments: 11,
-  },
-  {
-    name: 'Runable',
-    domain: 'runable.com',
-    category: 'Generative',
-    categoryColor: 'bg-teal-50 text-teal-500',
-    description: 'World\'s first design-driven general AI agent for workflow automation.',
-    previewBg: 'linear-gradient(135deg, #004d40 0%, #00695c 50%, #26a69a 100%)',
-    previewContent: 'Runable',
-    rating: 3.9,
-    likes: 27,
-    comments: 9,
-  },
-  {
-    name: 'Intervo AI',
-    domain: 'intervo.ai',
-    category: 'Generative',
-    categoryColor: 'bg-teal-50 text-teal-500',
-    description: 'Open-source platform for conversational AI agents — build and deploy easily.',
-    previewBg: 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #5c6bc0 100%)',
-    previewContent: 'Intervo',
-    rating: 3.2,
-    likes: 16,
-    comments: 4,
-  },
-  {
-    name: 'Loti',
-    domain: 'loti.com',
-    category: 'Legal',
-    categoryColor: 'bg-slate-50 text-slate-500',
-    description: 'Protect public figures from online content misuse with AI-powered monitoring.',
-    previewBg: 'linear-gradient(135deg, #37474f 0%, #455a64 50%, #78909c 100%)',
-    previewContent: 'Loti',
-    rating: 4.3,
-    likes: 22,
-    comments: 7,
-  },
-]
-
-export default function TrendingGrid() {
+function Stars({ rating }: { rating: number }) {
+  const filled = Math.round(rating)
   return (
-    <section aria-labelledby="trending-heading" className="max-w-[1160px] mx-auto px-8 pt-4 pb-20">
+    <span className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((s) => (
+        <Star
+          key={s}
+          size={11}
+          strokeWidth={1.5}
+          style={
+            s <= filled
+              ? { fill: 'var(--g2-star)', color: 'var(--g2-star)' }
+              : { fill: 'none', color: 'var(--g2-border)' }
+          }
+        />
+      ))}
+    </span>
+  )
+}
 
-      <div className="flex items-center gap-2.5 mb-10">
-        <h2 id="trending-heading" className="text-[24px] font-black text-[var(--g2-dark)]">
-          Trending
-        </h2>
-        <svg aria-hidden="true" className="h-5 w-auto text-[var(--g2-purple)]" viewBox="0 0 512 512" fill="currentColor">
-          <path d="M511.58,140.9c-.07-.73-.18-1.45-.31-2.16l0-.14c-.14-.71-.31-1.41-.51-2.09,0-.06,0-.12-.05-.17-.2-.68-.44-1.34-.7-2l-.09-.23c-.26-.64-.55-1.26-.87-1.87,0-.09-.09-.18-.14-.27-.32-.61-.67-1.2-1-1.78l-.17-.25c-.4-.6-.83-1.18-1.28-1.74l-.12-.16c-.51-.62-1-1.21-1.6-1.77h0c-.57-.56-1.16-1.1-1.77-1.6l-.16-.13c-.56-.45-1.14-.88-1.74-1.28l-.26-.16q-.87-.56-1.77-1l-.28-.14q-.92-.47-1.86-.87l-.25-.09q-1-.39-2-.69l-.18-.06c-.68-.19-1.38-.37-2.08-.5l-.16,0c-.7-.13-1.41-.24-2.14-.31h-.14c-.72-.07-1.44-.1-2.18-.11H356.48a24,24,0,0,0,0,48h73.27L305.65,291.34l-102-102a24,24,0,0,0-33.94,0L7.34,351.79a24,24,0,1,0,33.94,33.95L186.72,240.29l102,102a24,24,0,0,0,33.94,0L463.69,201.18v73.26a24,24,0,0,0,48,0V143.24h0c0-.75,0-1.48-.1-2.21A.49.49,0,0,1,511.58,140.9Z"/>
-        </svg>
+function authorInitials(name: string) {
+  return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+}
+
+function PlaybookCard({ playbook }: { playbook: PlaybookData }) {
+  const navigate = useNavigate()
+  const tools = playbook.toolIds
+    .slice(0, 5)
+    .map((id) => getProductById(id))
+    .filter(Boolean)
+
+  const chipColor = CATEGORY_COLORS[playbook.category] ?? 'bg-violet-50 text-violet-500'
+
+  return (
+    <article
+      onClick={() => navigate(`/playbook/view/${playbook.id}`)}
+      className="flex flex-col rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] p-5 gap-4 cursor-pointer hover:shadow-lg hover:border-[var(--g2-purple)]/40 transition-all"
+    >
+      {/* Category + rating */}
+      <div className="flex items-center justify-between gap-2">
+        <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${chipColor}`}>
+          {playbook.category}
+        </span>
+        <div className="flex items-center gap-1.5">
+          <Stars rating={playbook.rating} />
+          <span className="text-[12px] font-semibold text-[var(--g2-dark)]">
+            {playbook.rating.toFixed(1)}
+          </span>
+          <span className="text-[11px] text-[var(--g2-muted)]">({playbook.ratingCount})</span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {TRENDING_TOOLS.map((tool, i) => (
-          <ToolCard key={tool.name} tool={{ ...tool, previewImage: PRODUCT_IMAGES[i % PRODUCT_IMAGES.length] }} />
+      {/* Title */}
+      <h3 className="text-[16px] font-bold text-[var(--g2-dark)] leading-snug line-clamp-2">
+        {playbook.title}
+      </h3>
+
+      {/* Description */}
+      <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed line-clamp-3 -mt-1">
+        {playbook.description}
+      </p>
+
+      {/* Tool logos */}
+      <div className="flex items-center gap-2">
+        {tools.map((tool) => (
+          <ToolLogo key={tool!.id} domain={tool!.domain} name={tool!.name} size={28} />
+        ))}
+        {playbook.toolIds.length > 5 && (
+          <span className="text-[11px] text-[var(--g2-muted)] font-medium ml-1">
+            +{playbook.toolIds.length - 5} more
+          </span>
+        )}
+      </div>
+
+      {/* Divider + author */}
+      <div className="border-t border-[var(--g2-border)] pt-3.5 flex items-center gap-2.5 -mb-0.5">
+        <div className="w-7 h-7 rounded-full bg-[var(--g2-purple-light)] text-[var(--g2-purple)] text-[10px] font-bold flex items-center justify-center shrink-0">
+          {authorInitials(playbook.author)}
+        </div>
+        <div className="min-w-0">
+          <p className="text-[12.5px] font-semibold text-[var(--g2-dark)] truncate">{playbook.author}</p>
+          <p className="text-[11.5px] text-[var(--g2-muted)] truncate">
+            {playbook.authorRole} at {playbook.company}
+          </p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+const ALL_CATEGORIES = [...new Set(PLAYBOOKS.map((p) => p.category))].sort()
+
+interface Props {
+  dark: boolean
+}
+
+export default function AllPlaybooks({ dark }: Props) {
+  const [query, setQuery] = useState('')
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [visible, setVisible] = useState(PAGE_SIZE)
+
+  const filtered = PLAYBOOKS.filter((p) => {
+    const matchCat = !activeCategory || p.category === activeCategory
+    const q = query.toLowerCase()
+    const matchQ =
+      !q ||
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.author.toLowerCase().includes(q) ||
+      p.company.toLowerCase().includes(q)
+    return matchCat && matchQ
+  })
+
+  const shown = filtered.slice(0, visible)
+  const hasMore = visible < filtered.length
+
+  function handleCategoryClick(cat: string | null) {
+    setActiveCategory(cat)
+    setVisible(PAGE_SIZE)
+  }
+
+  function handleSearch(val: string) {
+    setQuery(val)
+    setVisible(PAGE_SIZE)
+  }
+
+  return (
+    <section aria-labelledby="playbooks-heading" className="max-w-[1160px] mx-auto px-8 pt-4 pb-20">
+
+      {/* Header row */}
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <h2 id="playbooks-heading" className="text-[24px] font-black text-[var(--g2-dark)] shrink-0">
+          All Playbooks
+        </h2>
+
+        {/* Search */}
+        <div
+          className="flex items-center gap-2 rounded-full border px-4 py-2 max-w-[280px] w-full"
+          style={{
+            background: dark ? '#1e1b36' : 'var(--g2-surface)',
+            borderColor: dark ? '#4a4570' : 'var(--g2-border)',
+          }}
+        >
+          <Search size={14} className="shrink-0 text-[var(--g2-muted)]" aria-hidden="true" />
+          <input
+            type="search"
+            value={query}
+            placeholder="Search playbooks..."
+            aria-label="Search playbooks"
+            className="flex-1 bg-transparent text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] text-[13px] outline-none"
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Category filter chips */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        <button
+          onClick={() => handleCategoryClick(null)}
+          className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
+            !activeCategory
+              ? 'bg-[var(--g2-purple)] text-white border-[var(--g2-purple)]'
+              : 'border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)]'
+          }`}
+        >
+          All
+        </button>
+        {ALL_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => handleCategoryClick(cat)}
+            className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
+              activeCategory === cat
+                ? 'bg-[var(--g2-purple)] text-white border-[var(--g2-purple)]'
+                : 'border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)]'
+            }`}
+          >
+            {cat}
+          </button>
         ))}
       </div>
 
-      <div className="flex justify-center mt-10">
-        <button className="px-7 py-3 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors">
-          See All
-        </button>
-      </div>
+      {/* Grid */}
+      {shown.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {shown.map((playbook) => (
+            <PlaybookCard key={playbook.id} playbook={playbook} />
+          ))}
+        </div>
+      ) : (
+        <div className="py-20 text-center text-[var(--g2-muted)] text-[15px]">
+          No playbooks found.
+        </div>
+      )}
+
+      {/* Load More */}
+      {hasMore && (
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={() => setVisible((v) => v + PAGE_SIZE)}
+            className="px-7 py-3 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[#7060c8] hover:text-[#7060c8] transition-colors"
+          >
+            Load More
+          </button>
+        </div>
+      )}
 
     </section>
   )
