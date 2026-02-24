@@ -7,6 +7,9 @@ import AllPlaybooks from './components/home/TrendingGrid'
 import PlaybookBuilder from './pages/PlaybookBuilder'
 import PlaybookStart from './pages/PlaybookStart'
 import PlaybookView from './pages/PlaybookView'
+import LoginA from './pages/LoginA'
+import LoginB from './pages/LoginB'
+import { DemoProvider } from './context/DemoContext'
 
 function useTheme() {
   const [dark, setDark] = useState(true)
@@ -33,13 +36,17 @@ export default function App() {
   const { dark, toggle } = useTheme()
 
   return (
-    <BrowserRouter basename="/g2ai-playbooks">
-      <Routes>
-        <Route path="/" element={<Homepage dark={dark} onToggle={toggle} />} />
-        <Route path="/playbook/start" element={<PlaybookStart dark={dark} />} />
-        <Route path="/playbook/new" element={<PlaybookBuilder dark={dark} onToggle={toggle} />} />
-        <Route path="/playbook/view/:id" element={<PlaybookView dark={dark} onToggle={toggle} />} />
-      </Routes>
-    </BrowserRouter>
+    <DemoProvider>
+      <BrowserRouter basename="/g2ai-playbooks">
+        <Routes>
+          <Route path="/" element={<Homepage dark={dark} onToggle={toggle} />} />
+          <Route path="/playbook/start" element={<PlaybookStart dark={dark} />} />
+          <Route path="/playbook/new" element={<PlaybookBuilder dark={dark} onToggle={toggle} />} />
+          <Route path="/playbook/view/:id" element={<PlaybookView dark={dark} onToggle={toggle} />} />
+          <Route path="/loginA" element={<LoginA />} />
+          <Route path="/loginB" element={<LoginB />} />
+        </Routes>
+      </BrowserRouter>
+    </DemoProvider>
   )
 }

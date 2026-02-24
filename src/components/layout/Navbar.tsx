@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Search, Sparkles } from 'lucide-react'
 import ThemeToggle from '../ui/ThemeToggle'
 import G2Logo from '../ui/G2Logo'
 import SearchDropdown from '../home/SearchDropdown'
+import { useDemo } from '../../context/DemoContext'
 
 interface NavbarProps {
   dark: boolean
@@ -16,6 +18,7 @@ const menuLinks = [
 ]
 
 export default function Navbar({ dark, onToggle }: NavbarProps) {
+  const { model } = useDemo()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const [query, setQuery] = useState('')
@@ -101,52 +104,61 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
           )}
         </div>
 
-        {/* Right: avatar + profile menu */}
-        <div ref={menuRef} className="shrink-0 justify-self-end relative">
-          <button
-            onClick={() => setOpen(v => !v)}
-            className="block rounded-full focus-visible:outline-2 focus-visible:outline-[var(--g2-purple)]"
-            aria-label="Open profile menu"
-            aria-expanded={open}
+        {/* Right: avatar + profile menu (authenticated) or Log-in button (demo A/B) */}
+        {model === 'auth' ? (
+          <div ref={menuRef} className="shrink-0 justify-self-end relative">
+            <button
+              onClick={() => setOpen(v => !v)}
+              className="block rounded-full focus-visible:outline-2 focus-visible:outline-[var(--g2-purple)]"
+              aria-label="Open profile menu"
+              aria-expanded={open}
+            >
+              <img
+                src="https://media.licdn.com/dms/image/v2/C5603AQF2xPA_A5YPIg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1653323249034?e=2147483647&v=beta&t=cQ2tQFG2kS-Z38clCSkC6fuw3ANhg6p9FpM9HJtb19Y"
+                alt="Profile"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-[var(--g2-border)]"
+              />
+            </button>
+
+            {open && (
+              <div className="absolute right-0 top-[calc(100%+10px)] w-56 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)] shadow-lg shadow-black/10 py-1 z-50">
+                {/* Greeting */}
+                <div className="px-4 pt-3 pb-2">
+                  <p className="text-[13px] font-semibold text-[var(--g2-dark)]">Hi, Godard!</p>
+                </div>
+
+                <div className="h-px bg-[var(--g2-border)] mx-2 mb-1" />
+
+                {/* Nav links */}
+                {menuLinks.map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    className="flex items-center px-4 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {label}
+                  </a>
+                ))}
+
+                <div className="h-px bg-[var(--g2-border)] mx-2 mt-1 mb-2" />
+
+                {/* UI Theme row */}
+                <div className="flex items-center justify-between px-4 py-2">
+                  <span className="text-[13px] text-[var(--g2-muted)]">UI Theme</span>
+                  <ThemeToggle dark={dark} onToggle={onToggle} />
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link
+            to={model === 'A' ? '/loginA' : '/loginB'}
+            className="shrink-0 justify-self-end px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-[#7060c8] transition-colors whitespace-nowrap"
           >
-            <img
-              src="https://media.licdn.com/dms/image/v2/C5603AQF2xPA_A5YPIg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1653323249034?e=2147483647&v=beta&t=cQ2tQFG2kS-Z38clCSkC6fuw3ANhg6p9FpM9HJtb19Y"
-              alt="Profile"
-              className="w-8 h-8 rounded-full object-cover ring-2 ring-[var(--g2-border)]"
-            />
-          </button>
-
-          {open && (
-            <div className="absolute right-0 top-[calc(100%+10px)] w-56 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)] shadow-lg shadow-black/10 py-1 z-50">
-              {/* Greeting */}
-              <div className="px-4 pt-3 pb-2">
-                <p className="text-[13px] font-semibold text-[var(--g2-dark)]">Hi, Godard!</p>
-              </div>
-
-              <div className="h-px bg-[var(--g2-border)] mx-2 mb-1" />
-
-              {/* Nav links */}
-              {menuLinks.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="flex items-center px-4 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
-                  onClick={() => setOpen(false)}
-                >
-                  {label}
-                </a>
-              ))}
-
-              <div className="h-px bg-[var(--g2-border)] mx-2 mt-1 mb-2" />
-
-              {/* UI Theme row */}
-              <div className="flex items-center justify-between px-4 py-2">
-                <span className="text-[13px] text-[var(--g2-muted)]">UI Theme</span>
-                <ThemeToggle dark={dark} onToggle={onToggle} />
-              </div>
-            </div>
-          )}
-        </div>
+            Log-in / Contribute
+          </Link>
+        )}
       </div>
     </header>
   )

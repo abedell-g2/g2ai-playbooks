@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mic, Pause, ArrowRight, ArrowLeft, X, Plus, Search } from 'lucide-react'
+import { Mic, Pause, ArrowRight, ArrowLeft, X, Plus, Search, TrendingDown, AlertTriangle, Sparkles } from 'lucide-react'
 import G2Logo from '../components/ui/G2Logo'
 import ToolLogo from '../components/ui/ToolLogo'
 import { PRODUCTS, getProductById } from '../data/searchData'
+import { useDemo } from '../context/DemoContext'
 
 const SpeechRecognitionAPI =
   typeof window !== 'undefined'
@@ -138,6 +139,85 @@ function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
   )
 }
 
+// ── Model B: Optimization insights panel ─────────────────────────────────────
+
+function OptimizationInsights({ toolIds }: { toolIds: string[] }) {
+  const savingsCount = Math.min(Math.max(toolIds.length - 1, 1), 3)
+  const hasRedundancy = toolIds.length >= 3
+
+  return (
+    <div className="w-full rounded-2xl border border-[var(--g2-purple)]/25 bg-[var(--g2-purple)]/5 p-5">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Sparkles size={14} className="text-[var(--g2-purple)]" />
+          <span className="text-[13px] font-bold text-[var(--g2-dark)]">
+            G2.AI Optimization Preview
+          </span>
+        </div>
+        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[var(--g2-purple)]/10 text-[var(--g2-purple)]">
+          BETA
+        </span>
+      </div>
+      <p className="text-[12px] text-[var(--g2-muted)] mb-4 leading-relaxed">
+        Publish your playbook to unlock your full AI stack audit.
+      </p>
+
+      {/* Insight cards */}
+      <div className="flex flex-col gap-2.5">
+
+        {/* Cost savings */}
+        <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[var(--g2-surface)] border border-[var(--g2-border)]">
+          <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+            <TrendingDown size={14} className="text-emerald-500" />
+          </div>
+          <div>
+            <p className="text-[13px] font-semibold text-[var(--g2-dark)]">
+              {savingsCount} cheaper alternative{savingsCount !== 1 ? 's' : ''} found
+            </p>
+            <p className="text-[12px] text-[var(--g2-muted)] mt-0.5">
+              Tools with similar features at a lower cost, based on your stack.
+            </p>
+          </div>
+        </div>
+
+        {/* Redundancy (only shown when 3+ tools detected) */}
+        {hasRedundancy && (
+          <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[var(--g2-surface)] border border-[var(--g2-border)]">
+            <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
+              <AlertTriangle size={14} className="text-amber-500" />
+            </div>
+            <div>
+              <p className="text-[13px] font-semibold text-[var(--g2-dark)]">
+                1 potential redundancy detected
+              </p>
+              <p className="text-[12px] text-[var(--g2-muted)] mt-0.5">
+                Two tools in your stack have significant feature overlap.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Emerging tools */}
+        <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[var(--g2-surface)] border border-[var(--g2-border)]">
+          <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
+            <Sparkles size={14} className="text-blue-500" />
+          </div>
+          <div>
+            <p className="text-[13px] font-semibold text-[var(--g2-dark)]">
+              3 emerging tools in your category
+            </p>
+            <p className="text-[12px] text-[var(--g2-muted)] mt-0.5">
+              Tools gaining momentum that could enhance your workflow.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 // ── Main page ────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -145,6 +225,7 @@ interface Props {
 }
 
 export default function PlaybookStart({ dark }: Props) {
+  const { model } = useDemo()
   const navigate = useNavigate()
   const [step, setStep] = useState<1 | 2>(1)
 
@@ -336,6 +417,11 @@ export default function PlaybookStart({ dark }: Props) {
                   onAdd={addTool}
                   dark={dark}
                 />
+              )}
+
+              {/* Model B: Optimization preview — shown when tools detected */}
+              {model === 'B' && toolIds.length > 0 && (
+                <OptimizationInsights toolIds={toolIds} />
               )}
 
               {/* Continue */}
