@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Search, Sparkles } from 'lucide-react'
 import ThemeToggle from '../ui/ThemeToggle'
 import G2Logo from '../ui/G2Logo'
+import SearchDropdown from '../home/SearchDropdown'
 
 interface NavbarProps {
   dark: boolean
@@ -17,8 +18,11 @@ const menuLinks = [
 export default function Navbar({ dark, onToggle }: NavbarProps) {
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const [query, setQuery] = useState('')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
 
-  // Close on outside click
+  // Close profile menu on outside click
   useEffect(() => {
     if (!open) return
     function handleClick(e: MouseEvent) {
@@ -30,6 +34,19 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [open])
 
+  // Close search dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const showDropdown = dropdownOpen && query.length > 0
+
   return (
     <header className="sticky top-0 z-50 w-full bg-[var(--g2-bg)]/50 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto px-6 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-6">
@@ -38,13 +55,51 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
           <G2Logo className="h-9 w-auto" />
         </a>
 
-        {/* Nav links */}
-        <nav aria-label="Primary navigation" className="hidden md:flex items-center justify-center gap-7">
-          <a href="#" className="text-[15px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Explore Software</a>
-          <Link to="/playbook/new" className="text-[15px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">AI Playbooks</Link>
-          <a href="#" className="text-[15px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Categories</a>
-          <a href="#" className="text-[15px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">Rankings</a>
-        </nav>
+        {/* Search */}
+        <div ref={searchRef} className="relative">
+          <form
+            role="search"
+            aria-label="Find AI software"
+            onSubmit={(e) => e.preventDefault()}
+            className="flex items-center gap-2.5 rounded-full border px-4 py-2 transition-all focus-within:shadow-md"
+            style={{
+              background: dark ? '#1e1b36' : 'var(--g2-surface)',
+              borderColor: dark ? '#4a4570' : 'var(--g2-border)',
+            }}
+          >
+            <Search size={15} className="shrink-0 text-[var(--g2-muted)]" aria-hidden="true" />
+            <input
+              type="search"
+              value={query}
+              placeholder="Find AI software, playbooks, and more..."
+              aria-label="Find AI software"
+              className="flex-1 bg-transparent text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] text-[14px] outline-none"
+              onChange={(e) => {
+                setQuery(e.target.value)
+                if (e.target.value.length > 0) setDropdownOpen(true)
+              }}
+              onFocus={() => { if (query.length > 0) setDropdownOpen(true) }}
+            />
+            <button
+              type="submit"
+              aria-label="Search with AI"
+              className="shrink-0 text-[var(--g2-purple)] hover:text-[var(--g2-orange)] transition-colors"
+            >
+              <Sparkles size={15} aria-hidden="true" />
+            </button>
+          </form>
+
+          {showDropdown && (
+            <SearchDropdown
+              query={query}
+              dark={dark}
+              onClose={() => {
+                setDropdownOpen(false)
+                setQuery('')
+              }}
+            />
+          )}
+        </div>
 
         {/* Right: avatar + profile menu */}
         <div ref={menuRef} className="shrink-0 justify-self-end relative">
