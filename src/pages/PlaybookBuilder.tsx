@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link, useSearchParams, useLocation } from 'react-router-dom'
 import { ReactFlowProvider } from '@xyflow/react'
 import { ArrowLeft, Share2, Save } from 'lucide-react'
@@ -69,6 +69,19 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
     startState?.title ?? (remixPlaybook ? `Remix: ${remixPlaybook.title}` : '')
   )
   const [editing, setEditing] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [menuOpen])
 
   function handleModalSubmit(meta: PlaybookMeta) {
     setTitle(meta.title)
@@ -128,12 +141,49 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
             <Save size={13} />
             <span className="hidden sm:inline">Save</span>
           </button>
-          <ThemeToggle dark={dark} onToggle={onToggle} />
-          <img
-            src="https://media.licdn.com/dms/image/v2/C5603AQF2xPA_A5YPIg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1653323249034?e=2147483647&v=beta&t=cQ2tQFG2kS-Z38clCSkC6fuw3ANhg6p9FpM9HJtb19Y"
-            alt="Profile"
-            className="w-8 h-8 rounded-full object-cover ring-2 ring-[var(--g2-border)] shrink-0"
-          />
+          {/* Avatar + profile dropdown */}
+          <div ref={menuRef} className="relative shrink-0">
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              className="block rounded-full focus-visible:outline-2 focus-visible:outline-[var(--g2-purple)]"
+              aria-label="Open profile menu"
+              aria-expanded={menuOpen}
+            >
+              <img
+                src="https://media.licdn.com/dms/image/v2/C5603AQF2xPA_A5YPIg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1653323249034?e=2147483647&v=beta&t=cQ2tQFG2kS-Z38clCSkC6fuw3ANhg6p9FpM9HJtb19Y"
+                alt="Profile"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-[var(--g2-border)]"
+              />
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 top-[calc(100%+10px)] w-56 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)] shadow-lg shadow-black/10 py-1 z-50">
+                <div className="px-4 pt-3 pb-2">
+                  <p className="text-[13px] font-semibold text-[var(--g2-dark)]">Hi, Godard!</p>
+                </div>
+                <div className="h-px bg-[var(--g2-border)] mx-2 mb-1" />
+                {[
+                  { label: 'My Playbooks', href: '#' },
+                  { label: 'My Profile',   href: '#' },
+                  { label: 'Account Settings', href: '#' },
+                ].map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    className="flex items-center px-4 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {label}
+                  </a>
+                ))}
+                <div className="h-px bg-[var(--g2-border)] mx-2 mt-1 mb-2" />
+                <div className="flex items-center justify-between px-4 py-2">
+                  <span className="text-[13px] text-[var(--g2-muted)]">UI Theme</span>
+                  <ThemeToggle dark={dark} onToggle={onToggle} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
