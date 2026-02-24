@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mic, MicOff, ArrowRight, ArrowLeft, X } from 'lucide-react'
+import { Mic, Pause, ArrowRight, ArrowLeft, X } from 'lucide-react'
 import G2Logo from '../components/ui/G2Logo'
 import ToolLogo from '../components/ui/ToolLogo'
 import { PRODUCTS, getProductById } from '../data/searchData'
@@ -156,8 +156,8 @@ export default function PlaybookStart({ dark }: Props) {
                 </h1>
                 <p className="text-[14px] text-[var(--g2-muted)] leading-relaxed">
                   {supported
-                    ? 'Hit the mic and tell us how you use AI. We\'ll detect the tools automatically.'
-                    : 'Type out how you use AI tools — we\'ll detect them automatically.'}
+                    ? "Hit the microphone icon, describe how you use AI in your normal workflow and we'll detect the tools automatically."
+                    : "Type out how you use AI in your normal workflow and we'll detect the tools automatically."}
                 </p>
               </div>
 
@@ -182,7 +182,7 @@ export default function PlaybookStart({ dark }: Props) {
                         : 'bg-[var(--g2-surface)] border-2 border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] hover:scale-105'
                     }`}
                   >
-                    {recording ? <MicOff size={28} /> : <Mic size={28} />}
+                    {recording ? <Pause size={28} /> : <Mic size={28} />}
                   </button>
                 </div>
               )}
@@ -261,7 +261,7 @@ export default function PlaybookStart({ dark }: Props) {
               )}
 
               {/* Continue */}
-              <div className="w-full pt-2">
+              <div className="w-full pt-2 flex flex-col items-center gap-3">
                 <button
                   onClick={() => setStep(2)}
                   disabled={!canContinue}
@@ -270,11 +270,12 @@ export default function PlaybookStart({ dark }: Props) {
                   Continue
                   <ArrowRight size={16} />
                 </button>
-                {!canContinue && (
-                  <p className="text-center text-[12px] text-[var(--g2-muted)] mt-2.5">
-                    Describe your workflow first
-                  </p>
-                )}
+                <button
+                  onClick={() => navigate('/playbook/new')}
+                  className="text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-purple)] transition-colors"
+                >
+                  I'll build it myself
+                </button>
               </div>
 
             </div>
