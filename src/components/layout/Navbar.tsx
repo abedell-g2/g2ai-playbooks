@@ -56,7 +56,7 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
         </a>
 
         {/* Search */}
-        <div ref={searchRef} className="relative">
+        <div ref={searchRef} className="relative max-w-[420px] w-full justify-self-center">
           <form
             role="search"
             aria-label="Find AI software"
@@ -71,8 +71,8 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
             <input
               type="search"
               value={query}
-              placeholder="Find AI software, playbooks, and more..."
-              aria-label="Find AI software"
+              placeholder="Find AI Playbooks, experts, AI software and more..."
+              aria-label="Find AI Playbooks, experts, AI software and more"
               className="flex-1 bg-transparent text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] text-[14px] outline-none"
               onChange={(e) => {
                 setQuery(e.target.value)
