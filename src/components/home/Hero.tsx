@@ -103,7 +103,7 @@ export default function Hero({ dark }: HeroProps) {
           </p>
           <div className="flex items-center gap-3">
             <Link
-              to="/playbook/new"
+              to="/playbook/start"
               className="px-6 py-3 rounded-full bg-[var(--g2-purple)] text-white text-[15px] font-semibold hover:bg-[#7060c8] transition-colors"
             >
               Create a Playbook

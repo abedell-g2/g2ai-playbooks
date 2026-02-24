@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useLocation } from 'react-router-dom'
 import { ReactFlowProvider } from '@xyflow/react'
 import { ArrowLeft, Share2, Save } from 'lucide-react'
 import ToolSidebar, { type AITool } from '../components/playbook/ToolSidebar'
@@ -24,9 +24,22 @@ function productToAITool(product: ProductData): AITool {
   }
 }
 
+interface StartState {
+  toolIds?: string[]
+  title?: string
+  author?: string
+  authorRole?: string
+  company?: string
+  linkedin?: string
+}
+
 export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps) {
   const [searchParams] = useSearchParams()
+  const location = useLocation()
   const remixId = searchParams.get('remix')
+
+  // State passed from the PlaybookStart onboarding flow
+  const startState = (location.state as StartState | null) ?? null
 
   // Resolve remix data at render time (stable — remixId doesn't change)
   const remixPlaybook = remixId ? getPlaybookById(remixId) : undefined
@@ -39,9 +52,21 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
         .filter(Boolean) as RemixTool[])
     : undefined
 
-  const [showModal, setShowModal] = useState(!remixPlaybook)
+  // Tools pre-populated from the voice onboarding
+  const startTools: RemixTool[] | undefined = startState?.toolIds?.length
+    ? (startState.toolIds
+        .map((id) => {
+          const product = getProductById(id)
+          return product ? { tool: productToAITool(product), action: '' } : null
+        })
+        .filter(Boolean) as RemixTool[])
+    : undefined
+
+  const initialTools = startTools ?? remixTools
+
+  const [showModal, setShowModal] = useState(!remixPlaybook && !startState)
   const [title, setTitle] = useState(
-    remixPlaybook ? `Remix: ${remixPlaybook.title}` : ''
+    startState?.title ?? (remixPlaybook ? `Remix: ${remixPlaybook.title}` : '')
   )
   const [editing, setEditing] = useState(false)
 
@@ -116,7 +141,7 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
       <div className="flex flex-1 overflow-hidden">
         <ToolSidebar />
         <ReactFlowProvider>
-          <PlaybookCanvas dark={dark} initialTools={remixTools} />
+          <PlaybookCanvas dark={dark} initialTools={initialTools} />
         </ReactFlowProvider>
       </div>
     </div>
