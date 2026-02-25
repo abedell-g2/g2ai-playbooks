@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useDemo } from '../../context/DemoContext'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -65,6 +66,7 @@ interface HeroProps {
 }
 
 export default function Hero({ dark }: HeroProps) {
+  const { model, openLoginModal } = useDemo()
   const bgImage = dark
     ? `${BASE}images/Background_DarkMode.svg`
     : `${BASE}images/Background_LightMode.svg`
@@ -102,12 +104,21 @@ export default function Hero({ dark }: HeroProps) {
             AI Playbooks — Discover expert-curated AI tool stacks
           </p>
           <div className="flex items-center gap-3">
-            <Link
-              to="/playbook/start"
-              className="px-6 py-3 rounded-full bg-[var(--g2-purple)] text-white text-[15px] font-semibold hover:bg-[#7060c8] transition-colors"
-            >
-              Create a Playbook
-            </Link>
+            {model === 'auth' ? (
+              <Link
+                to="/playbook/start"
+                className="px-6 py-3 rounded-full bg-[var(--g2-purple)] text-white text-[15px] font-semibold hover:bg-[#7060c8] transition-colors"
+              >
+                Create a Playbook
+              </Link>
+            ) : (
+              <button
+                onClick={openLoginModal}
+                className="px-6 py-3 rounded-full bg-[var(--g2-purple)] text-white text-[15px] font-semibold hover:bg-[#7060c8] transition-colors"
+              >
+                Create a Playbook
+              </button>
+            )}
             <a
               href="#"
               className="px-6 py-3 rounded-full border border-[var(--g2-border)] text-[var(--g2-dark)] text-[15px] font-semibold hover:border-[#7060c8] hover:text-[#7060c8] transition-colors"
