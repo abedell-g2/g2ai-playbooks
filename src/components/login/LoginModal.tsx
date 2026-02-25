@@ -6,15 +6,13 @@ import { useDemo } from '../../context/DemoContext'
 
 const modelContent = {
   A: {
-    badge: 'New on G2.AI Playbooks',
     headline: 'Share your AI expertise.\nGet paid.',
-    sub: 'Earn a commission every time a reader purchases a tool you recommended in your playbook.',
-    features: ['Up to 15% commission', 'Real-time earnings dashboard', 'Payments available via Stripe'],
+    sub: 'Earn money every time someone purchases a tool you recommended in your playbook.',
+    features: ['Up to 15% on each referral', 'Real-time earnings dashboard', 'Payments available via Stripe'],
     cardTitle: 'Create your account',
     cardSubtitle: 'Start earning from your AI expertise today.',
   },
   B: {
-    badge: 'Powered by G2.AI',
     headline: 'Your AI stack,\noptimized.',
     sub: 'Share your workflow and our AI surfaces cheaper alternatives, spots redundancies, and highlights emerging tools.',
     features: ['Find cheaper alternatives', 'Spot redundancies', 'Emerging tool alerts'],
@@ -56,10 +54,6 @@ export default function LoginModal() {
         {/* ── Left: pitch panel ── */}
         <div className="hidden sm:flex flex-col justify-center w-[42%] shrink-0 bg-gradient-to-br from-[#232060] to-[#5746b2] px-9 py-10 text-white">
           <G2Logo className="h-6 w-auto self-start mb-9" />
-
-          <span className="text-[11px] font-bold uppercase tracking-widest text-purple-300 mb-4 block">
-            {content.badge}
-          </span>
 
           <h2 className="text-[26px] font-black leading-[1.1] mb-4 whitespace-pre-line">
             {content.headline}
