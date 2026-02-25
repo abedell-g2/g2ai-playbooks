@@ -57,10 +57,10 @@ const OptimizationNode = memo(({ data }: NodeProps) => {
       {/* Type badge */}
       <div className="px-2.5 pt-2.5 pb-0">
         <span
-          className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+          className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
           style={{ background: cfg.badgeBg, color: cfg.badgeText }}
         >
-          {cfg.icon} {cfg.label}
+          {cfg.label}
         </span>
       </div>
 
@@ -73,7 +73,7 @@ const OptimizationNode = memo(({ data }: NodeProps) => {
 
         {/* Metric headline */}
         <p
-          className="text-[15px] font-black leading-tight mb-0.5"
+          className="text-[13px] font-semibold leading-tight mb-0.5"
           style={{ color: cfg.border }}
         >
           {d.metric}

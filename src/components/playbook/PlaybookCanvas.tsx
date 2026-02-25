@@ -39,9 +39,9 @@ const OPT_EDGE_COLORS: Record<string, string> = {
 }
 
 const OPT_EDGE_LABELS: Record<string, string> = {
-  cost: '💸 Alternative',
-  speed: '⚡ Alternative',
-  capability: '✨ Alternative',
+  cost: 'Alternative',
+  speed: 'Alternative',
+  capability: 'Alternative',
 }
 
 let idCounter = 1
