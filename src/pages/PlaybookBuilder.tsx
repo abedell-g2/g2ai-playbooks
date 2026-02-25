@@ -35,7 +35,7 @@ interface StartState {
 }
 
 export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps) {
-  const { model } = useDemo()
+  const { model, openLoginModal } = useDemo()
   const [searchParams] = useSearchParams()
   const location = useLocation()
   const remixId = searchParams.get('remix')
@@ -188,12 +188,12 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
               )}
             </div>
           ) : (
-            <Link
-              to={model === 'A' ? '/loginA' : '/loginB'}
+            <button
+              onClick={openLoginModal}
               className="shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[var(--g2-purple)] text-white text-[12.5px] font-semibold hover:bg-[#7060c8] transition-colors"
             >
               Log-in / Contribute
-            </Link>
+            </button>
           )}
         </div>
       </header>

@@ -10,6 +10,7 @@ import PlaybookView from './pages/PlaybookView'
 import LoginA from './pages/LoginA'
 import LoginB from './pages/LoginB'
 import { DemoProvider } from './context/DemoContext'
+import LoginModal from './components/login/LoginModal'
 
 function useTheme() {
   const [dark, setDark] = useState(true)
@@ -38,6 +39,7 @@ export default function App() {
   return (
     <DemoProvider>
       <BrowserRouter basename="/g2ai-playbooks">
+        <LoginModal />
         <Routes>
           <Route path="/" element={<Homepage dark={dark} onToggle={toggle} />} />
           <Route path="/playbook/start" element={<PlaybookStart dark={dark} />} />

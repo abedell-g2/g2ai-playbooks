@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Search, Sparkles } from 'lucide-react'
 import ThemeToggle from '../ui/ThemeToggle'
 import G2Logo from '../ui/G2Logo'
@@ -18,7 +17,7 @@ const menuLinks = [
 ]
 
 export default function Navbar({ dark, onToggle }: NavbarProps) {
-  const { model } = useDemo()
+  const { model, openLoginModal } = useDemo()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const [query, setQuery] = useState('')
@@ -152,12 +151,12 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
             )}
           </div>
         ) : (
-          <Link
-            to={model === 'A' ? '/loginA' : '/loginB'}
+          <button
+            onClick={openLoginModal}
             className="shrink-0 justify-self-end px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-[#7060c8] transition-colors whitespace-nowrap"
           >
             Log-in / Contribute
-          </Link>
+          </button>
         )}
       </div>
     </header>
