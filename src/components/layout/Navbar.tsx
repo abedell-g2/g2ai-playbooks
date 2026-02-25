@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Search, Sparkles } from 'lucide-react'
+import { Search, Sparkles, Pencil } from 'lucide-react'
 import ThemeToggle from '../ui/ThemeToggle'
 import G2Logo from '../ui/G2Logo'
 import SearchDropdown from '../home/SearchDropdown'
@@ -10,10 +10,14 @@ interface NavbarProps {
   onToggle: () => void
 }
 
-const menuLinks = [
-  { label: 'My Playbooks', href: '#' },
-  { label: 'My Profile',   href: '#' },
-  { label: 'Account Settings', href: '#' },
+const myPlaybooks = [
+  { label: 'Sales Automation Stack' },
+  { label: 'Content Creation Workflow' },
+]
+
+const bottomLinks = [
+  { label: 'My Profile' },
+  { label: 'Account Settings' },
 ]
 
 export default function Navbar({ dark, onToggle }: NavbarProps) {
@@ -120,31 +124,52 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
             </button>
 
             {open && (
-              <div className="absolute right-0 top-[calc(100%+10px)] w-56 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)] shadow-lg shadow-black/10 py-1 z-50">
+              <div className="absolute right-0 top-[calc(100%+10px)] w-64 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-bg)] shadow-lg shadow-black/10 py-1.5 z-50">
                 {/* Greeting */}
-                <div className="px-4 pt-3 pb-2">
-                  <p className="text-[13px] font-semibold text-[var(--g2-dark)]">Hi, Godard!</p>
+                <div className="px-4 pt-3 pb-2.5">
+                  <p className="text-[15px] font-semibold text-[var(--g2-dark)]">Hi, Godard!</p>
                 </div>
 
-                <div className="h-px bg-[var(--g2-border)] mx-2 mb-1" />
+                <div className="h-px bg-[var(--g2-border)] mx-2 mb-1.5" />
 
-                {/* Nav links */}
-                {menuLinks.map(({ label, href }) => (
+                {/* My Playbooks section */}
+                <div className="px-4 pt-1 pb-0.5">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--g2-muted)]">My Playbooks</p>
+                </div>
+                {myPlaybooks.map(({ label }) => (
+                  <div
+                    key={label}
+                    className="flex items-center justify-between px-4 py-2 group hover:bg-[var(--g2-border)]/40 transition-colors cursor-pointer"
+                  >
+                    <span className="text-[14px] text-[var(--g2-dark)] truncate">{label}</span>
+                    <button
+                      aria-label={`Edit ${label}`}
+                      className="ml-2 shrink-0 text-[var(--g2-muted)] group-hover:text-[var(--g2-purple)] transition-colors"
+                    >
+                      <Pencil size={13} />
+                    </button>
+                  </div>
+                ))}
+
+                <div className="h-px bg-[var(--g2-border)] mx-2 my-1.5" />
+
+                {/* Bottom links */}
+                {bottomLinks.map(({ label }) => (
                   <a
                     key={label}
-                    href={href}
-                    className="flex items-center px-4 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
+                    href="#"
+                    className="flex items-center px-4 py-2 text-[14px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     {label}
                   </a>
                 ))}
 
-                <div className="h-px bg-[var(--g2-border)] mx-2 mt-1 mb-2" />
+                <div className="h-px bg-[var(--g2-border)] mx-2 mt-1.5 mb-2" />
 
                 {/* UI Theme row */}
                 <div className="flex items-center justify-between px-4 py-2">
-                  <span className="text-[13px] text-[var(--g2-muted)]">UI Theme</span>
+                  <span className="text-[14px] text-[var(--g2-muted)]">UI Theme</span>
                   <ThemeToggle dark={dark} onToggle={onToggle} />
                 </div>
               </div>
