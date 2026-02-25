@@ -72,10 +72,19 @@ const ToolNode = memo(({ id, data, selected }: NodeProps) => {
         />
       </div>
 
-      {/* Output handle */}
+      {/* Output handle — right (connects to next tool) */}
       <Handle
         type="source"
         position={Position.Right}
+        id="right"
+        className="!w-3 !h-3 !bg-[var(--g2-purple)] !border-2 !border-white !shadow"
+      />
+
+      {/* Output handle — bottom (connects to optimization suggestions) */}
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="bottom"
         className="!w-3 !h-3 !bg-[var(--g2-purple)] !border-2 !border-white !shadow"
       />
     </div>

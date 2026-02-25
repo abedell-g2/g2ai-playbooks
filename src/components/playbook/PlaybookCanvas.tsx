@@ -15,8 +15,12 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import ToolNode from './ToolNode'
+import OptimizationNode from './OptimizationNode'
 import type { AITool } from './ToolSidebar'
 import ConnectionModal, { type ConnectionMeta } from './ConnectionModal'
+import { useDemo } from '../../context/DemoContext'
+import { OPTIMIZATION_MAP } from '../../data/optimizationData'
+import { getProductById } from '../../data/searchData'
 
 type ToolNodeData = AITool & {
   rating?: number
@@ -26,7 +30,19 @@ type ToolNodeData = AITool & {
 type ToolNode = Node<ToolNodeData, 'toolNode'>
 type AppEdge = Edge
 
-const nodeTypes = { toolNode: ToolNode }
+const nodeTypes = { toolNode: ToolNode, optimizationNode: OptimizationNode }
+
+const OPT_EDGE_COLORS: Record<string, string> = {
+  cost: '#10b981',
+  speed: '#3b82f6',
+  capability: '#8b5cf6',
+}
+
+const OPT_EDGE_LABELS: Record<string, string> = {
+  cost: '💸 Alternative',
+  speed: '⚡ Alternative',
+  capability: '✨ Alternative',
+}
 
 let idCounter = 1
 const uid = () => `node_${idCounter++}`
@@ -43,6 +59,7 @@ export default function PlaybookCanvas({
   dark: boolean
   initialTools?: RemixTool[]
 }) {
+  const { optimizationMode } = useDemo()
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<ToolNode, AppEdge> | null>(null)
   const [nodes, setNodes, onNodesChange] = useNodesState<ToolNode>([])
@@ -74,11 +91,10 @@ export default function PlaybookCanvas({
       position: { x: i * 380, y: 120 + (i % 2) * 200 },
       data: { ...tool, rating: 0, onDelete: deleteNode, onRate },
     }))
-    setNodes(newNodes)
-
     const newEdges: AppEdge[] = newNodes.slice(0, -1).map((node, i) => ({
       id: `remix-edge-${i}`,
       source: node.id,
+      sourceHandle: 'right',
       target: newNodes[i + 1].id,
       animated: true,
       style: { stroke: '#5746b2', strokeWidth: 2 },
@@ -97,10 +113,73 @@ export default function PlaybookCanvas({
           }
         : {}),
     }))
-    setEdges(newEdges)
+
+    // Inject optimization suggestion nodes for Model B
+    const optNodes: ToolNode[] = []
+    const optEdges: AppEdge[] = []
+
+    if (optimizationMode) {
+      newNodes.forEach((mainNode, i) => {
+        const toolId = initialTools[i].tool.id
+        const suggestion = OPTIMIZATION_MAP[toolId]
+        if (!suggestion) return
+
+        const altProduct = getProductById(suggestion.altToolId)
+        if (!altProduct) return
+
+        const optId = `opt_${mainNode.id}`
+        const color = OPT_EDGE_COLORS[suggestion.type]
+
+        optNodes.push({
+          id: optId,
+          type: 'optimizationNode',
+          position: {
+            x: mainNode.position.x,
+            y: mainNode.position.y + 290,
+          },
+          data: {
+            id: suggestion.altToolId,
+            name: altProduct.name,
+            domain: altProduct.domain,
+            category: altProduct.category,
+            description: altProduct.shortDescription,
+            type: suggestion.type,
+            metric: suggestion.metric,
+            detail: suggestion.detail,
+            rating: 0,
+            onDelete: deleteNode,
+            onRate,
+          },
+        } as unknown as ToolNode)
+
+        optEdges.push({
+          id: `opt-edge-${mainNode.id}`,
+          source: mainNode.id,
+          sourceHandle: 'bottom',
+          target: optId,
+          targetHandle: 'top',
+          type: 'smoothstep',
+          animated: false,
+          style: { stroke: color, strokeWidth: 2, strokeDasharray: '6 3' },
+          label: OPT_EDGE_LABELS[suggestion.type],
+          labelStyle: {
+            fill: color,
+            fontSize: 10,
+            fontWeight: 700,
+            fontFamily: 'Figtree, system-ui, sans-serif',
+          },
+          labelBgStyle: { fill: 'var(--g2-surface)', stroke: color, strokeWidth: 1 },
+          labelBgPadding: [4, 2] as [number, number],
+          labelBgBorderRadius: 4,
+        })
+      })
+    }
+
+    setNodes([...newNodes, ...optNodes])
+    setEdges([...newEdges, ...optEdges])
 
     requestAnimationFrame(() => rfInstance.fitView({ padding: 0.18 }))
-  }, [rfInstance, initialTools, deleteNode, onRate, setNodes, setEdges])
+  }, [rfInstance, initialTools, deleteNode, onRate, setNodes, setEdges, optimizationMode])
 
   const onConnect = useCallback((params: Connection) => {
     setPendingConnection(params)

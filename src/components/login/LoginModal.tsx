@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
 import G2Logo from '../ui/G2Logo'
 import LoginCard from './LoginCard'
@@ -22,7 +23,8 @@ const modelContent = {
 }
 
 export default function LoginModal() {
-  const { model, loginModalOpen, closeLoginModal, setModel } = useDemo()
+  const { model, loginModalOpen, closeLoginModal, setModel, setOptimizationMode } = useDemo()
+  const navigate = useNavigate()
   const backdropRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -39,8 +41,11 @@ export default function LoginModal() {
   const content = modelContent[model]
 
   function handleSuccess() {
+    const wasB = model === 'B'
+    if (wasB) setOptimizationMode(true)
     setModel('auth')
     closeLoginModal()
+    if (wasB) navigate('/playbook/start')
   }
 
   return (
