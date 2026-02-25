@@ -9,7 +9,7 @@ const modelContent = {
     badge: 'New on G2.AI Playbooks',
     headline: 'Share your AI expertise.\nGet paid.',
     sub: 'Earn a commission every time a reader purchases a tool you recommended in your playbook.',
-    features: ['Up to 15% commission', 'Real-time earnings dashboard', 'Monthly Stripe payouts'],
+    features: ['Up to 15% commission', 'Real-time earnings dashboard', 'Payments available via Stripe'],
     cardTitle: 'Create your account',
     cardSubtitle: 'Start earning from your AI expertise today.',
   },
@@ -54,7 +54,7 @@ export default function LoginModal() {
       <div className="w-full max-w-[800px] flex rounded-2xl overflow-hidden border border-[var(--g2-border)] shadow-2xl shadow-black/40 max-h-[90vh]">
 
         {/* ── Left: pitch panel ── */}
-        <div className="hidden sm:flex flex-col justify-center w-[42%] shrink-0 bg-gradient-to-br from-[#0d0a2e] via-[#1a1060] to-[#5746b2] px-9 py-10 text-white">
+        <div className="hidden sm:flex flex-col justify-center w-[42%] shrink-0 bg-gradient-to-br from-[#232060] to-[#5746b2] px-9 py-10 text-white">
           <G2Logo className="h-6 w-auto self-start mb-9" />
 
           <span className="text-[11px] font-bold uppercase tracking-widest text-purple-300 mb-4 block">
