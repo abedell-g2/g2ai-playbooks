@@ -382,13 +382,17 @@ export default function PlaybookStart({ dark }: Props) {
 
               {/* Mic status label */}
               {supported && (
-                <p className={`-mt-8 text-[14px] font-medium transition-colors ${recording ? 'text-[var(--g2-purple)]' : 'text-white/50'}`}>
+                <div className={`-mt-4 px-4 py-1.5 rounded-full border text-[13px] font-medium transition-colors ${
+                  recording
+                    ? 'border-[var(--g2-purple)]/40 bg-[var(--g2-purple)]/10 text-[var(--g2-purple)]'
+                    : 'border-[var(--g2-border)] bg-[var(--g2-surface)]/60 text-white/50'
+                }`}>
                   {recording ? 'Listening…' : transcript ? 'Click to add more' : 'Click to start speaking'}
-                </p>
+                </div>
               )}
 
               {/* Transcript textarea */}
-              <div className="w-full flex flex-col gap-1.5">
+              <div className="w-full flex flex-col gap-1.5 mt-4">
                 <textarea
                   value={transcript}
                   onChange={(e) => setTranscript(e.target.value)}
