@@ -43,7 +43,7 @@ function AnimatedAI() {
   return (
     <span
       className="inline-block"
-      style={{ height: '1.65em', verticalAlign: '-0.3em' }}
+      style={{ height: '1.9em', verticalAlign: '-0.48em' }}
     >
       <img
         src={displaySrc}
