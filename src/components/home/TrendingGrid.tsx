@@ -20,6 +20,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   'Automation':       'bg-purple-50 text-purple-500',
   'Research':         'bg-teal-50 text-teal-500',
   'Generative':       'bg-violet-50 text-violet-500',
+  'Design & UI':      'bg-yellow-50 text-yellow-600',
 }
 
 function Stars({ rating }: { rating: number }) {

@@ -31,6 +31,14 @@ export const AI_TOOLS: AITool[] = [
   { id: 'zoominfo',       name: 'ZoomInfo',       domain: 'zoominfo.com',      category: 'Sales',        description: 'B2B data & intelligence' },
   { id: 'huggingface',    name: 'Hugging Face',   domain: 'huggingface.co',    category: 'Generative', description: 'Open-source AI models' },
   { id: 'replicate',      name: 'Replicate',      domain: 'replicate.com',     category: 'Generative', description: 'Run AI models in the cloud' },
+  { id: 'figma',          name: 'Figma',          domain: 'figma.com',         category: 'Design & UI', description: 'Collaborative UI design with AI' },
+  { id: 'lovable',        name: 'Lovable',        domain: 'lovable.dev',       category: 'Design & UI', description: 'Build full-stack apps from a prompt' },
+  { id: 'v0',             name: 'v0',             domain: 'v0.dev',            category: 'Design & UI', description: 'Vercel AI UI component generator' },
+  { id: 'bolt',           name: 'Bolt',           domain: 'bolt.new',          category: 'Design & UI', description: 'AI full-stack app builder' },
+  { id: 'framer',         name: 'Framer',         domain: 'framer.com',        category: 'Design & UI', description: 'AI website and landing page builder' },
+  { id: 'webflow',        name: 'Webflow',        domain: 'webflow.com',       category: 'Design & UI', description: 'Visual web development with AI' },
+  { id: 'uizard',         name: 'Uizard',         domain: 'uizard.io',         category: 'Design & UI', description: 'Sketch to UI design with AI' },
+  { id: 'galileo-ai',     name: 'Galileo AI',     domain: 'usegalileo.ai',     category: 'Design & UI', description: 'Generate UI designs from text' },
 ]
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -43,6 +51,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Video:       'bg-orange-50 text-orange-500',
   Audio:       'bg-cyan-50 text-cyan-600',
   Sales:       'bg-red-50 text-red-500',
+  'Design & UI': 'bg-yellow-50 text-yellow-600',
 }
 
 export default function ToolSidebar() {
