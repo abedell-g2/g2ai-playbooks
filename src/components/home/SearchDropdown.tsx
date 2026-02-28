@@ -4,7 +4,6 @@ import ToolLogo from '../ui/ToolLogo'
 import {
   searchProducts,
   searchPlaybooks,
-  getProductById,
   type ProductData,
   type PlaybookData,
 } from '../../data/searchData'
@@ -42,13 +41,6 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
   const matchedPlaybooks = searchPlaybooks(query)
 
   const featured: ProductData | null = matchedProducts[0] ?? null
-
-  const relatedProducts: ProductData[] = featured
-    ? featured.relatedIds
-        .map((id) => getProductById(id))
-        .filter((p): p is ProductData => !!p)
-        .slice(0, 3)
-    : []
 
   const displayPlaybooks: PlaybookData[] = matchedPlaybooks.slice(0, 3)
 
@@ -120,31 +112,6 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
             </a>
           </div>
 
-          {/* Related AI Tools — single row of 3 */}
-          {relatedProducts.length > 0 && (
-            <div className="flex flex-col gap-2.5">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)]">
-                Related AI Tools
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                {relatedProducts.map((tool) => (
-                  <div
-                    key={tool.id}
-                    className="flex items-center gap-2.5 p-2.5 rounded-xl border border-[var(--g2-border)] hover:border-[var(--g2-purple)] transition-colors cursor-pointer"
-                  >
-                    <ToolLogo domain={tool.domain} name={tool.name} size={28} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-semibold text-[var(--g2-dark)] truncate">{tool.name}</p>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Stars rating={tool.rating} size={9} />
-                        <span className="text-[11px] text-[var(--g2-muted)]">{tool.rating.toFixed(1)}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
