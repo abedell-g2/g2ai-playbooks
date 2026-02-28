@@ -356,7 +356,7 @@ export default function PlaybookStart({ dark }: Props) {
 
               {/* Mic button with pulse rings */}
               {supported && (
-                <div className="relative flex items-center justify-center w-36 h-36">
+                <div className="relative flex items-center justify-center w-52 h-52">
                   {recording && (
                     <>
                       <span className="absolute inset-0 rounded-full bg-[var(--g2-purple)]/20 animate-ping" />
@@ -369,13 +369,13 @@ export default function PlaybookStart({ dark }: Props) {
                   <button
                     onClick={toggleRecording}
                     aria-label={recording ? 'Stop recording' : 'Start recording'}
-                    className={`relative z-10 w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`relative z-10 w-32 h-32 rounded-full flex items-center justify-center transition-all duration-300 ${
                       recording
-                        ? 'bg-[var(--g2-purple)] text-white shadow-2xl shadow-[var(--g2-purple)]/40 scale-110'
-                        : 'bg-[var(--g2-surface)] border-2 border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] hover:scale-105'
+                        ? 'bg-[var(--g2-purple)] text-white shadow-2xl shadow-[var(--g2-purple)]/50 scale-110'
+                        : 'bg-[var(--g2-purple)]/15 border-2 border-[var(--g2-purple)]/60 text-[var(--g2-purple)] hover:bg-[var(--g2-purple)]/25 hover:border-[var(--g2-purple)] hover:scale-105'
                     }`}
                   >
-                    {recording ? <Pause size={28} /> : <Mic size={28} />}
+                    {recording ? <Pause size={36} /> : <Mic size={36} />}
                   </button>
                 </div>
               )}
