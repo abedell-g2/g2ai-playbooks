@@ -99,11 +99,8 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
 
   return (
     <div
-      className="absolute top-full mt-3 z-50 rounded-2xl border overflow-hidden shadow-2xl text-left"
+      className="absolute top-full mt-3 left-0 right-0 z-50 rounded-2xl border overflow-hidden shadow-2xl text-left"
       style={{
-        width: '780px',
-        left: '50%',
-        transform: 'translateX(-50%)',
         background: dark ? '#16132b' : 'var(--g2-surface)',
         borderColor: dark ? '#2a2740' : 'var(--g2-border)',
         animation: 'dropdown-enter 0.18s ease both',

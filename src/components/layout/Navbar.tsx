@@ -62,12 +62,12 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
         </a>
 
         {/* Search */}
-        <div ref={searchRef} className="relative max-w-[420px] w-full justify-self-center">
+        <div ref={searchRef} className="relative max-w-[780px] w-full justify-self-center">
           <form
             role="search"
             aria-label="Find AI software"
             onSubmit={(e) => e.preventDefault()}
-            className="flex items-center gap-2.5 rounded-full border px-4 py-2 transition-all focus-within:shadow-md"
+            className="flex items-center gap-2.5 rounded-full border px-4 py-2 transition-all focus-within:shadow-md max-w-[420px] mx-auto"
             style={{
               background: dark ? '#1e1b36' : 'var(--g2-surface)',
               borderColor: dark ? '#4a4570' : 'var(--g2-border)',
