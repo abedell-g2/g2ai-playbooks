@@ -340,7 +340,7 @@ export default function PlaybookStart({ dark }: Props) {
           {step === 1 && (
             <div className="flex flex-col items-center gap-4">
 
-              <div className="text-center">
+              <div className="w-full">
                 <p className="text-[12px] font-semibold uppercase tracking-widest text-white/60 mb-3">
                   Step 1 of 2
                 </p>
