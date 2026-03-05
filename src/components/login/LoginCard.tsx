@@ -367,7 +367,7 @@ export default function LoginCard({ title, subtitle, onSuccess }: Props) {
         </div>
 
         {/* OTP boxes */}
-        <div className="flex gap-2 mb-6 justify-between">
+        <div className="flex gap-2 mb-6 justify-center">
           {tfaCode.map((digit, i) => (
             <input
               key={i}
@@ -376,7 +376,7 @@ export default function LoginCard({ title, subtitle, onSuccess }: Props) {
               value={digit}
               onChange={e => handleTfaInput(i, e.target.value)}
               onKeyDown={e => handleTfaKey(i, e)}
-              className="flex-1 h-12 rounded-xl border text-center text-[18px] font-bold text-[var(--g2-dark)] bg-[var(--g2-surface)] border-[var(--g2-border)] outline-none focus:border-[var(--g2-purple)] transition-colors"
+              className="w-10 h-11 shrink-0 rounded-xl border text-center text-[18px] font-bold text-[var(--g2-dark)] bg-[var(--g2-surface)] border-[var(--g2-border)] outline-none focus:border-[var(--g2-purple)] transition-colors"
               aria-label={`Digit ${i + 1}`}
             />
           ))}
