@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { ArrowRight, ArrowLeft, Eye, EyeOff, Mail } from 'lucide-react'
+
+// ── Social icons ──────────────────────────────────────────────────────────────
 
 function LinkedInIcon() {
   return (
@@ -20,16 +22,27 @@ function GoogleIcon() {
   )
 }
 
-function AppleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-    </svg>
-  )
-}
+// ── Types & constants ─────────────────────────────────────────────────────────
 
-const socialButtonClass =
+type AuthStep = 'email' | 'create' | 'signin' | 'verify' | 'twofa' | 'forgot' | 'forgot-sent'
+
+const passwordRules = [
+  { label: 'At least 8 characters',  test: (pw: string) => pw.length >= 8 },
+  { label: 'One uppercase letter',    test: (pw: string) => /[A-Z]/.test(pw) },
+  { label: 'One number',              test: (pw: string) => /[0-9]/.test(pw) },
+  { label: 'One special character',   test: (pw: string) => /[!@#$%^&*(),.?":{}|<>]/.test(pw) },
+]
+
+const inputClass =
+  'w-full rounded-xl border px-4 py-2.5 text-[14px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none focus:border-[var(--g2-purple)] transition-colors bg-[var(--g2-surface)] border-[var(--g2-border)]'
+
+const primaryBtnClass =
+  'w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[var(--g2-purple)] text-white text-[14px] font-semibold hover:bg-[#6858c4] transition-colors disabled:opacity-40 disabled:cursor-not-allowed'
+
+const socialBtnClass =
   'flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-surface)] text-[var(--g2-dark)] text-[12.5px] font-medium hover:border-[var(--g2-purple)]/40 hover:bg-[var(--g2-border)]/30 transition-colors'
+
+// ── Props ─────────────────────────────────────────────────────────────────────
 
 interface Props {
   title: string
@@ -37,68 +50,411 @@ interface Props {
   onSuccess: () => void
 }
 
-export default function LoginCard({ title, subtitle, onSuccess }: Props) {
-  const [email, setEmail] = useState('')
+// ── Component ─────────────────────────────────────────────────────────────────
 
-  return (
+export default function LoginCard({ title, subtitle, onSuccess }: Props) {
+  const [step, setStep]                   = useState<AuthStep>('email')
+  const [email, setEmail]                 = useState('')
+  const [firstName, setFirstName]         = useState('')
+  const [lastName, setLastName]           = useState('')
+  const [password, setPassword]           = useState('')
+  const [passwordConfirm, setConfirm]     = useState('')
+  const [showPassword, setShowPw]         = useState(false)
+  const [showConfirm, setShowConfirm]     = useState(false)
+  const [termsAccepted, setTerms]         = useState(false)
+  const [marketingOptIn, setMarketing]    = useState(false)
+  const [forgotEmail, setForgotEmail]     = useState('')
+  const [tfaCode, setTfaCode]             = useState(Array(6).fill(''))
+  const tfaRefs                           = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null))
+
+  const maskedEmail = email.replace(/^(.{2})(.+?)(@.+)$/, (_, a, b, c) => a + b.replace(/./g, '•') + c)
+  const pwAllValid  = passwordRules.every(r => r.test(password))
+  const confirmOk   = password === passwordConfirm && passwordConfirm.length > 0
+
+  function goBack(to: AuthStep) {
+    setStep(to)
+  }
+
+  function handleTfaInput(i: number, val: string) {
+    if (!/^\d?$/.test(val)) return
+    const next = [...tfaCode]
+    next[i] = val
+    setTfaCode(next)
+    if (val && i < 5) tfaRefs.current[i + 1]?.focus()
+  }
+
+  function handleTfaKey(i: number, e: React.KeyboardEvent) {
+    if (e.key === 'Backspace' && !tfaCode[i] && i > 0) tfaRefs.current[i - 1]?.focus()
+  }
+
+  // ── Back link (reusable inline) ──────────────────────────────────────────
+
+  const BackLink = ({ to }: { to: AuthStep }) => (
+    <button
+      type="button"
+      onClick={() => goBack(to)}
+      className="flex items-center gap-1.5 text-[12.5px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] mb-6 transition-colors"
+    >
+      <ArrowLeft size={13} /> Back
+    </button>
+  )
+
+  // ── Step: Email entry ────────────────────────────────────────────────────
+
+  if (step === 'email') return (
     <div className="w-full">
       <div className="mb-7">
         <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-1.5 leading-tight">{title}</h2>
         <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed">{subtitle}</p>
       </div>
 
-      {/* Email form */}
-      <form
-        onSubmit={(e) => { e.preventDefault(); onSuccess() }}
-        className="flex flex-col gap-3 mb-5"
-      >
+      <form onSubmit={e => { e.preventDefault(); setStep('create') }} className="flex flex-col gap-3 mb-5">
         <input
-          type="email"
-          required
-          placeholder="Work email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-xl border px-4 py-2.5 text-[14px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none focus:border-[var(--g2-purple)] transition-colors"
-          style={{ background: 'var(--g2-surface)', borderColor: 'var(--g2-border)' }}
+          type="email" required placeholder="Work email address"
+          value={email} onChange={e => setEmail(e.target.value)}
+          className={inputClass}
         />
-        <button
-          type="submit"
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[var(--g2-purple)] text-white text-[14px] font-semibold hover:bg-[#7060c8] transition-colors"
-        >
-          Continue with email
-          <ArrowRight size={15} />
+        <button type="submit" className={primaryBtnClass}>
+          Continue with email <ArrowRight size={15} />
         </button>
       </form>
 
-      {/* Divider */}
       <div className="flex items-center gap-3 mb-4">
         <div className="flex-1 h-px bg-[var(--g2-border)]" />
         <span className="text-[12px] text-[var(--g2-muted)] shrink-0">or continue with</span>
         <div className="flex-1 h-px bg-[var(--g2-border)]" />
       </div>
 
-      {/* Social buttons — unified secondary style, brand color in logo only */}
-      <div className="grid grid-cols-3 gap-2.5 mb-6">
-        <button onClick={onSuccess} className={socialButtonClass}>
-          <LinkedInIcon /> LinkedIn
-        </button>
-        <button onClick={onSuccess} className={socialButtonClass}>
-          <GoogleIcon /> Google
-        </button>
-        <button onClick={onSuccess} className={socialButtonClass}>
-          <AppleIcon /> Apple
-        </button>
+      <div className="grid grid-cols-2 gap-2.5 mb-6">
+        <button type="button" onClick={onSuccess} className={socialBtnClass}><LinkedInIcon /> LinkedIn</button>
+        <button type="button" onClick={onSuccess} className={socialBtnClass}><GoogleIcon /> Google</button>
       </div>
 
       <p className="text-[13px] text-[var(--g2-muted)] text-center">
         Already have an account?{' '}
-        <button
-          onClick={onSuccess}
-          className="text-[var(--g2-purple)] font-semibold hover:underline"
-        >
+        <button type="button" onClick={() => setStep('signin')} className="text-[var(--g2-purple)] font-semibold hover:underline">
           Sign in
         </button>
       </p>
     </div>
   )
+
+  // ── Step: Create account ─────────────────────────────────────────────────
+
+  if (step === 'create') return (
+    <div className="w-full">
+      <BackLink to="email" />
+
+      <div className="mb-6">
+        <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-1">Create your account</h2>
+        <p className="text-[13px] text-[var(--g2-muted)]">{email}</p>
+      </div>
+
+      <form
+        onSubmit={e => { e.preventDefault(); if (pwAllValid && confirmOk && termsAccepted) setStep('verify') }}
+        className="flex flex-col gap-3"
+      >
+        {/* Name row */}
+        <div className="grid grid-cols-2 gap-2.5">
+          <input
+            type="text" required placeholder="First name"
+            value={firstName} onChange={e => setFirstName(e.target.value)}
+            className={inputClass}
+          />
+          <input
+            type="text" required placeholder="Last name"
+            value={lastName} onChange={e => setLastName(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        {/* Password */}
+        <div className="relative">
+          <input
+            type={showPassword ? 'text' : 'password'} required placeholder="Password"
+            value={password} onChange={e => setPassword(e.target.value)}
+            className={inputClass + ' pr-10'}
+          />
+          <button
+            type="button" onClick={() => setShowPw(v => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+          </button>
+        </div>
+
+        {/* Live password rules */}
+        {password.length > 0 && (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1 px-0.5">
+            {passwordRules.map(r => {
+              const ok = r.test(password)
+              return (
+                <span key={r.label} className={`flex items-center gap-1.5 text-[11px] ${ok ? 'text-green-600 dark:text-green-400' : 'text-[var(--g2-muted)]'}`}>
+                  <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${ok ? 'bg-green-500 border-green-500' : 'border-[var(--g2-border)]'}`}>
+                    {ok && (
+                      <svg width="7" height="7" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="1,4 3,6 7,2" />
+                      </svg>
+                    )}
+                  </span>
+                  {r.label}
+                </span>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Confirm password */}
+        <div className="relative">
+          <input
+            type={showConfirm ? 'text' : 'password'} required placeholder="Confirm password"
+            value={passwordConfirm} onChange={e => setConfirm(e.target.value)}
+            className={inputClass + ' pr-10'}
+          />
+          <button
+            type="button" onClick={() => setShowConfirm(v => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
+            aria-label={showConfirm ? 'Hide password' : 'Show password'}
+          >
+            {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
+          </button>
+        </div>
+        {passwordConfirm.length > 0 && !confirmOk && (
+          <p className="text-[11.5px] text-red-500 -mt-1 px-0.5">Passwords don't match</p>
+        )}
+
+        {/* Consent checkboxes */}
+        <div className="flex flex-col gap-3 pt-1 pb-1">
+          <label className="flex items-start gap-2.5 cursor-pointer group">
+            <input
+              type="checkbox" required checked={termsAccepted} onChange={e => setTerms(e.target.checked)}
+              className="mt-0.5 accent-[var(--g2-purple)] shrink-0"
+            />
+            <span className="text-[12px] text-[var(--g2-muted)] leading-relaxed">
+              I agree to G2's{' '}
+              <a href="https://legal.g2.com/terms-of-use" target="_blank" rel="noopener" className="text-[var(--g2-purple)] hover:underline">Terms of Use</a>
+              {' '}and{' '}
+              <a href="https://legal.g2.com/privacy-policy" target="_blank" rel="noopener" className="text-[var(--g2-purple)] hover:underline">Privacy Policy</a>
+            </span>
+          </label>
+          <label className="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox" checked={marketingOptIn} onChange={e => setMarketing(e.target.checked)}
+              className="mt-0.5 accent-[var(--g2-purple)] shrink-0"
+            />
+            <span className="text-[12px] text-[var(--g2-muted)] leading-relaxed">
+              Send me product updates, new playbooks, and AI tool recommendations
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" disabled={!pwAllValid || !confirmOk || !termsAccepted} className={primaryBtnClass}>
+          Create account <ArrowRight size={15} />
+        </button>
+      </form>
+
+      <p className="text-[13px] text-[var(--g2-muted)] text-center mt-5">
+        Already have an account?{' '}
+        <button type="button" onClick={() => setStep('signin')} className="text-[var(--g2-purple)] font-semibold hover:underline">
+          Sign in
+        </button>
+      </p>
+    </div>
+  )
+
+  // ── Step: Sign in ────────────────────────────────────────────────────────
+
+  if (step === 'signin') return (
+    <div className="w-full">
+      <BackLink to="email" />
+
+      <div className="mb-6">
+        <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-1">Welcome back</h2>
+        <p className="text-[13px] text-[var(--g2-muted)]">{email || 'Sign in to your G2 account'}</p>
+      </div>
+
+      <form onSubmit={e => { e.preventDefault(); setStep('twofa') }} className="flex flex-col gap-3">
+        {!email && (
+          <input
+            type="email" required placeholder="Work email address"
+            value={email} onChange={e => setEmail(e.target.value)}
+            className={inputClass}
+          />
+        )}
+
+        <div className="relative">
+          <input
+            type={showPassword ? 'text' : 'password'} required placeholder="Password"
+            value={password} onChange={e => setPassword(e.target.value)}
+            className={inputClass + ' pr-10'}
+          />
+          <button
+            type="button" onClick={() => setShowPw(v => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+          </button>
+        </div>
+
+        <div className="flex justify-end -mt-1">
+          <button type="button" onClick={() => setStep('forgot')} className="text-[12px] text-[var(--g2-purple)] hover:underline">
+            Forgot password?
+          </button>
+        </div>
+
+        <button type="submit" className={primaryBtnClass}>
+          Sign in <ArrowRight size={15} />
+        </button>
+      </form>
+
+      <p className="text-[13px] text-[var(--g2-muted)] text-center mt-5">
+        Don't have an account?{' '}
+        <button type="button" onClick={() => setStep('create')} className="text-[var(--g2-purple)] font-semibold hover:underline">
+          Create one
+        </button>
+      </p>
+    </div>
+  )
+
+  // ── Step: Verify email (post-signup) ─────────────────────────────────────
+
+  if (step === 'verify') return (
+    <div className="w-full">
+      <div className="flex flex-col items-center text-center mb-8 mt-2">
+        <div className="w-14 h-14 rounded-2xl bg-[var(--g2-purple)]/10 flex items-center justify-center mb-5">
+          <Mail size={24} className="text-[var(--g2-purple)]" />
+        </div>
+        <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-2">Verify your email</h2>
+        <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed">
+          We sent a verification link to<br />
+          <span className="font-semibold text-[var(--g2-dark)]">{maskedEmail}</span>
+        </p>
+        <p className="text-[12px] text-[var(--g2-muted)] mt-2 leading-relaxed">
+          Click the link in the email to activate your account. Check your spam folder if you don't see it.
+        </p>
+      </div>
+
+      <button type="button" onClick={onSuccess} className={primaryBtnClass + ' mb-3'}>
+        I've verified my email <ArrowRight size={15} />
+      </button>
+
+      <div className="flex flex-col items-center gap-2.5 mt-1">
+        <button type="button" className="text-[12.5px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">
+          Resend verification email
+        </button>
+        <button type="button" onClick={() => setStep('email')} className="text-[12.5px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors">
+          Use a different email
+        </button>
+      </div>
+    </div>
+  )
+
+  // ── Step: Two-factor auth ────────────────────────────────────────────────
+
+  if (step === 'twofa') {
+    const codeComplete = tfaCode.every(d => d !== '')
+    return (
+      <div className="w-full">
+        <BackLink to="signin" />
+
+        <div className="mb-7">
+          <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-2">Check your email</h2>
+          <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed">
+            We sent a 6-digit code to <span className="font-semibold text-[var(--g2-dark)]">{maskedEmail}</span>. Enter it below to complete sign in.
+          </p>
+        </div>
+
+        {/* OTP boxes */}
+        <div className="flex gap-2 mb-6 justify-between">
+          {tfaCode.map((digit, i) => (
+            <input
+              key={i}
+              ref={el => { tfaRefs.current[i] = el }}
+              type="text" inputMode="numeric" maxLength={1}
+              value={digit}
+              onChange={e => handleTfaInput(i, e.target.value)}
+              onKeyDown={e => handleTfaKey(i, e)}
+              className="flex-1 h-12 rounded-xl border text-center text-[18px] font-bold text-[var(--g2-dark)] bg-[var(--g2-surface)] border-[var(--g2-border)] outline-none focus:border-[var(--g2-purple)] transition-colors"
+              aria-label={`Digit ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button" onClick={onSuccess} disabled={!codeComplete}
+          className={primaryBtnClass + ' mb-3'}
+        >
+          Verify and sign in <ArrowRight size={15} />
+        </button>
+
+        <p className="text-[12.5px] text-[var(--g2-muted)] text-center">
+          Didn't receive a code?{' '}
+          <button type="button" className="text-[var(--g2-purple)] hover:underline">Resend</button>
+        </p>
+      </div>
+    )
+  }
+
+  // ── Step: Forgot password ────────────────────────────────────────────────
+
+  if (step === 'forgot') return (
+    <div className="w-full">
+      <BackLink to="signin" />
+
+      <div className="mb-6">
+        <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-1.5">Reset your password</h2>
+        <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed">
+          Enter your email and we'll send a reset link if an account exists.
+        </p>
+      </div>
+
+      <form onSubmit={e => { e.preventDefault(); setStep('forgot-sent') }} className="flex flex-col gap-3">
+        <input
+          type="email" required placeholder="Work email address"
+          value={forgotEmail || email} onChange={e => setForgotEmail(e.target.value)}
+          className={inputClass}
+        />
+        <button type="submit" className={primaryBtnClass}>
+          Send reset link <ArrowRight size={15} />
+        </button>
+      </form>
+
+      <p className="text-[12px] text-[var(--g2-muted)] text-center mt-5 leading-relaxed">
+        Password reset is not available for accounts created with LinkedIn or Google.
+      </p>
+    </div>
+  )
+
+  // ── Step: Forgot password sent ───────────────────────────────────────────
+
+  if (step === 'forgot-sent') return (
+    <div className="w-full">
+      <div className="flex flex-col items-center text-center mb-8 mt-2">
+        <div className="w-14 h-14 rounded-2xl bg-[var(--g2-purple)]/10 flex items-center justify-center mb-5">
+          <Mail size={24} className="text-[var(--g2-purple)]" />
+        </div>
+        <h2 className="text-[22px] font-black text-[var(--g2-dark)] mb-2">Check your email</h2>
+        <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed">
+          If an account exists for{' '}
+          <span className="font-semibold text-[var(--g2-dark)]">{forgotEmail || maskedEmail}</span>,
+          you'll receive a password reset link shortly.
+        </p>
+      </div>
+
+      <button type="button" onClick={() => setStep('signin')} className={primaryBtnClass + ' mb-3'}>
+        Back to sign in
+      </button>
+
+      <p className="text-[12.5px] text-[var(--g2-muted)] text-center">
+        Didn't receive it?{' '}
+        <button type="button" onClick={() => setStep('forgot')} className="text-[var(--g2-purple)] hover:underline">
+          Try again
+        </button>
+      </p>
+    </div>
+  )
+
+  return null
 }
