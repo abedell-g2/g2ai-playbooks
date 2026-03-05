@@ -31,10 +31,21 @@ interface ToolChipListProps {
   dark: boolean
 }
 
+interface CustomTool {
+  id: string
+  name: string
+  description: string
+}
+
 function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
   const [addOpen, setAddOpen] = useState(false)
   const [addQuery, setAddQuery] = useState('')
+  const [showCustomForm, setShowCustomForm] = useState(false)
+  const [customName, setCustomName] = useState('')
+  const [customDesc, setCustomDesc] = useState('')
+  const [customTools, setCustomTools] = useState<CustomTool[]>([])
   const addRef = useRef<HTMLDivElement>(null)
+  const customNameRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (!addOpen) return
@@ -42,11 +53,18 @@ function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
       if (addRef.current && !addRef.current.contains(e.target as Node)) {
         setAddOpen(false)
         setAddQuery('')
+        setShowCustomForm(false)
+        setCustomName('')
+        setCustomDesc('')
       }
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [addOpen])
+
+  useEffect(() => {
+    if (showCustomForm) customNameRef.current?.focus()
+  }, [showCustomForm])
 
   const available = PRODUCTS.filter(
     (p) =>
@@ -56,12 +74,29 @@ function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
         p.tags.some((t) => t.includes(addQuery.toLowerCase())))
   )
 
+  function handleAddCustom() {
+    if (!customName.trim()) return
+    setCustomTools((prev) => [
+      ...prev,
+      { id: `custom-${Date.now()}`, name: customName.trim(), description: customDesc.trim() },
+    ])
+    setCustomName('')
+    setCustomDesc('')
+    setShowCustomForm(false)
+    setAddOpen(false)
+  }
+
+  function removeCustomTool(id: string) {
+    setCustomTools((prev) => prev.filter((t) => t.id !== id))
+  }
+
   return (
     <div className="w-full">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--g2-muted)] mb-3">
         AI Tools Found
       </p>
       <div className="flex flex-wrap gap-2 items-center">
+        {/* PRODUCTS-based chips */}
         {toolIds.map((id) => {
           const p = getProductById(id)
           if (!p) return null
@@ -83,10 +118,30 @@ function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
           )
         })}
 
-        {/* Add tool button + dropdown */}
+        {/* Custom tool chips */}
+        {customTools.map((t) => (
+          <span
+            key={t.id}
+            className="flex items-center gap-1.5 pl-1.5 pr-2.5 py-1.5 rounded-full border border-[var(--g2-border)] bg-[var(--g2-surface)] text-[12.5px] font-medium text-[var(--g2-dark)]"
+          >
+            <span className="w-[18px] h-[18px] rounded-full bg-[var(--g2-purple)]/15 text-[var(--g2-purple)] text-[9px] font-bold flex items-center justify-center shrink-0 uppercase">
+              {t.name.charAt(0)}
+            </span>
+            {t.name}
+            <button
+              onClick={() => removeCustomTool(t.id)}
+              className="ml-0.5 text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
+              aria-label={`Remove ${t.name}`}
+            >
+              <X size={11} />
+            </button>
+          </span>
+        ))}
+
+        {/* Add tool button + dropdown (opens above) */}
         <div ref={addRef} className="relative">
           <button
-            onClick={() => { setAddOpen((v) => !v); setAddQuery('') }}
+            onClick={() => { setAddOpen((v) => !v); setAddQuery(''); setShowCustomForm(false) }}
             aria-label="Add a tool"
             className="w-[34px] h-[34px] rounded-full border-2 border-dashed border-[var(--g2-border)] text-[var(--g2-muted)] hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] flex items-center justify-center transition-colors"
           >
@@ -95,42 +150,108 @@ function ToolChipList({ toolIds, onRemove, onAdd, dark }: ToolChipListProps) {
 
           {addOpen && (
             <div
-              className="absolute left-0 top-[calc(100%+8px)] z-50 w-60 rounded-xl border border-[var(--g2-border)] shadow-xl overflow-hidden"
+              className="absolute left-0 bottom-[calc(100%+8px)] z-50 w-60 rounded-xl border border-[var(--g2-border)] shadow-xl overflow-hidden flex flex-col"
               style={{ background: dark ? '#16132b' : 'var(--g2-bg)' }}
             >
-              {/* Search input */}
-              <div
-                className="flex items-center gap-2 px-3 py-2.5 border-b border-[var(--g2-border)]"
-              >
-                <Search size={13} className="shrink-0 text-[var(--g2-muted)]" />
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Search tools…"
-                  value={addQuery}
-                  onChange={(e) => setAddQuery(e.target.value)}
-                  className="flex-1 bg-transparent text-[13px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none"
-                />
-              </div>
-              {/* Results */}
-              <div className="max-h-52 overflow-y-auto py-1">
-                {available.length > 0 ? (
-                  available.map((p) => (
+              {showCustomForm ? (
+                /* ── Custom tool form ── */
+                <>
+                  <div className="flex items-center gap-2 px-3 py-2.5 border-b border-[var(--g2-border)]">
                     <button
-                      key={p.id}
-                      onClick={() => { onAdd(p.id); setAddOpen(false); setAddQuery('') }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
+                      onClick={() => setShowCustomForm(false)}
+                      className="text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors"
+                      aria-label="Back to search"
                     >
-                      <ToolLogo domain={p.domain} name={p.name} size={20} />
-                      <span className="font-medium">{p.name}</span>
+                      <ArrowLeft size={13} />
                     </button>
-                  ))
-                ) : (
-                  <p className="px-3 py-4 text-[12px] text-[var(--g2-muted)] text-center">
-                    No tools found
-                  </p>
-                )}
-              </div>
+                    <span className="text-[12px] font-semibold text-[var(--g2-dark)]">Add custom tool</span>
+                  </div>
+                  <div className="p-3 flex flex-col gap-2.5">
+                    {/* Placeholder icon preview */}
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-xl bg-[var(--g2-purple)]/10 border border-[var(--g2-border)] flex items-center justify-center text-[var(--g2-purple)] text-[14px] font-bold uppercase shrink-0">
+                        {customName.charAt(0) || '?'}
+                      </div>
+                      <span className="text-[11px] text-[var(--g2-muted)]">Auto-generated icon</span>
+                    </div>
+                    <input
+                      ref={customNameRef}
+                      type="text"
+                      placeholder="Tool name"
+                      value={customName}
+                      onChange={(e) => setCustomName(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleAddCustom() }}
+                      className="w-full rounded-lg border px-2.5 py-1.5 text-[12.5px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none focus:border-[var(--g2-purple)] transition-colors"
+                      style={{
+                        background: dark ? '#1e1b36' : 'var(--g2-surface)',
+                        borderColor: dark ? '#4a4570' : 'var(--g2-border)',
+                      }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Short description (optional)"
+                      value={customDesc}
+                      onChange={(e) => setCustomDesc(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleAddCustom() }}
+                      className="w-full rounded-lg border px-2.5 py-1.5 text-[12.5px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none focus:border-[var(--g2-purple)] transition-colors"
+                      style={{
+                        background: dark ? '#1e1b36' : 'var(--g2-surface)',
+                        borderColor: dark ? '#4a4570' : 'var(--g2-border)',
+                      }}
+                    />
+                    <button
+                      onClick={handleAddCustom}
+                      disabled={!customName.trim()}
+                      className="w-full py-1.5 rounded-lg bg-[var(--g2-purple)] text-white text-[12.5px] font-semibold hover:bg-[#7060c8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Add tool
+                    </button>
+                  </div>
+                </>
+              ) : (
+                /* ── Search + results + footer ── */
+                <>
+                  <div className="flex items-center gap-2 px-3 py-2.5 border-b border-[var(--g2-border)]">
+                    <Search size={13} className="shrink-0 text-[var(--g2-muted)]" />
+                    <input
+                      autoFocus
+                      type="text"
+                      placeholder="Search tools…"
+                      value={addQuery}
+                      onChange={(e) => setAddQuery(e.target.value)}
+                      className="flex-1 bg-transparent text-[13px] text-[var(--g2-dark)] placeholder:text-[var(--g2-muted)] outline-none"
+                    />
+                  </div>
+                  <div className="max-h-52 overflow-y-auto py-1">
+                    {available.length > 0 ? (
+                      available.map((p) => (
+                        <button
+                          key={p.id}
+                          onClick={() => { onAdd(p.id); setAddOpen(false); setAddQuery('') }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] hover:bg-[var(--g2-border)]/40 transition-colors"
+                        >
+                          <ToolLogo domain={p.domain} name={p.name} size={20} />
+                          <span className="font-medium">{p.name}</span>
+                        </button>
+                      ))
+                    ) : (
+                      <p className="px-3 py-4 text-[12px] text-[var(--g2-muted)] text-center">
+                        No tools found
+                      </p>
+                    )}
+                  </div>
+                  {/* Fixed footer */}
+                  <div className="border-t border-[var(--g2-border)] px-3 py-2.5">
+                    <button
+                      onClick={() => setShowCustomForm(true)}
+                      className="w-full text-left text-[12px] text-[var(--g2-muted)] hover:text-[var(--g2-dark)] transition-colors leading-snug"
+                    >
+                      Don't see the tool you're looking for?{' '}
+                      <span className="font-semibold text-[var(--g2-purple)] hover:underline">Add tool</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
