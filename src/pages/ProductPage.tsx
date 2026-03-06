@@ -448,7 +448,7 @@ export default function ProductPage({ dark, onToggle }: Props) {
               {launch.tagline}
             </p>
             <p className="text-[13px] text-[var(--g2-muted)] mt-1">
-              Hunted by{' '}
+              Added by{' '}
               <span className="font-medium text-[var(--g2-text)]">{launch.hunter.name}</span>
               {' · '}{launch.hunter.role}{' · '}{launch.daysAgo} {launch.daysAgo === 1 ? 'day' : 'days'} ago
             </p>
