@@ -1,4 +1,4 @@
-import { Star, BookOpen, ArrowRight, ExternalLink, Shuffle } from 'lucide-react'
+import { Star, BookOpen, ArrowRight, Shuffle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import ToolLogo from '../ui/ToolLogo'
 import {
@@ -98,9 +98,8 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
           <div className="flex gap-2.5">
             <button
               onClick={() => { onClose(); navigate(`/product/${featured.id}`) }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-purple-700 transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-[#7060c8] transition-colors"
             >
-              <ExternalLink size={13} />
               Explore {featured.name}
             </button>
             <a
