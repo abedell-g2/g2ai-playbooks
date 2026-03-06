@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Search, Sparkles, Pencil } from 'lucide-react'
 import ThemeToggle from '../ui/ThemeToggle'
 import G2Logo from '../ui/G2Logo'
@@ -57,9 +58,9 @@ export default function Navbar({ dark, onToggle }: NavbarProps) {
     <header className="sticky top-0 z-50 w-full bg-[var(--g2-bg)]/50 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto px-6 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-6">
         {/* Logo */}
-        <a href="/" aria-label="G2.AI home" className="shrink-0">
+        <Link to="/" aria-label="G2.AI home" className="shrink-0">
           <G2Logo className="h-9 w-auto" />
-        </a>
+        </Link>
 
         {/* Search */}
         <div ref={searchRef} className="relative max-w-[780px] w-full justify-self-center">
