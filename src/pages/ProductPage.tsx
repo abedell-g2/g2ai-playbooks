@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, Star, ExternalLink, Plus, ChevronUp,
@@ -5,8 +6,11 @@ import {
 } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
 import ToolLogo from '../components/ui/ToolLogo'
+import G2Logo from '../components/ui/G2Logo'
 import { getProductById, PLAYBOOKS, type ProductData } from '../data/searchData'
 import { useDemo } from '../context/DemoContext'
+
+const BASE_URL = import.meta.env.BASE_URL
 
 interface Props {
   dark: boolean
@@ -131,6 +135,59 @@ function CircleMetric({
   )
 }
 
+// ── Product screenshot with Microlink fallback ─────────────────────────────
+function ProductScreenshot({ domain, name, dark }: { domain: string; name: string; dark: boolean }) {
+  const [failed, setFailed] = useState(false)
+  const screenshotUrl = `https://api.microlink.io/?url=https://${domain}&screenshot=true&meta=false&embed=screenshot.url`
+
+  return (
+    <div
+      className="rounded-2xl border border-[var(--g2-border)] overflow-hidden shadow-xl shadow-black/10"
+      style={{ background: dark ? '#1e1b36' : '#f0effe' }}
+    >
+      {/* Browser chrome */}
+      <div
+        className="h-9 flex items-center gap-1.5 px-3.5 border-b border-[var(--g2-border)] shrink-0"
+        style={{ background: dark ? '#16132b' : '#e4e2f0' }}
+      >
+        <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+        <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+        <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        <div
+          className="flex-1 mx-3 rounded-full px-3 py-0.5 text-[11px] text-[var(--g2-muted)] truncate"
+          style={{ background: dark ? '#0e0c1a' : 'white' }}
+        >
+          {domain}
+        </div>
+      </div>
+
+      {/* Screenshot or fallback */}
+      {!failed ? (
+        <img
+          src={screenshotUrl}
+          alt={`${name} product screenshot`}
+          className="w-full block"
+          onError={() => setFailed(true)}
+          loading="lazy"
+        />
+      ) : (
+        <div className="aspect-[16/10] flex flex-col items-center justify-center gap-4 p-8">
+          <ToolLogo domain={domain} name={name} size={80} />
+          <p className="text-[14px] font-semibold text-[var(--g2-dark)]">{name}</p>
+          <a
+            href={`https://${domain}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[var(--g2-purple)] hover:underline"
+          >
+            {domain} <ExternalLink size={11} />
+          </a>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Static mock data ────────────────────────────────────────────────────────
 const MOCK_DISCUSSIONS = [
   {
@@ -205,71 +262,104 @@ export default function ProductPage({ dark, onToggle }: Props) {
     <div className="min-h-screen bg-[var(--g2-bg)]">
       <Navbar dark={dark} onToggle={onToggle} />
 
-      {/* ── Back link ── */}
-      <div className="max-w-[1160px] mx-auto px-6 pt-5">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-purple)] transition-colors"
-        >
-          <ArrowLeft size={14} />
-          Back to Playbooks
-        </Link>
-      </div>
+      {/* ── HERO with glow + background treatment ── */}
+      <section
+        className="relative"
+        style={{ background: 'var(--hero-glow), var(--g2-bg)' }}
+        aria-labelledby="product-heading"
+      >
+        {/* Decorative background — same SVG as homepage */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <img
+            src={dark ? `${BASE_URL}images/Background_DarkMode.svg` : `${BASE_URL}images/Background_LightMode.svg`}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-      {/* ── HERO ── */}
-      <section className="max-w-[1160px] mx-auto px-6 pt-6 pb-10">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-          <ToolLogo domain={product.domain} name={product.name} size={72} className="shrink-0" />
+        <div className="relative max-w-[1160px] mx-auto px-6 pt-5 pb-12">
+          {/* Back link */}
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--g2-muted)] hover:text-[var(--g2-purple)] transition-colors mb-8"
+          >
+            <ArrowLeft size={14} />
+            Back to Playbooks
+          </Link>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2.5 mb-2">
-              <h1 className="text-[34px] font-black text-[var(--g2-dark)] leading-tight">
-                {product.name}
-              </h1>
-              <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${product.categoryColor}`}>
-                {product.category}
-              </span>
-            </div>
+          {/* Two-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_460px] gap-10 items-center">
 
-            <div className="flex items-center gap-2.5 mb-3">
-              <Stars rating={product.rating} size={15} />
-              <span className="text-[16px] font-bold text-[var(--g2-dark)]">
-                {product.rating.toFixed(1)}
-              </span>
-              <span className="text-[13px] text-[var(--g2-muted)]">
-                {product.reviewCount.toLocaleString()} reviews
-              </span>
-            </div>
+            {/* LEFT — branding + identity + CTAs */}
+            <div>
+              {/* G2.AI "Reviewed on" badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--g2-border)] bg-[var(--g2-surface)]/60 backdrop-blur-sm mb-6">
+                <G2Logo className="h-4 w-auto" />
+                <span className="text-[11px] font-semibold text-[var(--g2-muted)]">
+                  Reviewed on G2.AI
+                </span>
+              </div>
 
-            <p className="text-[15px] text-[var(--g2-muted)] leading-relaxed max-w-[640px] mb-5">
-              {product.shortDescription}
-            </p>
+              {/* Logo + name */}
+              <div className="flex items-center gap-4 mb-3">
+                <ToolLogo domain={product.domain} name={product.name} size={64} className="shrink-0" />
+                <div>
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <h1
+                      id="product-heading"
+                      className="text-[36px] font-black text-[var(--g2-dark)] leading-tight"
+                    >
+                      {product.name}
+                    </h1>
+                    <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${product.categoryColor}`}>
+                      {product.category}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2.5 mt-1.5">
+                    <Stars rating={product.rating} size={15} />
+                    <span className="text-[15px] font-bold text-[var(--g2-dark)]">
+                      {product.rating.toFixed(1)}
+                    </span>
+                    <span className="text-[13px] text-[var(--g2-muted)]">
+                      {product.reviewCount.toLocaleString()} reviews
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              {model === 'auth' ? (
-                <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--g2-purple)] text-white text-[14px] font-semibold hover:bg-[#7060c8] transition-colors">
-                  <Plus size={15} />
-                  Add to Playbook
-                </button>
-              ) : (
-                <button
-                  onClick={openLoginModal}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--g2-purple)] text-white text-[14px] font-semibold hover:bg-[#7060c8] transition-colors"
+              <p className="text-[15px] text-[var(--g2-muted)] leading-relaxed max-w-[520px] mb-6">
+                {product.shortDescription}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3">
+                {model === 'auth' ? (
+                  <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--g2-purple)] text-white text-[14px] font-semibold hover:bg-[#7060c8] transition-colors">
+                    <Plus size={15} />
+                    Add to Playbook
+                  </button>
+                ) : (
+                  <button
+                    onClick={openLoginModal}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--g2-purple)] text-white text-[14px] font-semibold hover:bg-[#7060c8] transition-colors"
+                  >
+                    <Plus size={15} />
+                    Add to Playbook
+                  </button>
+                )}
+                <a
+                  href={`https://${product.domain}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-dark)] text-[14px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
                 >
-                  <Plus size={15} />
-                  Add to Playbook
-                </button>
-              )}
-              <a
-                href={`https://${product.domain}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-dark)] text-[14px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
-              >
-                Visit {product.name}
-                <ExternalLink size={13} />
-              </a>
+                  Visit {product.name}
+                  <ExternalLink size={13} />
+                </a>
+              </div>
             </div>
+
+            {/* RIGHT — live product screenshot */}
+            <ProductScreenshot domain={product.domain} name={product.name} dark={dark} />
           </div>
         </div>
       </section>
@@ -322,41 +412,8 @@ export default function ProductPage({ dark, onToggle }: Props) {
           </div>
         </div>
 
-        {/* RIGHT — product screenshot + pricing */}
+        {/* RIGHT — pricing + quick stats */}
         <div className="flex flex-col gap-4">
-          {/* Fake browser chrome + product logo */}
-          <div
-            className="rounded-2xl border border-[var(--g2-border)] overflow-hidden"
-            style={{ background: dark ? '#1e1b36' : '#f0effe' }}
-          >
-            <div
-              className="h-8 flex items-center gap-1.5 px-3 border-b border-[var(--g2-border)]"
-              style={{ background: dark ? '#16132b' : '#e8e7f0' }}
-            >
-              <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-              <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-              <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-              <div
-                className="flex-1 mx-3 rounded-full px-3 py-0.5 text-[11px] text-[var(--g2-muted)] truncate"
-                style={{ background: dark ? '#0e0c1a' : 'white' }}
-              >
-                {product.domain}
-              </div>
-            </div>
-            <div className="aspect-[4/3] flex flex-col items-center justify-center gap-4 p-8">
-              <ToolLogo domain={product.domain} name={product.name} size={80} />
-              <p className="text-[14px] font-semibold text-[var(--g2-dark)]">{product.name}</p>
-              <a
-                href={`https://${product.domain}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[var(--g2-purple)] hover:underline"
-              >
-                {product.domain} <ExternalLink size={11} />
-              </a>
-            </div>
-          </div>
-
           {/* Pricing */}
           <div className="p-4 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-surface)]">
             <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--g2-muted)] mb-3">
