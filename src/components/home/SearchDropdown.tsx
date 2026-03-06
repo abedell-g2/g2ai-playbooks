@@ -97,14 +97,16 @@ export default function SearchDropdown({ query, dark, onClose }: Props) {
           {/* CTAs */}
           <div className="flex gap-2.5">
             <button
-              onClick={onClose}
+              onClick={() => { onClose(); navigate(`/product/${featured.id}`) }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--g2-purple)] text-white text-[13px] font-semibold hover:bg-purple-700 transition-colors"
             >
               <ExternalLink size={13} />
               Explore {featured.name}
             </button>
             <a
-              href="#"
+              href={`https://${featured.domain}`}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={onClose}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--g2-border)] text-[var(--g2-text)] text-[13px] font-semibold hover:border-[var(--g2-purple)] hover:text-[var(--g2-purple)] transition-colors"
             >

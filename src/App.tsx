@@ -9,6 +9,7 @@ import PlaybookStart from './pages/PlaybookStart'
 import PlaybookMode from './pages/PlaybookMode'
 import PlaybookAssist from './pages/PlaybookAssist'
 import PlaybookView from './pages/PlaybookView'
+import ProductPage from './pages/ProductPage'
 import LoginA from './pages/LoginA'
 import LoginB from './pages/LoginB'
 import { DemoProvider } from './context/DemoContext'
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/playbook/assist" element={<PlaybookAssist dark={dark} />} />
           <Route path="/playbook/new" element={<PlaybookBuilder dark={dark} onToggle={toggle} />} />
           <Route path="/playbook/view/:id" element={<PlaybookView dark={dark} onToggle={toggle} />} />
+          <Route path="/product/:id" element={<ProductPage dark={dark} onToggle={toggle} />} />
           <Route path="/loginA" element={<LoginA />} />
           <Route path="/loginB" element={<LoginB />} />
         </Routes>
