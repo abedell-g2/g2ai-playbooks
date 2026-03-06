@@ -402,9 +402,9 @@ export default function ProductPage({ dark, onToggle }: Props) {
       {/* ── LAUNCHED THIS WEEK ── */}
       <section className="max-w-[1160px] mx-auto px-6 py-8">
         <div className="flex items-center gap-2 mb-4">
-          <Rocket size={14} style={{ color: '#ff6154' }} />
+          <Rocket size={15} style={{ color: '#ff6154' }} />
           <span
-            className="text-[11px] font-bold uppercase tracking-widest"
+            className="text-[13px] font-bold uppercase tracking-widest"
             style={{ color: '#ff6154' }}
           >
             Launched this week
@@ -425,7 +425,7 @@ export default function ProductPage({ dark, onToggle }: Props) {
             }}
           >
             <ChevronUp size={16} style={{ color: '#ff6154' }} />
-            <span className="text-[13px] font-bold" style={{ color: '#ff6154' }}>
+            <span className="text-[14px] font-bold" style={{ color: '#ff6154' }}>
               {launch.upvotes.toLocaleString()}
             </span>
           </button>
@@ -436,18 +436,18 @@ export default function ProductPage({ dark, onToggle }: Props) {
           {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <p className="text-[16px] font-bold text-[var(--g2-dark)]">{launch.version}</p>
+              <p className="text-[18px] font-bold text-[var(--g2-dark)]">{launch.version}</p>
               <span
-                className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                className="text-[12px] font-semibold px-2 py-0.5 rounded-full"
                 style={{ background: 'rgba(255,97,84,0.12)', color: '#ff6154' }}
               >
                 New
               </span>
             </div>
-            <p className="text-[14px] text-[var(--g2-muted)] leading-snug line-clamp-1">
+            <p className="text-[15px] text-[var(--g2-muted)] leading-snug line-clamp-1">
               {launch.tagline}
             </p>
-            <p className="text-[12px] text-[var(--g2-muted)] mt-1">
+            <p className="text-[13px] text-[var(--g2-muted)] mt-1">
               Hunted by{' '}
               <span className="font-medium text-[var(--g2-text)]">{launch.hunter.name}</span>
               {' · '}{launch.hunter.role}{' · '}{launch.daysAgo} {launch.daysAgo === 1 ? 'day' : 'days'} ago
@@ -459,7 +459,7 @@ export default function ProductPage({ dark, onToggle }: Props) {
             className="flex items-center gap-1.5 shrink-0 text-[var(--g2-muted)]"
           >
             <MessageSquare size={15} />
-            <span className="text-[14px] font-medium">{launch.comments}</span>
+            <span className="text-[15px] font-medium">{launch.comments}</span>
           </div>
         </div>
       </section>
