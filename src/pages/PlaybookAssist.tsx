@@ -340,7 +340,7 @@ export default function PlaybookAssist({ dark }: Props) {
                 <button
                   key={s}
                   onClick={() => setProblem(s)}
-                  className="text-[12px] font-semibold text-[var(--g2-purple)] bg-[var(--g2-purple)]/8 border border-[var(--g2-purple)]/20 rounded-full px-3 py-1 hover:bg-[var(--g2-purple)] hover:text-white hover:border-[var(--g2-purple)] transition-colors"
+                  className="text-[12px] font-semibold text-[var(--g2-purple-fg)] bg-[var(--g2-purple-fg)]/10 border border-[var(--g2-purple-fg)]/25 rounded-full px-3 py-1 hover:bg-[var(--g2-purple)] hover:text-white hover:border-[var(--g2-purple)] transition-colors"
                 >
                   {s.trim()}…
                 </button>
