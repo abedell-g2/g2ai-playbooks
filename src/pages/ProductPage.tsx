@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, Star, ExternalLink, Plus, ChevronUp,
-  MessageSquare, Clock, BarChart3, Users, Bot, Code2, BookOpen,
+  MessageSquare, Clock, BarChart3, Users, Bot, Code2, BookOpen, Rocket,
 } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
 import ToolLogo from '../components/ui/ToolLogo'
@@ -79,6 +79,37 @@ function getPricingTiers(category: string, id: string): string[] {
   return tiers
 }
 
+function getLaunchData(product: ProductData) {
+  const h = hash(product.id + 'launch')
+  const h2 = hash(product.id + 'hunter')
+  const major = seededRange(hash(product.id), 2, 4)
+  const minor = seededRange(hash(product.id + 'lminor'), 0, 3)
+
+  const taglines = [
+    `The fastest, most capable version of ${product.name} yet — built for agentic workflows at scale.`,
+    `${product.name} now handles multi-step reasoning tasks natively, with 2× the context window.`,
+    `Introducing real-time collaboration, live agent monitoring, and one-click Playbook exports.`,
+    `${product.name} just shipped native API integrations, drastically reducing time-to-production.`,
+    `New: ${product.name} fine-tuning is now available for all Pro and Enterprise customers.`,
+  ]
+
+  const hunters = [
+    { name: 'Alex Chen', role: 'Product Lead' },
+    { name: 'Jordan Rivera', role: 'Developer Advocate' },
+    { name: 'Sam Patel', role: 'Founding Engineer' },
+    { name: 'Taylor Brooks', role: 'Growth Lead' },
+  ]
+
+  return {
+    version: `${product.name} ${major}.${minor}`,
+    tagline: taglines[h % taglines.length],
+    upvotes: seededRange(hash(product.id + 'upvotes'), 280, 1800),
+    comments: seededRange(hash(product.id + 'comments'), 24, 120),
+    daysAgo: seededRange(h2, 1, 5),
+    hunter: hunters[h2 % hunters.length],
+  }
+}
+
 // ── Shared display components ───────────────────────────────────────────────
 function Stars({ rating, size = 13 }: { rating: number; size?: number }) {
   const filled = Math.round(rating)
@@ -116,6 +147,12 @@ function CircleMetric({
   const offset = circ * (1 - value / 100)
   return (
     <div className="flex flex-col items-center gap-2">
+      <span
+        className="text-[13px] font-semibold uppercase tracking-wider text-center leading-tight max-w-[96px]"
+        style={{ color: 'rgba(255,255,255,0.4)' }}
+      >
+        {label}
+      </span>
       <div className="relative w-[88px] h-[88px]">
         <svg width="88" height="88" style={{ transform: 'rotate(-90deg)' }}>
           <circle cx="44" cy="44" r={r} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="5" />
@@ -131,12 +168,6 @@ function CircleMetric({
           {value}%
         </span>
       </div>
-      <span
-        className="text-[13px] text-center leading-tight max-w-[88px]"
-        style={{ color: 'rgba(255,255,255,0.55)' }}
-      >
-        {label}
-      </span>
     </div>
   )
 }
@@ -265,6 +296,7 @@ export default function ProductPage({ dark, onToggle }: Props) {
   const metrics = getMetrics(product.id)
   const releases = getVersionHistory(product)
   const pricing = getPricingTiers(product.category, product.id)
+  const launch = getLaunchData(product)
   const featuredIn = PLAYBOOKS.filter((pb) => pb.toolIds.includes(product.id))
   const relatedTools = product.relatedIds
     .slice(0, 4)
@@ -361,6 +393,73 @@ export default function ProductPage({ dark, onToggle }: Props) {
 
             {/* RIGHT — website screenshot */}
             <ProductScreenshot product={product} dark={dark} />
+          </div>
+        </div>
+      </section>
+
+      <div className="border-t border-[var(--g2-border)]" />
+
+      {/* ── LAUNCHED THIS WEEK ── */}
+      <section className="max-w-[1160px] mx-auto px-6 py-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Rocket size={14} style={{ color: '#ff6154' }} />
+          <span
+            className="text-[11px] font-bold uppercase tracking-widest"
+            style={{ color: '#ff6154' }}
+          >
+            Launched this week
+          </span>
+        </div>
+        <div className="flex items-center gap-5 p-5 rounded-2xl border border-[var(--g2-border)] bg-[var(--g2-surface)] hover:border-[#ff6154]/30 transition-colors">
+          {/* Upvote button */}
+          <button
+            className="flex flex-col items-center gap-0.5 px-3.5 py-2.5 rounded-xl border transition-colors shrink-0 min-w-[56px]"
+            style={{ borderColor: 'var(--g2-border)' }}
+            onMouseEnter={(e) => {
+              ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#ff6154'
+              ;(e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,97,84,0.06)'
+            }}
+            onMouseLeave={(e) => {
+              ;(e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--g2-border)'
+              ;(e.currentTarget as HTMLButtonElement).style.background = 'transparent'
+            }}
+          >
+            <ChevronUp size={16} style={{ color: '#ff6154' }} />
+            <span className="text-[13px] font-bold" style={{ color: '#ff6154' }}>
+              {launch.upvotes.toLocaleString()}
+            </span>
+          </button>
+
+          {/* Logo */}
+          <ToolLogo domain={product.domain} name={product.name} size={44} className="shrink-0" />
+
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <p className="text-[16px] font-bold text-[var(--g2-dark)]">{launch.version}</p>
+              <span
+                className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(255,97,84,0.12)', color: '#ff6154' }}
+              >
+                New
+              </span>
+            </div>
+            <p className="text-[14px] text-[var(--g2-muted)] leading-snug line-clamp-1">
+              {launch.tagline}
+            </p>
+            <p className="text-[12px] text-[var(--g2-muted)] mt-1">
+              Hunted by{' '}
+              <span className="font-medium text-[var(--g2-text)]">{launch.hunter.name}</span>
+              {' · '}{launch.hunter.role}{' · '}{launch.daysAgo} {launch.daysAgo === 1 ? 'day' : 'days'} ago
+            </p>
+          </div>
+
+          {/* Comments */}
+          <div
+            className="flex items-center gap-1.5 shrink-0 text-[var(--g2-muted)]"
+          >
+            <MessageSquare size={15} />
+            <span className="text-[14px] font-medium">{launch.comments}</span>
           </div>
         </div>
       </section>
