@@ -100,6 +100,14 @@ function Stars({ rating, size = 13 }: { rating: number; size?: number }) {
   )
 }
 
+// Interpolate between the autonomy-scale purple (#a594f9) and green (#6ef0a0)
+function lerpColor(t: number): string {
+  const r = Math.round(0xa5 + (0x6e - 0xa5) * t)
+  const g = Math.round(0x94 + (0xf0 - 0x94) * t)
+  const b = Math.round(0xf9 + (0xa0 - 0xf9) * t)
+  return `rgb(${r},${g},${b})`
+}
+
 function CircleMetric({
   label, value, color,
 }: { label: string; value: number; color: string }) {
@@ -504,19 +512,18 @@ export default function ProductPage({ dark, onToggle }: Props) {
                 </p>
               </div>
               <span className="text-[17px] font-bold text-white">
-                Level {metrics.autonomyLevel} / 6
+                Level 5 / 6
               </span>
             </div>
             <div className="flex gap-1.5">
-              {[1, 2, 3, 4, 5, 6].map((level) => (
+              {[0, 1, 2, 3, 4, 5].map((idx) => (
                 <div
-                  key={level}
+                  key={idx}
                   className="flex-1 h-3 rounded-full"
                   style={{
-                    background:
-                      level <= metrics.autonomyLevel
-                        ? 'linear-gradient(90deg, #a594f9, #6ef0a0)'
-                        : 'rgba(255,255,255,0.1)',
+                    background: idx < 5
+                      ? lerpColor(idx / 4)
+                      : 'rgba(255,255,255,0.1)',
                   }}
                 />
               ))}
