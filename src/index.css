@@ -9,6 +9,7 @@
 /* ── Elevate / G2.AI design tokens ────────────────────────── */
 :root {
   --g2-purple:        #5746b2;
+  --g2-purple-fg:     #5746b2;
   --g2-purple-light:  #ebe9f6;
   --g2-star:          #5746b2;
   --g2-orange:        #ff492c;
@@ -58,6 +59,7 @@
   --g2-muted:        #807d8e;
   --g2-border:       #2a2740;
   --g2-purple-light: #221f3d;
+  --g2-purple-fg:    #a89ee8;
   --g2-star:         #ebe9f6;
   --g2-ai-text:      #f5f4fb;
   --g2-logo:         #ebe9f6;

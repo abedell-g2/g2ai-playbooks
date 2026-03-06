@@ -45,8 +45,8 @@ export default function PlaybookMode({ dark }: Props) {
               className="flex-1 group rounded-2xl border-2 border-[var(--g2-border)] p-7 transition-all hover:border-[var(--g2-purple)] hover:shadow-lg hover:shadow-[var(--g2-purple)]/10"
               style={{ background: dark ? '#1e1b36' : 'white' }}
             >
-              <div className="w-11 h-11 rounded-xl bg-[var(--g2-purple)]/10 flex items-center justify-center mb-4 group-hover:bg-[var(--g2-purple)]/20 transition-colors">
-                <Pencil size={20} className="text-[var(--g2-purple)]" />
+              <div className="w-11 h-11 rounded-xl bg-[var(--g2-purple-fg)]/15 flex items-center justify-center mb-4 group-hover:bg-[var(--g2-purple-fg)]/25 transition-colors">
+                <Pencil size={20} className="text-[var(--g2-purple-fg)]" />
               </div>
               <h2 className="text-[17px] font-bold text-[var(--g2-dark)] mb-2">
                 I have a workflow
@@ -54,7 +54,7 @@ export default function PlaybookMode({ dark }: Props) {
               <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed mb-6">
                 Document an existing AI workflow and share it as a playbook.
               </p>
-              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--g2-purple)]">
+              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--g2-purple-fg)]">
                 Get started <ArrowRight size={14} />
               </span>
             </Link>
@@ -69,10 +69,10 @@ export default function PlaybookMode({ dark }: Props) {
               <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[var(--g2-purple)]/8 -translate-y-1/2 translate-x-1/2 pointer-events-none" />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-11 h-11 rounded-xl bg-[var(--g2-purple)]/10 flex items-center justify-center group-hover:bg-[var(--g2-purple)]/20 transition-colors">
-                    <Sparkles size={20} className="text-[var(--g2-purple)]" />
+                  <div className="w-11 h-11 rounded-xl bg-[var(--g2-purple-fg)]/15 flex items-center justify-center group-hover:bg-[var(--g2-purple-fg)]/25 transition-colors">
+                    <Sparkles size={20} className="text-[var(--g2-purple-fg)]" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--g2-purple)] bg-[var(--g2-purple)]/10 px-2.5 py-1 rounded-full">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--g2-purple-fg)] bg-[var(--g2-purple-fg)]/15 px-2.5 py-1 rounded-full">
                     Recommended
                   </span>
                 </div>
@@ -82,7 +82,7 @@ export default function PlaybookMode({ dark }: Props) {
                 <p className="text-[13.5px] text-[var(--g2-muted)] leading-relaxed mb-6">
                   Describe a problem and G2.AI will recommend a playbook tailored to your needs.
                 </p>
-                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--g2-purple)]">
+                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--g2-purple-fg)]">
                   Start guided build <ArrowRight size={14} />
                 </span>
               </div>
