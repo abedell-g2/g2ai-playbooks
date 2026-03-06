@@ -6,7 +6,6 @@ import {
 } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
 import ToolLogo from '../components/ui/ToolLogo'
-import G2Logo from '../components/ui/G2Logo'
 import { getProductById, PLAYBOOKS, type ProductData } from '../data/searchData'
 import { useDemo } from '../context/DemoContext'
 
@@ -294,14 +293,6 @@ export default function ProductPage({ dark, onToggle }: Props) {
 
             {/* LEFT — branding + identity + CTAs */}
             <div>
-              {/* G2.AI "Reviewed on" badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--g2-border)] bg-[var(--g2-surface)]/60 backdrop-blur-sm mb-6">
-                <G2Logo className="h-4 w-auto" />
-                <span className="text-[11px] font-semibold text-[var(--g2-muted)]">
-                  Reviewed on G2.AI
-                </span>
-              </div>
-
               {/* Logo + name */}
               <div className="flex items-center gap-4 mb-3">
                 <ToolLogo domain={product.domain} name={product.name} size={64} className="shrink-0" />
@@ -400,7 +391,7 @@ export default function ProductPage({ dark, onToggle }: Props) {
                 key={i}
                 className="flex items-start gap-4 p-5 rounded-xl border border-[var(--g2-border)] bg-[var(--g2-surface)]"
               >
-                <span className="shrink-0 mt-0.5 text-[12px] font-bold px-3 py-1 rounded-full bg-[var(--g2-purple-light)] text-[var(--g2-purple)] whitespace-nowrap">
+                <span className="shrink-0 mt-0.5 text-[12px] font-bold px-3 py-1 rounded-full bg-[var(--g2-purple)] text-white whitespace-nowrap">
                   {rel.label}
                 </span>
                 <p className="flex-1 text-[15px] text-[var(--g2-text)] leading-relaxed">
@@ -425,7 +416,7 @@ export default function ProductPage({ dark, onToggle }: Props) {
               {pricing.map((tier) => (
                 <span
                   key={tier}
-                  className="text-[14px] px-3 py-1.5 rounded-full bg-[var(--g2-purple-light)] text-[var(--g2-purple)] font-medium"
+                  className="text-[14px] px-3 py-1.5 rounded-full border border-[var(--g2-border)] text-[var(--g2-dark)] font-medium"
                 >
                   {tier}
                 </span>
