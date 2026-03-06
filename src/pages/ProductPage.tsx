@@ -133,12 +133,10 @@ function CircleMetric({
   )
 }
 
-// ── Branded product card (instant, no external image dependency) ───────────
+// ── Branded logo spotlight (hero right column) ─────────────────────────────
 function ProductCard({
   product, dark,
 }: { product: ProductData; dark: boolean }) {
-  const filled = Math.round(product.rating)
-
   return (
     <div
       className="rounded-2xl border border-[var(--g2-border)] overflow-hidden shadow-xl shadow-black/10"
@@ -147,68 +145,22 @@ function ProductCard({
       {/* Top accent strip */}
       <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, var(--g2-purple), #a594f9)' }} />
 
-      {/* Card body */}
-      <div className="flex flex-col items-center gap-5 px-8 py-10">
-        {/* Logo */}
+      {/* Logo centred in generous space */}
+      <div className="flex flex-col items-center justify-center gap-5 px-8 py-16">
         <div
-          className="w-24 h-24 rounded-3xl flex items-center justify-center shadow-lg"
+          className="w-32 h-32 rounded-3xl flex items-center justify-center shadow-lg"
           style={{ background: dark ? '#16132b' : 'white' }}
         >
-          <ToolLogo domain={product.domain} name={product.name} size={72} />
+          <ToolLogo domain={product.domain} name={product.name} size={88} />
         </div>
 
-        {/* Name + category */}
-        <div className="text-center">
-          <p className="text-[22px] font-black text-[var(--g2-dark)] mb-2">{product.name}</p>
-          <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${product.categoryColor}`}>
-            {product.category}
-          </span>
-        </div>
-
-        {/* Rating row */}
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-0.5">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Star
-                key={s}
-                size={14}
-                strokeWidth={1.5}
-                style={
-                  s <= filled
-                    ? { fill: 'var(--g2-star)', color: 'var(--g2-star)' }
-                    : { fill: 'none', color: 'var(--g2-border)' }
-                }
-              />
-            ))}
-          </span>
-          <span className="text-[15px] font-bold text-[var(--g2-dark)]">
-            {product.rating.toFixed(1)}
-          </span>
-          <span className="text-[12px] text-[var(--g2-muted)]">
-            ({product.reviewCount.toLocaleString()})
-          </span>
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap justify-center gap-1.5">
-          {product.tags.slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--g2-border)] text-[var(--g2-muted)]"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Visit link */}
         <a
           href={`https://${product.domain}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--g2-purple)] hover:underline"
+          className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[var(--g2-purple)] hover:underline"
         >
-          {product.domain} <ExternalLink size={12} />
+          {product.domain} <ExternalLink size={13} />
         </a>
       </div>
     </div>
