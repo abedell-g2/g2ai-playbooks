@@ -138,22 +138,28 @@ function ProductCard({
   product, dark,
 }: { product: ProductData; dark: boolean }) {
   return (
-    <div
-      className="rounded-2xl border border-[var(--g2-border)] overflow-hidden shadow-xl shadow-black/10"
-      style={{ background: dark ? '#1e1b36' : '#f5f3ff' }}
-    >
-      {/* Top accent strip */}
-      <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, var(--g2-purple), #a594f9)' }} />
+    <div className="rounded-2xl overflow-hidden border border-[var(--g2-border)] shadow-xl shadow-black/10">
+      {/* Gradient hero area */}
+      <div
+        className="relative flex items-center justify-center py-16 px-10 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #3d2f9e 0%, #5746b2 45%, #8b6fe8 100%)' }}
+      >
+        {/* Subtle decorative circles */}
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-16 -left-10 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full bg-white/[0.03] pointer-events-none" />
 
-      {/* Logo centred in generous space */}
-      <div className="flex flex-col items-center justify-center gap-5 px-8 py-16">
-        <div
-          className="w-32 h-32 rounded-3xl flex items-center justify-center shadow-lg"
-          style={{ background: dark ? '#16132b' : 'white' }}
-        >
-          <ToolLogo domain={product.domain} name={product.name} size={88} />
+        {/* Logo tile */}
+        <div className="relative w-32 h-32 rounded-2xl bg-white flex items-center justify-center shadow-2xl">
+          <ToolLogo domain={product.domain} name={product.name} size={80} />
         </div>
+      </div>
 
+      {/* Footer strip */}
+      <div
+        className="flex items-center justify-between px-6 py-4"
+        style={{ background: dark ? '#1e1b36' : '#f5f3ff' }}
+      >
         <a
           href={`https://${product.domain}`}
           target="_blank"
@@ -162,6 +168,9 @@ function ProductCard({
         >
           {product.domain} <ExternalLink size={13} />
         </a>
+        <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full ${product.categoryColor}`}>
+          {product.category}
+        </span>
       </div>
     </div>
   )
