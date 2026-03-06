@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, Star, ExternalLink, Plus, ChevronUp,
@@ -134,43 +135,65 @@ function CircleMetric({
 }
 
 // ── Branded logo spotlight (hero right column) ─────────────────────────────
-function ProductCard({
+function ProductScreenshot({
   product, dark,
 }: { product: ProductData; dark: boolean }) {
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'failed'>('loading')
+  // Thum.io: free CDN-cached screenshots, fast after first render
+  const screenshotUrl = `https://image.thum.io/get/width/1200/https://${product.domain}`
+
   return (
     <div className="rounded-2xl overflow-hidden border border-[var(--g2-border)] shadow-xl shadow-black/10">
-      {/* Gradient hero area */}
+      {/* Browser chrome */}
       <div
-        className="relative flex items-center justify-center py-16 px-10 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #3d2f9e 0%, #5746b2 45%, #8b6fe8 100%)' }}
+        className="h-9 flex items-center gap-1.5 px-3.5 border-b border-[var(--g2-border)] shrink-0"
+        style={{ background: dark ? '#16132b' : '#e4e2f0' }}
       >
-        {/* Subtle decorative circles */}
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
-        <div className="absolute -bottom-16 -left-10 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full bg-white/[0.03] pointer-events-none" />
-
-        {/* Logo tile */}
-        <div className="relative w-32 h-32 rounded-2xl bg-white flex items-center justify-center shadow-2xl">
-          <ToolLogo domain={product.domain} name={product.name} size={80} />
+        <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+        <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+        <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        <div
+          className="flex-1 mx-3 rounded-full px-3 py-0.5 text-[11px] text-[var(--g2-muted)] truncate"
+          style={{ background: dark ? '#0e0c1a' : 'white' }}
+        >
+          {product.domain}
         </div>
       </div>
 
-      {/* Footer strip */}
-      <div
-        className="flex items-center justify-between px-6 py-4"
-        style={{ background: dark ? '#1e1b36' : '#f5f3ff' }}
-      >
-        <a
-          href={`https://${product.domain}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[var(--g2-purple)] hover:underline"
-        >
-          {product.domain} <ExternalLink size={13} />
-        </a>
-        <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full ${product.categoryColor}`}>
-          {product.category}
-        </span>
+      {/* Screenshot area */}
+      <div className="relative" style={{ background: dark ? '#1e1b36' : '#f0effe' }}>
+        {/* Skeleton shown while loading */}
+        {status === 'loading' && (
+          <div className="flex items-center justify-center py-20 gap-3 animate-pulse">
+            <ToolLogo domain={product.domain} name={product.name} size={40} />
+            <span className="text-[14px] font-medium text-[var(--g2-muted)]">Loading preview…</span>
+          </div>
+        )}
+
+        {/* Screenshot */}
+        {status !== 'failed' && (
+          <img
+            src={screenshotUrl}
+            alt={`${product.name} website preview`}
+            className={`w-full block transition-opacity duration-500 ${status === 'loaded' ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}
+            onLoad={() => setStatus('loaded')}
+            onError={() => setStatus('failed')}
+          />
+        )}
+
+        {/* Fallback if screenshot fails */}
+        {status === 'failed' && (
+          <div
+            className="relative flex items-center justify-center py-16 overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #3d2f9e 0%, #5746b2 45%, #8b6fe8 100%)' }}
+          >
+            <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+            <div className="absolute -bottom-16 -left-10 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+            <div className="relative w-24 h-24 rounded-2xl bg-white flex items-center justify-center shadow-2xl">
+              <ToolLogo domain={product.domain} name={product.name} size={64} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -337,8 +360,8 @@ export default function ProductPage({ dark, onToggle }: Props) {
               </div>
             </div>
 
-            {/* RIGHT — branded product card */}
-            <ProductCard product={product} dark={dark} />
+            {/* RIGHT — website screenshot */}
+            <ProductScreenshot product={product} dark={dark} />
           </div>
         </div>
       </section>
