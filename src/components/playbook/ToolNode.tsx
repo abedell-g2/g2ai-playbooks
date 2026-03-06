@@ -6,15 +6,15 @@ import ToolLogo from '../ui/ToolLogo'
 import StarRating from './StarRating'
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Generative:      'bg-violet-50 text-violet-700',
-  Automation:      'bg-indigo-50 text-indigo-700',
-  Coding:          'bg-sky-50 text-sky-700',
-  'Image Creation':'bg-rose-50 text-rose-700',
-  Productivity:    'bg-blue-50 text-blue-700',
-  Writing:         'bg-emerald-50 text-emerald-700',
-  Video:           'bg-orange-50 text-orange-700',
-  Audio:           'bg-cyan-50 text-cyan-700',
-  Sales:           'bg-red-50 text-red-700',
+  Generative:      'bg-violet-50 text-violet-500',
+  Automation:      'bg-indigo-50 text-indigo-500',
+  Coding:          'bg-sky-50 text-sky-600',
+  'Image Creation':'bg-rose-50 text-rose-500',
+  Productivity:    'bg-blue-50 text-blue-500',
+  Writing:         'bg-emerald-50 text-emerald-600',
+  Video:           'bg-orange-50 text-orange-500',
+  Audio:           'bg-cyan-50 text-cyan-600',
+  Sales:           'bg-red-50 text-red-500',
 }
 
 type ToolNodeData = AITool & {

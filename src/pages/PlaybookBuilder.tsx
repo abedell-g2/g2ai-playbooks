@@ -139,7 +139,7 @@ export default function PlaybookBuilder({ dark, onToggle }: PlaybookBuilderProps
             <Share2 size={13} />
             <span className="hidden sm:inline">Share</span>
           </button>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--g2-purple)] text-white text-[12.5px] font-semibold hover:bg-[#7060c8] transition-colors">
+          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--g2-purple)] text-white text-[12.5px] font-semibold hover:bg-purple-700 transition-colors">
             <Save size={13} />
             <span className="hidden sm:inline">Save</span>
           </button>
