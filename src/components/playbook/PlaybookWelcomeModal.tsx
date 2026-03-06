@@ -115,7 +115,7 @@ export default function PlaybookWelcomeModal({ onSubmit }: PlaybookWelcomeModalP
               <p className="text-[13px] font-semibold text-[var(--g2-dark)]">Godard Abel</p>
               <p className="text-[12px] text-[var(--g2-muted)]">CEO @ G2</p>
             </div>
-            <span className="ml-auto text-[11px] font-semibold text-[var(--g2-purple)] bg-[var(--g2-purple-light)] px-2.5 py-1 rounded-full shrink-0">
+            <span className="ml-auto text-[11px] font-semibold text-[var(--g2-dark)] bg-[var(--g2-purple-light)] px-2.5 py-1 rounded-full shrink-0">
               Author
             </span>
           </div>
@@ -123,7 +123,7 @@ export default function PlaybookWelcomeModal({ onSubmit }: PlaybookWelcomeModalP
           <button
             type="submit"
             disabled={!canSubmit}
-            className="mt-1 w-full py-3 rounded-full bg-[var(--g2-purple)] text-white text-[13.5px] font-semibold hover:bg-purple-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="mt-1 w-full py-3 rounded-full bg-[var(--g2-purple)] text-white text-[13.5px] font-semibold hover:bg-[#7060c8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Start Building
           </button>
