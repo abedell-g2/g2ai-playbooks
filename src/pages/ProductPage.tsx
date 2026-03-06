@@ -10,7 +10,6 @@ import G2Logo from '../components/ui/G2Logo'
 import { getProductById, PLAYBOOKS, type ProductData } from '../data/searchData'
 import { useDemo } from '../context/DemoContext'
 
-const BASE_URL = import.meta.env.BASE_URL
 
 interface Props {
   dark: boolean
@@ -268,15 +267,6 @@ export default function ProductPage({ dark, onToggle }: Props) {
         style={{ background: 'var(--hero-glow), var(--g2-bg)' }}
         aria-labelledby="product-heading"
       >
-        {/* Decorative background — same SVG as homepage */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <img
-            src={dark ? `${BASE_URL}images/Background_DarkMode.svg` : `${BASE_URL}images/Background_LightMode.svg`}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-
         <div className="relative max-w-[1160px] mx-auto px-6 pt-5 pb-12">
           {/* Back link */}
           <Link
